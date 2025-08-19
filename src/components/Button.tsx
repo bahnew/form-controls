@@ -1,16 +1,35 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
-import ComponentStore from 'src/helpers/componentStore';
+import ComponentStore from '../helpers/componentStore';
 import map from 'lodash/map';
 import classNames from 'classnames';
-import { Validator } from 'src/helpers/Validator';
+import { Validator } from '../helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import clone from 'lodash/clone';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 
-export const Button = memo(({
+interface ButtonOption {
+  [key: string]: any;
+}
+
+interface ButtonProps {
+  conceptUuid?: string;
+  enabled?: boolean;
+  formFieldPath: string;
+  multiSelect?: boolean;
+  nameKey?: string;
+  onValueChange: (value: any, errors: any[], skipValidation?: boolean) => void;
+  options: ButtonOption[];
+  validate: boolean;
+  validateForm: boolean;
+  validations: string[];
+  value?: any;
+  valueKey?: string;
+}
+
+export const Button: React.FC<ButtonProps> = memo(({
   conceptUuid,
   enabled = true,
   formFieldPath,
@@ -24,13 +43,13 @@ export const Button = memo(({
   value,
   valueKey = 'value'
 }) => {
-  // Helper functions - memoized for performance
-  const getErrors = useCallback((currentValue) => {
+  // Helper functions
+  const getErrors = useCallback((currentValue: any) => {
     const controlDetails = { validations, value: currentValue };
     return Validator.getErrors(controlDetails);
   }, [validations]);
 
-  const hasErrorsCheck = useCallback((errors) => {
+  const hasErrors = useCallback((errors: any[]) => {
     return !isEmpty(errors);
   }, []);
 
@@ -45,59 +64,45 @@ export const Button = memo(({
     return undefined;
   }, [value, multiSelect]);
 
-  const isActive = useCallback((option) => {
+  const isActive = useCallback((option: ButtonOption) => {
     const currentValue = getValueFromProps();
     return find(currentValue, (val) => option[valueKey] === val[valueKey]);
   }, [getValueFromProps, valueKey]);
 
   // State management
-  const [hasErrors, setHasErrors] = useState(() => {
+  const [hasErrorsState, setHasErrorsState] = useState(() => {
     const initialErrors = getErrors(value) || [];
-    return isCreateByAddMore() ? hasErrorsCheck(initialErrors) : false;
+    return isCreateByAddMore() ? hasErrors(initialErrors) : false;
   });
 
-  // Previous value tracking for change detection
-  const [prevValue, setPrevValue] = useState(value);
-  const [prevValidate, setPrevValidate] = useState(validate);
-
-  // Memoized computed values
+  // Memoized values for performance
   const currentErrors = useMemo(() => getErrors(value), [getErrors, value]);
-  const shouldShowErrors = useMemo(() => hasErrorsCheck(currentErrors), [hasErrorsCheck, currentErrors]);
+  const shouldShowErrors = useMemo(() => hasErrors(currentErrors), [hasErrors, currentErrors]);
 
-  // Check if value or validate prop changed (replaces componentWillReceiveProps)
-  const valueChanged = !isEqual(prevValue, value);
-  const validateChanged = prevValidate !== validate;
-
-  // Effect for initial mount (replaces componentDidMount)
+  // Effect for component mount and validation
   useEffect(() => {
-    if (hasErrors || value !== undefined || validateForm) {
+    if (hasErrorsState || value !== undefined || validateForm) {
       onValueChange(value, currentErrors, true);
     }
-  }, []); // Empty dependency array - runs only on mount
+  }, []); // Only run on mount
 
-  // Effect for handling prop changes (replaces componentWillReceiveProps)
+  // Effect for validation and value changes
   useEffect(() => {
-    if (validateChanged || valueChanged) {
-      const errors = getErrors(value);
-      setHasErrors(hasErrorsCheck(errors));
-      setPrevValue(value);
-      setPrevValidate(validate);
+    if (validate || shouldShowErrors !== hasErrorsState) {
+      setHasErrorsState(shouldShowErrors);
     }
-  }, [validate, value, validateChanged, valueChanged, getErrors, hasErrorsCheck]);
+  }, [validate, value, shouldShowErrors, hasErrorsState]);
 
-  // Effect for handling updates (replaces componentDidUpdate)
+  // Effect for triggering onValueChange when value changes
   useEffect(() => {
     if (shouldShowErrors) {
       onValueChange(value, currentErrors);
     }
-    if (valueChanged) {
-      onValueChange(value, currentErrors);
-    }
-  }, [value, currentErrors, shouldShowErrors, valueChanged, onValueChange]);
+  }, [value, currentErrors, shouldShowErrors, onValueChange]);
 
   // Value change handler
-  const changeValue = useCallback((valueSelected) => {
-    const getValue = (selectedValue) => {
+  const changeValue = useCallback((valueSelected: ButtonOption) => {
+    const getValue = (selectedValue: ButtonOption) => {
       let currentValue = getValueFromProps() || [];
       
       if (isActive(selectedValue)) {
@@ -116,11 +121,11 @@ export const Button = memo(({
 
     const newValue = getValue(valueSelected);
     const errors = getErrors(newValue);
-    setHasErrors(hasErrorsCheck(errors));
+    setHasErrorsState(hasErrors(errors));
     onValueChange(newValue, errors);
-  }, [getValueFromProps, isActive, multiSelect, valueKey, getErrors, hasErrorsCheck, onValueChange]);
+  }, [getValueFromProps, isActive, multiSelect, valueKey, getErrors, hasErrors, onValueChange]);
 
-  // Render buttons - memoized for performance
+  // Render buttons
   const displayButtons = useMemo(() => {
     return map(options, (option, index) => (
       <button
@@ -131,7 +136,6 @@ export const Button = memo(({
         onClick={() => changeValue(option)}
         title={option[nameKey]}
         type="button"
-        aria-pressed={isActive(option) ? 'true' : 'false'}
       >
         <i className="fa fa-ok" aria-hidden="true"></i>
         {option[nameKey]}
@@ -139,18 +143,13 @@ export const Button = memo(({
     ));
   }, [options, isActive, enabled, nameKey, changeValue]);
 
-  // Main render
+  // Render component
   const className = classNames('form-control-buttons', { 
-    'form-builder-error': hasErrors 
+    'form-builder-error': hasErrorsState 
   });
 
   return (
-    <div 
-      className={className} 
-      id={conceptUuid}
-      role="group"
-      aria-label="Button group"
-    >
+    <div className={className} id={conceptUuid}>
       {displayButtons}
     </div>
   );

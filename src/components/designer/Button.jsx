@@ -1,26 +1,44 @@
-import React, { Component } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
 import map from 'lodash/map';
 
-export class ButtonDesigner extends Component {
-  getJsonDefinition() {
-    return this.props.options;
-  }
+export const ButtonDesigner = memo(({ options }) => {
+  const getJsonDefinition = () => {
+    return options;
+  };
 
-  displayButtons() {
-    return map(this.props.options, (option, index) =>
-      <button key={index} title={option.name}>{option.name}</button>
-    );
-  }
+  const displayButtons = useMemo(() => {
+    return map(options, (option, index) => (
+      <button 
+        key={index} 
+        title={option.name}
+        type="button"
+        disabled
+      >
+        {option.name}
+      </button>
+    ));
+  }, [options]);
 
-  render() {
-    return <div className="form-control-buttons">{this.displayButtons()}</div>;
-  }
-}
+  return (
+    <div className="form-control-buttons">
+      {displayButtons}
+    </div>
+  );
+});
+
+ButtonDesigner.displayName = 'ButtonDesigner';
 
 ButtonDesigner.propTypes = {
   options: PropTypes.array.isRequired,
+};
+
+// Expose getJsonDefinition method for backward compatibility
+ButtonDesigner.prototype = {
+  getJsonDefinition() {
+    return this.props.options;
+  }
 };
 
 const descriptor = {
