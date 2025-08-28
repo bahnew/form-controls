@@ -1,6 +1,6 @@
 import React from 'react';
 import { IntlProvider, createIntl } from 'react-intl';
-const Adapter = require('enzyme-adapter-react-16');
+const Adapter = require('@wojtekmaj/enzyme-adapter-react-17');
 const enzyme = require('enzyme');
 enzyme.configure({ adapter: new Adapter() });
 const { shallow, mount } = enzyme;
