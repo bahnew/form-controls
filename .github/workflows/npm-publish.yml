@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master
-      - 'release-*'
+      - "release-*"
     tags:
-      - '*'
+      - "*"
 
   workflow_dispatch:
 
@@ -20,19 +20,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 14.2.0
-          registry-url: 'https://registry.npmjs.org'
-      - run: yarn cache clean
+          registry-url: "https://registry.npmjs.org"
+      - run: npm cache clean --force
       - name: Install dependencies
         run: brew install automake autoconf libtool dpkg pkgconfig nasm libpng
-      - name: yarn Install
-        run: yarn
-      - name: yarn test
-        run: yarn test
-      - run: yarn ci
-      - name: Publish the package
-        if: startsWith(github.ref, 'refs/tags/')
-        run: yarn publish         
-      
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          always-auth: true
+      - name: npm install
+        run: npm install
+      - name: npm test
+        run: npm test
+      - run: npm ci
+      # - name: Publish the package
+      #   if: startsWith(github.ref, 'refs/tags/')
+      #   run: yarn publish
+
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      #     always-auth: true
