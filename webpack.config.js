@@ -19,7 +19,6 @@ module.exports = {
   externals: {
     'react/lib/ExecutionEnvironment': true,
     'react/lib/ReactContext': true,
-    'react/addons': true,
     react: {
       root: 'React',
       commonjs2: 'react',
