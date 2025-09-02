@@ -2,8 +2,8 @@ name: Validate PR for Bahmni Form Controls
 
 on:
   pull_request:
-    branches: [ master ]
-    types: [ opened, synchronize, reopened ]
+    branches: [master]
+    types: [opened, synchronize, reopened]
 
   workflow_dispatch:
 
@@ -17,11 +17,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 14.2.0
-          registry-url: 'https://registry.npmjs.org'
-      - run: yarn cache clean
+          registry-url: "https://registry.npmjs.org"
+      - run: npm cache clean --force
       - name: Install dependencies
         run: brew install automake autoconf libtool dpkg pkgconfig nasm libpng
-      - name: yarn Install
-        run: yarn
-      - name: yarn test
-        run: yarn test
+      - name: npm install
+        run: npm install
+      - name: npm test
+        run: npm test
