@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TextBox } from '../../src/components/TextBox.jsx';
+import { TextBox } from 'src/components/TextBox.jsx';
 import constants from 'src/constants';
 import { Error } from 'src/Error';
 import { Validator } from 'src/helpers/Validator';

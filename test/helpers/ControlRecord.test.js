@@ -1,5 +1,5 @@
-import ControlRecordTreeBuilder from '../../src/helpers/ControlRecordTreeBuilder';
-import ObservationMapper from '../../src/helpers/ObservationMapper';
+import ControlRecordTreeBuilder from 'src/helpers/ControlRecordTreeBuilder';
+import ObservationMapper from 'src/helpers/ObservationMapper';
 import { ControlRecord } from 'src/helpers/ControlRecordTreeBuilder';
 import { List } from 'immutable';
 import { Obs } from 'src/helpers/Obs';

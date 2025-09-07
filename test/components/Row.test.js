@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Row } from 'components/Row.jsx';
 import ComponentStore from 'src/helpers/componentStore';
-import { ObsMapper } from '../../src/mapper/ObsMapper';
-import { Obs } from '../../src/helpers/Obs';
+import { ObsMapper } from 'src/mapper/ObsMapper';
+import { Obs } from 'src/helpers/Obs';
 
 function getLocationAndSameLineProperties(row, column) {
   return { location: { row, column }, sameLine: true };

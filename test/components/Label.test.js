@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Label } from '../../src/components/Label.jsx';
+import { Label } from 'src/components/Label.jsx';
 
 const mockIntl = {
   formatMessage: ({ defaultMessage }) => defaultMessage

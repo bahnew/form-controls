@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AddMore } from '../../src/components/AddMore.jsx';
+import { AddMore } from 'src/components/AddMore.jsx';
 
 describe('AddMore', () => {
   let mockOnAdd;

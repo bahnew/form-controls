@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Button } from '../../src/components/Button.jsx';
+import { Button } from 'src/components/Button.jsx';
 import constants from 'src/constants';
 import { Validator } from 'src/helpers/Validator';
 
