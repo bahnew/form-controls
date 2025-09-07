@@ -1,8 +1,8 @@
 import { TableMapper } from 'src/mapper/TableMapper';
 import { ObsList } from 'src/helpers/ObsList';
 import { createFormNamespaceAndPath } from 'src/helpers/formNamespace';
-import { getKeyPrefixForControl } from '../../src/helpers/formNamespace';
-import { ControlRecord } from '../../src/helpers/ControlRecordTreeBuilder';
+import { getKeyPrefixForControl } from 'src/helpers/formNamespace';
+import { ControlRecord } from 'src/helpers/ControlRecordTreeBuilder';
 import { List } from 'immutable';
 import { Obs } from 'src/helpers/Obs';
 

@@ -1,5 +1,5 @@
 import { ObsMapper } from 'src/mapper/ObsMapper';
-import { ControlRecord } from '../../src/helpers/ControlRecordTreeBuilder';
+import { ControlRecord } from 'src/helpers/ControlRecordTreeBuilder';
 import { Obs } from 'src/helpers/Obs';
 
 describe('ObsMapper', () => {
