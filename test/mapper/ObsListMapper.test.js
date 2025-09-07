@@ -1,7 +1,7 @@
 import { ObsListMapper } from 'src/mapper/ObsListMapper';
-import { ObsList } from '../../src/helpers/ObsList';
+import { ObsList } from 'src/helpers/ObsList';
 import { List } from 'immutable';
-import { ControlRecord } from '../../src/helpers/ControlRecordTreeBuilder';
+import { ControlRecord } from 'src/helpers/ControlRecordTreeBuilder';
 import { cloneDeep } from 'lodash';
 import { Obs } from 'src/helpers/Obs';
 

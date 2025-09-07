@@ -1,4 +1,4 @@
-import { CodedMultiSelectValueMapper } from '../../src/mapper/CodedMultiSelectValueMapper';
+import { CodedMultiSelectValueMapper } from 'src/mapper/CodedMultiSelectValueMapper';
 
 describe('CodedMultiSelectValueMapper', () => {
   const codedMultiSelectObsControl = {

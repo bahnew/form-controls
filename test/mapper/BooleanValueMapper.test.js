@@ -1,4 +1,4 @@
-import { BooleanValueMapper } from '../../src/mapper/BooleanValueMapper';
+import { BooleanValueMapper } from 'src/mapper/BooleanValueMapper';
 
 describe('BooleanValueMapper', () => {
   const booleanObsControl = {

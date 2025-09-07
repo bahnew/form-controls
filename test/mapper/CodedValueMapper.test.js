@@ -1,4 +1,4 @@
-import { CodedValueMapper } from '../../src/mapper/CodedValueMapper';
+import { CodedValueMapper } from 'src/mapper/CodedValueMapper';
 
 describe('CodedValueMapper', () => {
   const codedObsControl = {
