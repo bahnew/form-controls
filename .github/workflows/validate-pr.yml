@@ -25,3 +25,5 @@ jobs:
         run: npm install
       - name: npm test
         run: npm test
+      - name: npm test jest
+        run: npm test:jest
