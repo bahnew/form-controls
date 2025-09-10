@@ -26,6 +26,8 @@ jobs:
         run: brew install automake autoconf libtool dpkg pkgconfig nasm libpng
       - name: npm install
         run: npm install
+      - name: npm test jest
+        run: npm run test:jest
       - name: npm test
         run: npm test
       - run: npm ci
