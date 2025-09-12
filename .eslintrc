@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb",
   "globals": {
     "describe": true,
     "before": true,
@@ -7,16 +6,27 @@
     "beforeEach": true,
     "afterEach": true,
     "context": true,
-    "it": true
+    "it": true,
+    "test": true,
+    "expect": true,
+    "jest": true,
+    "beforeAll": true,
+    "afterAll": true
   },
+  "plugins": ["react", "jest"],
+  "extends": ["airbnb", "plugin:jest/recommended"],
   "rules": {
     "react/prop-types": [1, { "ignore": ["children"] }],
     "react/sort-prop-types": 2,
-    "react/jsx-sort-props": 2,
-    "max-len": [2, 100, 2, {"ignoreComments": true }]
+    "react/jsx-sort-props": 0,
+    "max-len": [2, 120, 2, { "ignoreComments": true }]
   },
+  "parser": "babel-eslint",
   "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
     "ecmaFeatures": {
+      "jsx": true,
       "experimentalObjectRestSpread": true
     }
   }

@@ -17,7 +17,7 @@ describe('Location', () => {
   const locationData = {
     results: [{ name: 'loc1', id: 1 }, { name: 'loc2', id: 2 }],
   };
-  
+
   const defaultProps = {
     formFieldPath: 'test1.1/1-0',
     onChange: jest.fn(),
@@ -49,7 +49,7 @@ describe('Location', () => {
     const dropdownProps = {
       ...defaultProps,
       properties: { ...defaultProps.properties, style: 'dropdown' },
-      value: '1'
+      value: '1',
     };
 
     render(<Location {...dropdownProps} />);
@@ -83,7 +83,7 @@ describe('Location', () => {
 
     const input = await screen.findByRole('combobox');
     await userEvent.type(input, 'lo');
-    
+
     const option = await screen.findByRole('option', { name: 'loc1' });
     await userEvent.click(option);
 
@@ -143,7 +143,7 @@ describe('Location', () => {
   it('should use default URL when no URL is provided in properties', async () => {
     const propsWithoutURL = {
       ...defaultProps,
-      properties: { style: 'autocomplete' }
+      properties: { style: 'autocomplete' },
     };
 
     render(<Location {...propsWithoutURL} />);
@@ -184,7 +184,7 @@ describe('Location', () => {
 
     const control = screen.getByRole('combobox');
     await userEvent.click(control);
-    
+
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe('Location', () => {
   it('should call onChange with undefined when location value is cleared', async () => {
     const onChangeSpy = jest.fn();
     const testProps = { ...defaultProps, onChange: onChangeSpy, value: '1' };
-    
+
     render(<Location {...testProps} />);
 
     await waitFor(() => {
@@ -211,7 +211,7 @@ describe('Location', () => {
 
     expect(onChangeSpy).toHaveBeenCalledWith({
       value: undefined,
-      errors: []
+      errors: [],
     });
   });
 });

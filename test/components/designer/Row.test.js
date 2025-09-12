@@ -10,7 +10,7 @@ describe('Row', () => {
 
   beforeEach(() => {
     mockRef = {
-      getCellDefinition: jest.fn(() => ({ id: 'test', type: 'test' }))
+      getCellDefinition: jest.fn(() => ({ id: 'test', type: 'test' })),
     };
   });
 
@@ -36,7 +36,7 @@ describe('Row', () => {
 
   it('should render specified number of cells', () => {
     const idGenerator = new IDGenerator();
-    
+
     const { container } = render(
       <RowDesigner
         columns={2}
@@ -62,7 +62,7 @@ describe('Row', () => {
       },
     };
     const idGenerator = new IDGenerator();
-    
+
     const { container } = render(
       <RowDesigner
         idGenerator={idGenerator}
@@ -82,10 +82,10 @@ describe('Row', () => {
 
   it('should update cell data when receiving new props', () => {
     const initialRowData = [
-      { properties: { location: { row: 0, column: 0 } } }
+      { properties: { location: { row: 0, column: 0 } } },
     ];
     const newRowData = [
-      { properties: { location: { row: 0, column: 1 } } }
+      { properties: { location: { row: 0, column: 1 } } },
     ];
     const idGenerator = new IDGenerator();
 

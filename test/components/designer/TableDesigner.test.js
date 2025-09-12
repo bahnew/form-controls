@@ -120,7 +120,7 @@ describe('TableDesigner', () => {
         controls: undefined,
         columnHeaders: undefined,
       };
-      
+
       renderTableDesigner({ metadata: metadataWithoutHeaders });
 
       expect(screen.getByRole('group')).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('TableDesigner', () => {
         columnHeaders: [column1LabelJson, column2LabelJson],
         controls: [childControl],
       };
-      
+
       renderTableDesigner({ metadata: updatedMetadata });
 
       expect(screen.getByRole('group')).toBeInTheDocument();
@@ -164,7 +164,7 @@ describe('TableDesigner', () => {
 
     it('should render section without any controls', () => {
       const metadataWithoutControls = { ...metadata, controls: undefined };
-      
+
       renderTableDesigner({ metadata: metadataWithoutControls });
 
       expect(screen.getByTestId('grid-designer')).toBeInTheDocument();
@@ -172,7 +172,7 @@ describe('TableDesigner', () => {
 
     it('should show delete button if the showDeleteButton props is true', () => {
       renderTableDesigner({ showDeleteButton: true });
-      
+
       const deleteButton = screen.getByRole('button');
       expect(deleteButton).toBeInTheDocument();
       expect(deleteButton.textContent).toBe('');
@@ -180,59 +180,59 @@ describe('TableDesigner', () => {
 
     it('should not show delete button if the showDeleteButton props is false', () => {
       renderTableDesigner({ showDeleteButton: false });
-      
+
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
 
     it('should call deleteControl when delete button is clicked', () => {
       const deleteControlSpy = jest.fn();
       const clearSelectedControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         deleteControl: deleteControlSpy,
         clearSelectedControl: clearSelectedControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(deleteControlSpy).toHaveBeenCalledTimes(1);
       expect(clearSelectedControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call clearSelectedControl prop when delete button is clicked', () => {
       const clearSelectedControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         clearSelectedControl: clearSelectedControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(clearSelectedControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call deleteControl prop when delete button is clicked', () => {
       const deleteControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         deleteControl: deleteControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(deleteControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should return json definition', () => {
       let tableRef;
       renderTableDesigner({
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
       if (tableRef) {
@@ -251,24 +251,24 @@ describe('TableDesigner', () => {
     it('should have addMore in unsupportedProperties', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
       if (tableRef) {
         tableRef.handleControlDrop({
           metadata: { type: 'obsControl' },
           cellMetadata: [],
-          successCallback: processDropSuccessCallback
+          successCallback: processDropSuccessCallback,
         });
 
         expect(processDropSuccessCallback).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'obsControl',
-            unsupportedProperties: ['addMore']
+            unsupportedProperties: ['addMore'],
           })
         );
       }
@@ -277,18 +277,18 @@ describe('TableDesigner', () => {
     it('should not allow unsupported controls to be dropped', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
       if (tableRef) {
         tableRef.handleControlDrop({
           metadata: { type: 'section' },
           cellMetadata: [],
-          successCallback: processDropSuccessCallback
+          successCallback: processDropSuccessCallback,
         });
 
         expect(processDropSuccessCallback).not.toHaveBeenCalled();
@@ -299,12 +299,12 @@ describe('TableDesigner', () => {
       const dragSourceCell = { updateMetadata: jest.fn() };
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         dragSourceCell,
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
       if (tableRef) {
@@ -312,7 +312,7 @@ describe('TableDesigner', () => {
         tableRef.handleControlDrop({
           metadata: sectionMetadata,
           cellMetadata: [],
-          successCallback: processDropSuccessCallback
+          successCallback: processDropSuccessCallback,
         });
 
         expect(processDropSuccessCallback).not.toHaveBeenCalled();
@@ -323,18 +323,18 @@ describe('TableDesigner', () => {
     it('should not allow more than one control to be dropped in a cell', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
       if (tableRef) {
         tableRef.handleControlDrop({
           metadata: { type: 'obsControl' },
           cellMetadata: [{ type: 'obsControl' }],
-          successCallback: processDropSuccessCallback
+          successCallback: processDropSuccessCallback,
         });
 
         expect(processDropSuccessCallback).not.toHaveBeenCalled();

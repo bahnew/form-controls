@@ -88,14 +88,14 @@ describe('SectionDesigner', () => {
 
     it('should render a fieldset with the appropriate label', () => {
       renderSectionDesigner();
-      
+
       expect(screen.getByRole('group')).toBeInTheDocument();
       expect(screen.getByText('dummyPulse')).toBeInTheDocument();
     });
 
     it('should render a grid with appropriate props', () => {
       renderSectionDesigner();
-      
+
       expect(screen.getByTestId('grid-designer')).toBeInTheDocument();
     });
 
@@ -109,25 +109,25 @@ describe('SectionDesigner', () => {
     it('should call onSelect function on section click', () => {
       const { container } = renderSectionDesigner();
       const fieldset = container.querySelector('.form-builder-fieldset');
-      
+
       fireEvent.click(fieldset);
-      
+
       expect(onSelectSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call onSelect method with given metadata', () => {
       const { container } = renderSectionDesigner();
       const fieldset = container.querySelector('.form-builder-fieldset');
-      
+
       fireEvent.click(fieldset);
-      
+
       expect(onSelectSpy).toHaveBeenCalledWith(expect.anything(), metadata);
     });
 
     it('should return json definition', () => {
       let sectionRef;
       renderSectionDesigner({
-        ref: (ref) => { sectionRef = ref; }
+        ref: (ref) => { sectionRef = ref; },
       });
 
       if (sectionRef) {
@@ -147,12 +147,12 @@ describe('SectionDesigner', () => {
       const dispatchSpy = jest.fn();
       const { container } = renderSectionDesigner({ dispatch: dispatchSpy });
       const fieldset = container.querySelector('fieldset');
-      
+
       const mockEvent = {
         preventDefault: jest.fn(),
         stopPropagation: jest.fn(),
       };
-      
+
       fireEvent.click(fieldset, mockEvent);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
@@ -160,7 +160,7 @@ describe('SectionDesigner', () => {
 
     it('should show delete button if the showDeleteButton props is true', () => {
       renderSectionDesigner({ showDeleteButton: true });
-      
+
       const deleteButton = screen.getByRole('button');
       expect(deleteButton).toBeInTheDocument();
       expect(deleteButton.textContent).toBe('');
@@ -168,11 +168,11 @@ describe('SectionDesigner', () => {
 
     it('should call deleteControl when delete button is clicked', () => {
       const deleteControlSpy = jest.fn();
-      renderSectionDesigner({ 
+      renderSectionDesigner({
         showDeleteButton: true,
-        deleteControl: deleteControlSpy
+        deleteControl: deleteControlSpy,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
 
@@ -182,10 +182,10 @@ describe('SectionDesigner', () => {
     it('should not render add-more and remove buttons when addMore attribute is false', () => {
       const metadataWithAddMoreFalse = {
         ...metadata,
-        properties: { ...metadata.properties, addMore: false }
+        properties: { ...metadata.properties, addMore: false },
       };
       const { container } = renderSectionDesigner({ metadata: metadataWithAddMoreFalse });
-      
+
       expect(container.querySelector('.form-builder-add-more')).not.toBeInTheDocument();
       expect(container.querySelector('.form-builder-remove')).not.toBeInTheDocument();
     });
@@ -193,10 +193,10 @@ describe('SectionDesigner', () => {
     it('should render add-more and remove buttons when addMore attribute is true', () => {
       const metadataWithAddMoreTrue = {
         ...metadata,
-        properties: { ...metadata.properties, addMore: true }
+        properties: { ...metadata.properties, addMore: true },
       };
       const { container } = renderSectionDesigner({ metadata: metadataWithAddMoreTrue });
-      
+
       expect(container.querySelector('.form-builder-add-more')).toBeInTheDocument();
       expect(container.querySelector('.form-builder-remove')).toBeInTheDocument();
     });

@@ -58,17 +58,17 @@ describe('TextBox', () => {
 
     const textbox = screen.getByRole('textbox');
     userEvent.clear(textbox);
-    await waitFor(()=>{
-        expect(mockOnChange).toHaveBeenCalledWith(
+    await waitFor(() => {
+      expect(mockOnChange).toHaveBeenCalledWith(
             { value: '', errors: [] }
         );
-    })
+    });
     fireEvent.change(textbox, { target: { value: 'My new value' } });
-    await waitFor(()=>{
-        expect(mockOnChange).toHaveBeenCalledWith(
+    await waitFor(() => {
+      expect(mockOnChange).toHaveBeenCalledWith(
             { value: 'My new value', errors: [] }
         );
-    })
+    });
   });
 
   it('should return whole value when given value with spaces but not empty string', async () => {
@@ -84,7 +84,7 @@ describe('TextBox', () => {
 
     const textbox = screen.getByRole('textbox');
     const valueWithSpaces = ' abc efg ';
-    fireEvent.change(textbox, { target: { value: valueWithSpaces}})
+    fireEvent.change(textbox, { target: { value: valueWithSpaces } });
 
     expect(mockOnChange).toHaveBeenCalledWith({ value: valueWithSpaces, errors: [] });
   });
@@ -128,7 +128,7 @@ describe('TextBox', () => {
       <TextBox
         formFieldPath="test1.1/1-0"
         onChange={mockOnChange}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value={undefined}

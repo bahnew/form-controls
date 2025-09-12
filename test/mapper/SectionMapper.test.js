@@ -726,14 +726,14 @@ describe('SectionMapper', () => {
           addMore: true,
         },
       };
-      
+
       const observations = [{
         formFieldPath: 'different.path/2-0',
         concept,
       }];
 
       const initObjects = mapper.getInitialObject(formName, formVersion, sectionCtrl, null, observations);
-      
+
       expect(initObjects).toHaveLength(1);
       expect(initObjects[0].formFieldPath).toBe(sectionControlFormFieldPath);
     });
@@ -746,7 +746,7 @@ describe('SectionMapper', () => {
       }];
 
       const result = mapper.segregateObsByAddMoreSections(prefix, observations);
-      
+
       expect(result).toHaveLength(0);
     });
   });

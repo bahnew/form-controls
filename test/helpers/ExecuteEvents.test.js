@@ -173,9 +173,9 @@ describe('execute control events', () => {
       children: List.of(recordTreeWithEvent),
     });
     const executeStub = jest.spyOn(ScriptRunner.prototype, 'execute').mockReturnValue(updatedRecordTreeAfterExecutingEvent);
-    
+
     expect(executeEventsFromCurrentRecord(recordWithChildren, undefined, patient)).toBe(updatedRecordTreeAfterExecutingEvent);
-    
+
     executeStub.mockRestore();
   });
 });

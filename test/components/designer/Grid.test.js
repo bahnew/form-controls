@@ -70,10 +70,10 @@ describe('GridDesigner', () => {
         wrapper={wrapper}
       />
     );
-    
+
     const gridContainer = container.querySelector('.grid');
     const rows = gridContainer.children;
-    
+
     expect(rows).toHaveLength(constants.Grid.minRows);
   });
 
@@ -85,10 +85,10 @@ describe('GridDesigner', () => {
         wrapper={wrapper}
       />
     );
-    
+
     const gridContainer = container.querySelector('.grid');
     const rows = gridContainer.children;
-    
+
     expect(rows).toHaveLength(constants.Grid.minRows);
     expect(gridContainer).toBeInTheDocument();
   });
@@ -104,10 +104,10 @@ describe('GridDesigner', () => {
         wrapper={wrapper}
       />
     );
-    
+
     const gridContainer = container.querySelector('.grid');
     const rows = gridContainer.children;
-    
+
     expect(rows).toHaveLength(6);
   });
 
@@ -119,13 +119,13 @@ describe('GridDesigner', () => {
         wrapper={wrapper}
       />
     );
-    
+
     const gridContainer = container.querySelector('.grid');
     const rows = gridContainer.children;
-    
+
     expect(rows).toHaveLength(4);
     expect(gridContainer).toBeInTheDocument();
-    
+
     Array.from(rows).forEach(row => {
       expect(row).toBeInTheDocument();
     });
@@ -142,7 +142,7 @@ describe('GridDesigner', () => {
         wrapper={wrapper}
       />
     );
-    
+
     const gridContainer = container.querySelector('.grid');
     expect(gridContainer.children).toHaveLength(7);
   });
@@ -159,7 +159,7 @@ describe('GridDesigner', () => {
     );
 
     render(<RefWrapper />);
-    
+
     expect(gridRef).toBeDefined();
     expect(typeof gridRef.getControls).toBe('function');
   });
@@ -176,13 +176,13 @@ describe('GridDesigner', () => {
     );
 
     const { container } = render(<RefWrapper />);
-    
+
     const initialRowCount = container.querySelector('.grid').children.length;
-    
+
     act(() => {
       gridRef.changeHandler(initialRowCount - 1);
     });
-    
+
     const finalRowCount = container.querySelector('.grid').children.length;
     expect(finalRowCount).toBe(initialRowCount + 1);
   });
@@ -199,13 +199,13 @@ describe('GridDesigner', () => {
     );
 
     const { container } = render(<RefWrapper />);
-    
+
     const initialRowCount = container.querySelector('.grid').children.length;
-    
+
     act(() => {
       gridRef.changeHandler(0);
     });
-    
+
     const finalRowCount = container.querySelector('.grid').children.length;
     expect(finalRowCount).toBe(initialRowCount);
   });

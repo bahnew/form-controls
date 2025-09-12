@@ -77,7 +77,7 @@ describe('Date', () => {
     );
 
     onChangeMock.mockClear();
-    
+
     const mandatoryError = new Error({ message: validations[0] });
     const input = screen.getByDisplayValue('2016-12-29');
     fireEvent.change(input, { target: { value: '' } });
@@ -101,12 +101,12 @@ describe('Date', () => {
     );
 
     const mandatoryError = new Error({ message: validations[0] });
-    
+
     rerender(
       <Date
         formFieldPath="test1.1/1-0"
         onChange={onChangeMock}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value={undefined}
@@ -199,7 +199,7 @@ describe('Date', () => {
   it('should show as enabled when date is set to be enabled', () => {
     const { container } = render(
       <Date
-        enabled={true}
+        enabled
         formFieldPath="test1.1/1-0"
         onChange={() => {}}
         validate={false}
@@ -215,7 +215,7 @@ describe('Date', () => {
   it('should trigger onChange when mounting component and the value is not undefined', () => {
     render(
       <Date
-        enabled={true}
+        enabled
         formFieldPath="test1.1-0"
         onChange={onChangeMock}
         validate={false}
@@ -226,9 +226,9 @@ describe('Date', () => {
     );
 
     expect(onChangeMock).toHaveBeenCalledWith(
-      expect.objectContaining({ 
+      expect.objectContaining({
         value: '2016-12-29',
-        triggerControlEvent: false
+        triggerControlEvent: false,
       })
     );
   });
@@ -262,7 +262,7 @@ describe('Date', () => {
 
   it('should handle undefined errors from validator gracefully', () => {
     const getErrorsSpy = jest.spyOn(Validator, 'getErrors').mockReturnValue(undefined);
-    
+
     const { container } = render(
       <Date
         formFieldPath="test1.1/1-0"

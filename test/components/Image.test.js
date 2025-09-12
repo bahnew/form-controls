@@ -31,13 +31,13 @@ describe('Image Control', () => {
       mockOnChange = jest.fn();
       mockOnControlAdd = jest.fn();
       mockShowNotification = jest.fn();
-      
+
       Util.getFileType.mockReturnValue('image');
       Util.uploadFile.mockResolvedValue({
         json: () => Promise.resolve({ url: 'someUrl' }),
       });
-      
-      mockFileReader.readAsDataURL.mockImplementation(function() {
+
+      mockFileReader.readAsDataURL.mockImplementation(function () {
         setTimeout(() => {
           this.onloadend({ target: { result: 'data:image/jpeg;base64,/9j/4SumRXhpZgAATU' } });
         }, 0);
@@ -48,8 +48,7 @@ describe('Image Control', () => {
       jest.clearAllMocks();
     });
 
-    const renderImage = (props = {}) => {
-      return render(
+    const renderImage = (props = {}) => render(
         <Image
           addMore
           formFieldPath={formFieldPath}
@@ -61,7 +60,6 @@ describe('Image Control', () => {
           {...props}
         />
       );
-    };
 
     it('should render Image', () => {
       renderImage();
@@ -76,7 +74,7 @@ describe('Image Control', () => {
 
       const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
       const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       setTimeout(() => {
@@ -102,7 +100,7 @@ describe('Image Control', () => {
 
       const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
       const file = new File(['content'], 'test.txt', { type: 'text/plain' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       expect(mockShowNotification).toHaveBeenCalledWith(
@@ -198,7 +196,7 @@ describe('Image Control', () => {
 
       const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
       const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       setTimeout(() => {
@@ -244,7 +242,7 @@ describe('Image Control', () => {
     it('should add more control when there is value and switch the tab', () => {
       const { unmount } = renderImage();
       unmount();
-      
+
       renderImage({ value: 'someValue' });
 
       expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
@@ -273,7 +271,7 @@ describe('Image Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value={undefined}
         />
@@ -294,7 +292,7 @@ describe('Image Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value="someValuevoided"
         />
@@ -324,7 +322,7 @@ describe('Image Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value="someValuevoided"
         />
@@ -365,7 +363,7 @@ describe('Image Control', () => {
 
       const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
       const file = new File(['fileContent'], 'test.jpg', { type: 'image/jpeg' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       await waitFor(() => {

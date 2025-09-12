@@ -8,18 +8,18 @@ jest.mock('src/helpers/controlsParser');
 
 describe('ControlRecord', () => {
   const mockMapper = {
-    getObject: jest.fn()
+    getObject: jest.fn(),
   };
-  
+
   const mockObs = { value: 'test' };
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should create record with default values', () => {
     const record = new ControlRecord();
-    
+
     expect(record.control).toBeUndefined();
     expect(record.formFieldPath).toBe('');
     expect(record.obs).toBeUndefined();
@@ -43,11 +43,11 @@ describe('ControlRecord', () => {
       errors: ['error1'],
       data: { test: 'data' },
       mapper: mockMapper,
-      active: false
+      active: false,
     };
-    
+
     const record = new ControlRecord(props);
-    
+
     expect(record.control).toEqual({ id: '1' });
     expect(record.formFieldPath).toBe('test/path');
     expect(record.obs).toBe(mockObs);
@@ -63,10 +63,10 @@ describe('ControlRecord', () => {
   it('should call mapper.getObject when getObject is called', () => {
     const expectedResult = { mapped: 'object' };
     mockMapper.getObject.mockReturnValue(expectedResult);
-    
+
     const record = new ControlRecord({ obs: mockObs, mapper: mockMapper });
     const result = record.getObject();
-    
+
     expect(mockMapper.getObject).toHaveBeenCalledWith(mockObs);
     expect(result).toBe(expectedResult);
   });
@@ -74,8 +74,10 @@ describe('ControlRecord', () => {
 
 describe('ControlState', () => {
   let controlState;
-  let record1, record2, record3;
-  
+  let record1,
+    record2,
+    record3;
+
   beforeEach(() => {
     controlState = new ControlState();
     record1 = new ControlRecord({ formFieldPath: 'form/1', active: true });
@@ -87,13 +89,13 @@ describe('ControlState', () => {
     it('should set multiple records', () => {
       const records = [record1, record2];
       const result = controlState.setRecords(records);
-      
+
       expect(result.getRecords()).toEqual(records);
     });
 
     it('should handle empty records array', () => {
       const result = controlState.setRecords([]);
-      
+
       expect(result.getRecords()).toEqual([]);
     });
   });
@@ -101,7 +103,7 @@ describe('ControlState', () => {
   describe('setRecord', () => {
     it('should add new record', () => {
       const result = controlState.setRecord(record1);
-      
+
       expect(result.getRecord('form/1')).toBe(record1);
     });
 
@@ -109,7 +111,7 @@ describe('ControlState', () => {
       const initialState = controlState.setRecord(record1);
       const updatedRecord = record1.set('enabled', false);
       const result = initialState.setRecord(updatedRecord);
-      
+
       expect(result.getRecord('form/1').enabled).toBe(false);
     });
   });
@@ -118,14 +120,14 @@ describe('ControlState', () => {
     it('should void record and set as inactive', () => {
       const mockObs = {
         formFieldPath: 'form/1',
-        void: jest.fn().mockReturnValue({ voided: true })
+        void: jest.fn().mockReturnValue({ voided: true }),
       };
       const record = new ControlRecord({ formFieldPath: 'form/1', obs: mockObs, active: true });
       const state = controlState.setRecord(record);
-      
+
       const result = state.deleteRecord(mockObs);
       const deletedRecord = result.getRecord('form/1');
-      
+
       expect(mockObs.void).toHaveBeenCalled();
       expect(deletedRecord.active).toBe(false);
       expect(deletedRecord.obs).toEqual({ voided: true });
@@ -135,15 +137,15 @@ describe('ControlState', () => {
   describe('getRecord', () => {
     it('should return record by formFieldPath', () => {
       const state = controlState.setRecord(record1);
-      
+
       const result = state.getRecord('form/1');
-      
+
       expect(result).toBe(record1);
     });
 
     it('should return undefined for non-existent path', () => {
       const result = controlState.getRecord('non/existent');
-      
+
       expect(result).toBeUndefined();
     });
   });
@@ -153,21 +155,21 @@ describe('ControlState', () => {
       const records = [
         new ControlRecord({ formFieldPath: 'form-1' }),
         new ControlRecord({ formFieldPath: 'form-2' }),
-        new ControlRecord({ formFieldPath: 'form-3' })
+        new ControlRecord({ formFieldPath: 'form-3' }),
       ];
       const state = controlState.setRecords(records);
-      
+
       const result = state.generateFormFieldPath('form-1');
-      
+
       expect(result).toBe('form-4');
     });
 
     it('should handle single record', () => {
       const records = [new ControlRecord({ formFieldPath: 'form-1' })];
       const state = controlState.setRecords(records);
-      
+
       const result = state.generateFormFieldPath('form-1');
-      
+
       expect(result).toBe('form-2');
     });
 
@@ -175,19 +177,19 @@ describe('ControlState', () => {
       const records = [
         new ControlRecord({ formFieldPath: 'form-3' }),
         new ControlRecord({ formFieldPath: 'form-1' }),
-        new ControlRecord({ formFieldPath: 'form-5' })
+        new ControlRecord({ formFieldPath: 'form-5' }),
       ];
       const state = controlState.setRecords(records);
-      
+
       const result = state.generateFormFieldPath('form-1');
-      
+
       expect(result).toBe('form-6');
     });
   });
 
   describe('prepareRecordsForAddMore', () => {
     beforeEach(() => {
-      setupAddRemoveButtonsForAddMore.mockImplementation(records => 
+      setupAddRemoveButtonsForAddMore.mockImplementation(records =>
         records.map(record => record.set('showAddMore', false))
       );
     });
@@ -196,14 +198,14 @@ describe('ControlState', () => {
       const records = [
         new ControlRecord({ formFieldPath: 'form-1', active: true }),
         new ControlRecord({ formFieldPath: 'form-2', active: true }),
-        new ControlRecord({ formFieldPath: 'other-1', active: true })
+        new ControlRecord({ formFieldPath: 'other-1', active: true }),
       ];
       const state = controlState.setRecords(records);
-      
+
       const result = state.prepareRecordsForAddMore('form-1');
-      
+
       expect(setupAddRemoveButtonsForAddMore).toHaveBeenCalledWith([
-        records[0], records[1]
+        records[0], records[1],
       ]);
     });
 
@@ -211,12 +213,12 @@ describe('ControlState', () => {
       const records = [
         new ControlRecord({ formFieldPath: 'form-1', active: true }),
         new ControlRecord({ formFieldPath: 'form-2', active: false }),
-        new ControlRecord({ formFieldPath: 'other-1', active: true })
+        new ControlRecord({ formFieldPath: 'other-1', active: true }),
       ];
       const state = controlState.setRecords(records);
-      
+
       const result = state.prepareRecordsForAddMore('form-1');
-      
+
       expect(setupAddRemoveButtonsForAddMore).toHaveBeenCalledWith([records[0]]);
     });
   });
@@ -225,15 +227,15 @@ describe('ControlState', () => {
     it('should return all records as array', () => {
       const records = [record1, record2, record3];
       const state = controlState.setRecords(records);
-      
+
       const result = state.getRecords();
-      
+
       expect(result).toEqual(records);
     });
 
     it('should return empty array when no records', () => {
       const result = controlState.getRecords();
-      
+
       expect(result).toEqual([]);
     });
   });
@@ -242,18 +244,18 @@ describe('ControlState', () => {
     it('should return only active records', () => {
       const records = [record1, record2, record3];
       const state = controlState.setRecords(records);
-      
+
       const result = state.getActiveRecords();
-      
+
       expect(result).toEqual([record1, record2]);
     });
 
     it('should return empty array when no active records', () => {
       const inactiveRecord = new ControlRecord({ formFieldPath: 'form/1', active: false });
       const state = controlState.setRecord(inactiveRecord);
-      
+
       const result = state.getActiveRecords();
-      
+
       expect(result).toEqual([]);
     });
   });
@@ -261,31 +263,31 @@ describe('ControlState', () => {
 
 describe('controlStateFactory', () => {
   const mockMapper = {
-    getInitialObject: jest.fn()
+    getInitialObject: jest.fn(),
   };
-  
+
   const metadata = {
     name: 'TestForm',
     version: '1',
     controls: [
       { id: '1', type: 'obsControl' },
-      { id: '2', type: 'obsControl' }
-    ]
+      { id: '2', type: 'obsControl' },
+    ],
   };
 
   beforeEach(() => {
     MapperStore.getMapper.mockReturnValue(mockMapper);
     mockMapper.getInitialObject.mockReturnValue([
       { formFieldPath: 'TestForm.1/1' },
-      { formFieldPath: 'TestForm.1/2' }
+      { formFieldPath: 'TestForm.1/2' },
     ]);
   });
 
   it('should create ControlState with metadata', () => {
     const bahmniObs = [];
-    
+
     const result = controlStateFactory(metadata, bahmniObs);
-    
+
     expect(result).toBeInstanceOf(ControlState);
     expect(MapperStore.getMapper).toHaveBeenCalledTimes(2);
     expect(mockMapper.getInitialObject).toHaveBeenCalledWith('TestForm', '1', metadata.controls[0], bahmniObs);
@@ -296,9 +298,9 @@ describe('controlStateFactory', () => {
     const bahmniObs = [];
     const customFormName = 'CustomForm';
     const customVersion = '2';
-    
+
     const result = controlStateFactory(metadata, bahmniObs, customFormName, customVersion);
-    
+
     expect(mockMapper.getInitialObject).toHaveBeenCalledWith(customFormName, customVersion, metadata.controls[0], bahmniObs);
     expect(mockMapper.getInitialObject).toHaveBeenCalledWith(customFormName, customVersion, metadata.controls[1], bahmniObs);
   });
@@ -306,14 +308,14 @@ describe('controlStateFactory', () => {
   it('should handle multiple obs per control', () => {
     mockMapper.getInitialObject.mockReturnValueOnce([
       { formFieldPath: 'TestForm.1/1-0' },
-      { formFieldPath: 'TestForm.1/1-1' }
+      { formFieldPath: 'TestForm.1/1-1' },
     ]).mockReturnValueOnce([
-      { formFieldPath: 'TestForm.1/2' }
+      { formFieldPath: 'TestForm.1/2' },
     ]);
-    
+
     const result = controlStateFactory(metadata, []);
     const records = result.getRecords();
-    
+
     expect(records).toHaveLength(3);
     expect(records[0].formFieldPath).toBe('TestForm.1/1-0');
     expect(records[1].formFieldPath).toBe('TestForm.1/1-1');
@@ -323,7 +325,7 @@ describe('controlStateFactory', () => {
   it('should set correct record properties', () => {
     const result = controlStateFactory(metadata, []);
     const records = result.getRecords();
-    
+
     records.forEach(record => {
       expect(record.enabled).toBe(false);
       expect(record.showAddMore).toBe(true);
@@ -338,58 +340,58 @@ describe('getErrors', () => {
     const errorRecord1 = new ControlRecord({
       errors: [
         { type: constants.errorTypes.error, message: 'Error 1' },
-        { type: constants.errorTypes.warning, message: 'Warning 1' }
-      ]
+        { type: constants.errorTypes.warning, message: 'Warning 1' },
+      ],
     });
     const errorRecord2 = new ControlRecord({
       errors: [
-        { type: constants.errorTypes.error, message: 'Error 2' }
-      ]
+        { type: constants.errorTypes.error, message: 'Error 2' },
+      ],
     });
     const warningOnlyRecord = new ControlRecord({
       errors: [
-        { type: constants.errorTypes.warning, message: 'Warning 2' }
-      ]
+        { type: constants.errorTypes.warning, message: 'Warning 2' },
+      ],
     });
-    
+
     const records = [errorRecord1, errorRecord2, warningOnlyRecord];
-    
+
     const result = getErrors(records);
-    
+
     expect(result).toHaveLength(3);
     expect(result).toEqual([
       { type: constants.errorTypes.error, message: 'Error 1' },
       { type: constants.errorTypes.warning, message: 'Warning 1' },
-      { type: constants.errorTypes.error, message: 'Error 2' }
+      { type: constants.errorTypes.error, message: 'Error 2' },
     ]);
   });
 
   it('should handle records with no errors', () => {
     const records = [
       new ControlRecord({ errors: [] }),
-      new ControlRecord({ errors: undefined })
+      new ControlRecord({ errors: undefined }),
     ];
-    
+
     const result = getErrors(records);
-    
+
     expect(result).toEqual([]);
   });
 
   it('should handle empty records array', () => {
     const result = getErrors([]);
-    
+
     expect(result).toEqual([]);
   });
 
   it('should handle records with only warnings', () => {
     const records = [
       new ControlRecord({
-        errors: [{ type: constants.errorTypes.warning, message: 'Warning' }]
-      })
+        errors: [{ type: constants.errorTypes.warning, message: 'Warning' }],
+      }),
     ];
-    
+
     const result = getErrors(records);
-    
+
     expect(result).toEqual([]);
   });
 
@@ -398,25 +400,25 @@ describe('getErrors', () => {
       new ControlRecord({
         errors: [
           { type: constants.errorTypes.error, message: 'Error 1' },
-          { type: constants.errorTypes.error, message: 'Error 2' }
-        ]
+          { type: constants.errorTypes.error, message: 'Error 2' },
+        ],
       }),
       new ControlRecord({
-        errors: [{ type: constants.errorTypes.warning, message: 'Warning' }]
+        errors: [{ type: constants.errorTypes.warning, message: 'Warning' }],
       }),
       new ControlRecord({ errors: [] }),
       new ControlRecord({
-        errors: [{ type: constants.errorTypes.error, message: 'Error 3' }]
-      })
+        errors: [{ type: constants.errorTypes.error, message: 'Error 3' }],
+      }),
     ];
-    
+
     const result = getErrors(records);
-    
+
     expect(result).toHaveLength(3);
     expect(result).toEqual([
       { type: constants.errorTypes.error, message: 'Error 1' },
       { type: constants.errorTypes.error, message: 'Error 2' },
-      { type: constants.errorTypes.error, message: 'Error 3' }
+      { type: constants.errorTypes.error, message: 'Error 3' },
     ]);
   });
 });

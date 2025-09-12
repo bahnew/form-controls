@@ -16,13 +16,13 @@ describe('DateTimeDesigner', () => {
 
   it('should render date and time inputs', () => {
     const { container } = render(<DateTimeDesigner metadata={metadata} />);
-    
+
     const inputs = container.querySelectorAll('input');
     expect(inputs).toHaveLength(2);
-    
+
     const dateInput = container.querySelector('input[type="date"]');
     const timeInput = container.querySelector('input[type="time"]');
-    
+
     expect(dateInput).toBeInTheDocument();
     expect(timeInput).toBeInTheDocument();
   });

@@ -74,7 +74,7 @@ describe('ObservationMapper', () => {
     voided: true,
   });
 
-  it('should get obs exclude record that is voided and doesn\'t have concept', () => {
+  it("should get obs exclude record that is voided and doesn't have concept", () => {
     const obsRecord = new ControlRecord({
       control: obsControl,
       formFieldPath: obsFormFieldPath,
@@ -87,12 +87,14 @@ describe('ObservationMapper', () => {
       value: {},
       dataSource: labelDataSource,
     });
-    const recordTree = new ControlRecord({ children: List.of(obsRecord, labelRecord) });
+    const recordTree = new ControlRecord({
+      children: List.of(obsRecord, labelRecord),
+    });
 
-    const observations = (new ObservationMapper()).from(recordTree);
+    const observations = new ObservationMapper().from(recordTree);
 
-    expect(observations.length).toBe(1);
-    observations.forEach(obs => expect(obs.voided).toBe(false));
+    expect(observations).toHaveLength(1);
+    observations.forEach((obs) => expect(obs.voided).toBe(false));
   });
 
   it('should get obs include record that is voided but has concept', () => {
@@ -108,12 +110,14 @@ describe('ObservationMapper', () => {
       value: {},
       dataSource: labelDataSource,
     });
-    const recordTree = new ControlRecord({ children: List.of(obsRecord, labelRecord) });
+    const recordTree = new ControlRecord({
+      children: List.of(obsRecord, labelRecord),
+    });
 
-    const observations = (new ObservationMapper()).from(recordTree);
+    const observations = new ObservationMapper().from(recordTree);
 
-    expect(observations.length).toBe(1);
-    observations.forEach(obs => expect(obs.voided).toBe(true));
+    expect(observations).toHaveLength(1);
+    observations.forEach((obs) => expect(obs.voided).toBe(true));
   });
 
   it('should get multiple obs when given record of obsList type', () => {
@@ -348,7 +352,7 @@ describe('ObservationMapper', () => {
         formFieldPath: obsListFormFieldPath,
         formNamespace: 'Bahmni',
         voided: true,
-      })
+      }),
     });
     const obsListValue = {
       value: [
@@ -413,9 +417,9 @@ describe('ObservationMapper', () => {
     });
     const recordTree = new ControlRecord({ children: List.of(obsListRecord) });
 
-    const observations = (new ObservationMapper()).from(recordTree);
+    const observations = new ObservationMapper().from(recordTree);
 
-    expect(observations.length).toBe(2);
+    expect(observations).toHaveLength(2);
     expect(observations[0].formFieldPath).toBe('multipleSelect.1/2-0');
     expect(observations[1].formFieldPath).toBe('multipleSelect.1/2-0');
   });
@@ -507,7 +511,7 @@ describe('ObservationMapper', () => {
 
     const observations = new ObservationMapper().from(rootRecordTree);
 
-    expect(observations.length).toBe(1);
+    expect(observations).toHaveLength(1);
 
     const activeObservation = observations[0];
     expect(activeObservation.formFieldPath).toBe(activeFormFieldPath);

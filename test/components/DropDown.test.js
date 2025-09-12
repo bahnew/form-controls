@@ -81,7 +81,7 @@ describe('DropDown Component', () => {
   describe('User Interactions', () => {
     it('should call onValueChange when option is selected', async () => {
       const user = userEvent.setup();
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -106,7 +106,7 @@ describe('DropDown Component', () => {
           name: 'two',
           value: 'Two',
           uuid: '2',
-          display: 'Two'
+          display: 'Two',
         }),
         []
       );
@@ -114,7 +114,7 @@ describe('DropDown Component', () => {
 
     it('should update displayed value when selection changes', async () => {
       const user = userEvent.setup();
-      
+
       const { rerender } = render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -140,7 +140,7 @@ describe('DropDown Component', () => {
 
     it('should show options when dropdown is opened', async () => {
       const user = userEvent.setup();
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -161,7 +161,7 @@ describe('DropDown Component', () => {
 
     it('should not be searchable by default', async () => {
       const user = userEvent.setup();
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -172,26 +172,26 @@ describe('DropDown Component', () => {
 
       const dropdown = screen.getByRole('combobox');
       await user.type(dropdown, 'test');
-      
+
       // Should not show typed text because it's not searchable
       expect(dropdown).not.toHaveValue('test');
     });
 
     it('should be searchable when searchable prop is true', async () => {
       const user = userEvent.setup();
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           options={options}
-          searchable={true}
+          searchable
         />
       );
 
       const dropdown = screen.getByRole('combobox');
       await user.type(dropdown, 'tw');
-      
+
       // Should be able to type and filter options
       await waitFor(() => {
         expect(screen.getByText('Two')).toBeInTheDocument();
@@ -202,7 +202,7 @@ describe('DropDown Component', () => {
   describe('Validation', () => {
     it('should call onValueChange with validation errors on mount when value is invalid', () => {
       const validations = [constants.validations.mandatory];
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-1"
@@ -220,7 +220,7 @@ describe('DropDown Component', () => {
     it('should remove validation errors when valid value is selected', async () => {
       const user = userEvent.setup();
       const validations = [constants.validations.mandatory];
-      
+
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -244,7 +244,7 @@ describe('DropDown Component', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'one',
-          value: 'One'
+          value: 'One',
         }),
         []
       );

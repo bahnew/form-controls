@@ -31,13 +31,13 @@ describe('Video Control', () => {
       mockOnChange = jest.fn();
       mockOnControlAdd = jest.fn();
       mockShowNotification = jest.fn();
-      
+
       Util.getFileType.mockReturnValue('video');
       Util.uploadFile.mockResolvedValue({
         json: () => Promise.resolve({ url: 'someUrl' }),
       });
-      
-      mockFileReader.readAsDataURL.mockImplementation(function() {
+
+      mockFileReader.readAsDataURL.mockImplementation(function () {
         setTimeout(() => {
           this.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
         }, 0);
@@ -48,8 +48,7 @@ describe('Video Control', () => {
       jest.clearAllMocks();
     });
 
-    const renderVideo = (props = {}) => {
-      return render(
+    const renderVideo = (props = {}) => render(
         <Video
           addMore
           formFieldPath={formFieldPath}
@@ -61,7 +60,6 @@ describe('Video Control', () => {
           {...props}
         />
       );
-    };
 
     it('should render ComplexControl Video', () => {
       renderVideo();
@@ -82,7 +80,7 @@ describe('Video Control', () => {
 
       const fileInput = screen.getByLabelText('Upload Video');
       const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       setTimeout(() => {
@@ -108,7 +106,7 @@ describe('Video Control', () => {
 
       const fileInput = screen.getByLabelText('Upload Video');
       const file = new File(['content'], 'test.txt', { type: 'text/plain' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       expect(mockShowNotification).toHaveBeenCalledWith(
@@ -180,7 +178,7 @@ describe('Video Control', () => {
     it('should add more control when there is value and switch the tab', () => {
       const { unmount } = renderVideo();
       unmount();
-      
+
       renderVideo({ value: 'someValue' });
 
       expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
@@ -208,7 +206,7 @@ describe('Video Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value={undefined}
         />
@@ -229,7 +227,7 @@ describe('Video Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value="someValuevoided"
         />
@@ -259,7 +257,7 @@ describe('Video Control', () => {
           onChange={mockOnChange}
           onControlAdd={mockOnControlAdd}
           showNotification={mockShowNotification}
-          validate={true}
+          validate
           validations={validations}
           value="someValuevoided"
         />
@@ -300,7 +298,7 @@ describe('Video Control', () => {
 
       const fileInput = screen.getByLabelText('Upload Video');
       const file = new File(['fileContent'], 'test.mp4', { type: 'video/mp4' });
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       await waitFor(() => {

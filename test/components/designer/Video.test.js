@@ -20,7 +20,7 @@ describe('VideoDesigner', () => {
 
   it('should render the Video designer component', () => {
     const { container } = render(<VideoDesigner metadata={metadata} />);
-    
+
     const fileInput = container.querySelector('input[type="file"]');
     expect(fileInput).toBeInTheDocument();
     expect(fileInput).toHaveAttribute('type', 'file');
@@ -28,21 +28,21 @@ describe('VideoDesigner', () => {
 
   it('should render a disabled file input', () => {
     const { container } = render(<VideoDesigner metadata={metadata} />);
-    
+
     const fileInput = container.querySelector('input[type="file"]');
     expect(fileInput).toBeDisabled();
   });
 
   it('should render with correct CSS classes', () => {
     const { container } = render(<VideoDesigner metadata={metadata} />);
-    
+
     const wrapper = container.querySelector('.fl.complex-component-designer');
     expect(wrapper).toBeInTheDocument();
   });
 
   it('should render without metadata', () => {
     const { container } = render(<VideoDesigner />);
-    
+
     const fileInput = container.querySelector('input[type="file"]');
     expect(fileInput).toBeInTheDocument();
     expect(fileInput).toBeDisabled();
@@ -50,7 +50,7 @@ describe('VideoDesigner', () => {
 
   it('should accept file input type', () => {
     const { container } = render(<VideoDesigner metadata={metadata} />);
-    
+
     const fileInput = container.querySelector('input[type="file"]');
     expect(fileInput).toHaveAttribute('type', 'file');
     expect(fileInput).toHaveAttribute('disabled');

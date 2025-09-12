@@ -16,7 +16,7 @@ describe('DateDesigner', () => {
 
   it('should render a date input', () => {
     const { container } = render(<DateDesigner metadata={metadata} />);
-    
+
     const dateInput = container.querySelector('input[type="date"]');
     expect(dateInput).toBeInTheDocument();
   });

@@ -11,11 +11,11 @@ describe('LabelDesigner', () => {
 
   beforeEach(() => {
     idGenerator = new IDGenerator();
-    metadata = { 
-      id: '1', 
+    metadata = {
+      id: '1',
       type: 'label',
-      value: 'History Notes', 
-      properties: {} 
+      value: 'History Notes',
+      properties: {},
     };
     defaultProps = {
       clearSelectedControl: jest.fn(),
@@ -35,12 +35,12 @@ describe('LabelDesigner', () => {
 
   it('should allow editing of value on double click', () => {
     render(<LabelDesigner {...defaultProps} />);
-    
+
     expect(screen.getByText('History Notes')).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
-    
+
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.queryByText('History Notes')).not.toBeInTheDocument();
   });
@@ -48,22 +48,22 @@ describe('LabelDesigner', () => {
   it('should not change translation key after editing the label', async () => {
     const user = userEvent.setup();
     const mockWrapper = jest.fn();
-    
+
     render(
-      <LabelDesigner 
-        {...defaultProps} 
+      <LabelDesigner
+        {...defaultProps}
         wrapper={mockWrapper}
       />
     );
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
-    
+
     const input = screen.getByRole('textbox');
     await user.clear(input);
     await user.type(input, 'My new value');
-    
+
     fireEvent.keyUp(input, { keyCode: 13 });
-    
+
     expect(screen.getByText('My new value')).toBeInTheDocument();
   });
 
@@ -77,9 +77,9 @@ describe('LabelDesigner', () => {
     const input = screen.getByRole('textbox');
     await user.clear(input);
     await user.type(input, 'Note');
-    
+
     fireEvent.keyUp(input, { keyCode: 13 });
-    
+
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
     expect(screen.getByText('Note')).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe('LabelDesigner', () => {
     expect(screen.getByRole('textbox')).toBeInTheDocument();
 
     fireEvent.blur(screen.getByRole('textbox'));
-    
+
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe('LabelDesigner', () => {
   it('should return appropriate JSON definition', () => {
     const { container } = render(<LabelDesigner {...defaultProps} />);
     const component = container.querySelector('.control-wrapper-content');
-    
+
     expect(component).toBeInTheDocument();
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
@@ -110,20 +110,20 @@ describe('LabelDesigner', () => {
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-    
+
     const input = screen.getByRole('textbox');
     await user.clear(input);
     await user.type(input, '  ');
-    
+
     fireEvent.keyUp(input, { keyCode: 13 });
-    
+
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
 
   it('should stop event propagation to upper component when click on label', () => {
     const dispatchSpy = jest.fn();
     const { container } = render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         dispatch={dispatchSpy}
       />
@@ -138,8 +138,8 @@ describe('LabelDesigner', () => {
   });
 
   it('should show delete button if the showDeleteButton props is true', () => {
-    render(<LabelDesigner {...defaultProps} showDeleteButton={true} />);
-    
+    render(<LabelDesigner {...defaultProps} showDeleteButton />);
+
     const deleteButton = screen.getByRole('button');
     expect(deleteButton).toBeInTheDocument();
     expect(deleteButton).toHaveClass('remove-control-button');
@@ -148,10 +148,10 @@ describe('LabelDesigner', () => {
   it('should call deleteControl when delete button is clicked', () => {
     const deleteControlSpy = jest.fn();
     render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         deleteControl={deleteControlSpy}
-        showDeleteButton={true}
+        showDeleteButton
       />
     );
 
@@ -170,30 +170,30 @@ describe('LabelDesigner', () => {
     };
 
     render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         metadata={metadataWithKey}
       />
     );
-    
+
     expect(screen.getByText('History Notes (/min)')).toBeInTheDocument();
   });
 
   it('should add hidden-label class when visible is false', () => {
     const { container } = render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         visible={false}
       />
     );
-    
+
     const wrapper = container.querySelector('.control-wrapper-content');
     expect(wrapper).toHaveClass('hidden-label');
   });
 
   it('should not call dispatch when not provided', () => {
     const { container } = render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         dispatch={undefined}
       />
@@ -205,13 +205,13 @@ describe('LabelDesigner', () => {
 
   it('should not show delete button when deleteControl is not provided', () => {
     render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         deleteControl={undefined}
-        showDeleteButton={true}
+        showDeleteButton
       />
     );
-    
+
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
@@ -220,9 +220,9 @@ describe('LabelDesigner', () => {
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
     const input = screen.getByRole('textbox');
-    
+
     fireEvent.keyUp(input, { keyCode: 27 }); // Escape key
-    
+
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
@@ -231,14 +231,14 @@ describe('LabelDesigner', () => {
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
     const input = screen.getByRole('textbox');
-    
+
     Object.defineProperty(input, 'value', {
       writable: true,
       value: '',
     });
-    
+
     fireEvent.blur(input);
-    
+
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
 
@@ -249,12 +249,12 @@ describe('LabelDesigner', () => {
     };
 
     render(
-      <LabelDesigner 
+      <LabelDesigner
         {...defaultProps}
         metadata={metadataWithoutUnits}
       />
     );
-    
+
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
 
@@ -264,10 +264,10 @@ describe('LabelDesigner', () => {
 
     fireEvent.doubleClick(screen.getByText('History Notes'));
     const input = screen.getByRole('textbox');
-    
+
     await user.clear(input);
     fireEvent.keyUp(input, { keyCode: 13 });
-    
+
     expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
 });

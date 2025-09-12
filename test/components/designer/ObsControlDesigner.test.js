@@ -127,7 +127,7 @@ describe('ObsControlDesigner', () => {
           deleteControl={mockDeleteControl}
           metadata={metadata}
           onSelect={mockOnSelect}
-          showDeleteButton={true}
+          showDeleteButton
         />
       );
 
@@ -141,7 +141,7 @@ describe('ObsControlDesigner', () => {
           deleteControl={mockDeleteControl}
           metadata={metadata}
           onSelect={mockOnSelect}
-          showDeleteButton={true}
+          showDeleteButton
         />
       );
 
@@ -369,7 +369,7 @@ describe('ObsControlDesigner', () => {
           deleteControl={mockDeleteControl}
           metadata={metadata}
           onSelect={mockOnSelect}
-          showDeleteButton={true}
+          showDeleteButton
         />
       );
 
@@ -403,7 +403,7 @@ describe('ObsControlDesigner', () => {
           deleteControl={mockDeleteControl}
           metadata={metadata}
           onSelect={mockOnSelect}
-          showDeleteButton={true}
+          showDeleteButton
         />
       );
 
@@ -433,7 +433,7 @@ describe('ObsControlDesigner', () => {
     it('should return json definition with units', () => {
       const metadataWithUnits = { ...metadata, units: '/min' };
       let componentRef;
-      
+
       render(
         <ObsControlDesigner
           ref={(ref) => { componentRef = ref; }}
@@ -504,9 +504,9 @@ describe('ObsControlDesigner', () => {
       );
 
       const tooltipTrigger = container.querySelector('.fa-question-circle.form-builder-tooltip-trigger');
-      
+
       expect(screen.getByText('concept description')).toBeInTheDocument();
-      
+
       fireEvent.click(tooltipTrigger);
       const tooltipWrapper = container.querySelector('.form-builder-tooltip-wrap.active');
       expect(tooltipWrapper).toBeInTheDocument();
@@ -514,7 +514,7 @@ describe('ObsControlDesigner', () => {
 
     it('should include translationKey if description is present', () => {
       let componentRef;
-      
+
       render(
         <ObsControlDesigner
           ref={(ref) => { componentRef = ref; }}

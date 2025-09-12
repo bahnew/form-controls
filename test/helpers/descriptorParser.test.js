@@ -80,9 +80,9 @@ describe('DescriptorParser', () => {
       designProperties: { isVisible: true },
       metadata: {
         attributes: [
-          { dataType: 'text', defaultValue: 'default', name: 'value' }
-        ]
-      }
+          { dataType: 'text', defaultValue: 'default', name: 'value' },
+        ],
+      },
     };
 
     const descriptorParser = new DescriptorParser(descriptorMetadata);
@@ -91,7 +91,7 @@ describe('DescriptorParser', () => {
     expect(data).toEqual({
       designProperties: { isVisible: true },
       metadata: { value: 'default' },
-      control: 'textControl'
+      control: 'textControl',
     });
   });
 });

@@ -46,7 +46,7 @@ describe('idGenerator', () => {
       const flatControls = [
         { id: 5 },
         { id: 10 },
-        { id: 3 }
+        { id: 3 },
       ];
       const idGenerator = new IDGenerator(flatControls);
       expect(idGenerator.getId()).toBe(11);
@@ -57,7 +57,7 @@ describe('idGenerator', () => {
         { id: 1, controls: [] },
         { id: 15 },
         { id: 8, controls: [{ id: 20 }] },
-        { id: 5 }
+        { id: 5 },
       ];
       const idGenerator = new IDGenerator(mixedControls);
       expect(idGenerator.getId()).toBe(21);
@@ -67,7 +67,7 @@ describe('idGenerator', () => {
       const controlsWithNulls = [
         { id: 10, controls: null },
         { id: 25, controls: undefined },
-        { id: 30 }
+        { id: 30 },
       ];
       const idGenerator = new IDGenerator(controlsWithNulls);
       expect(idGenerator.getId()).toBe(31);
@@ -77,7 +77,7 @@ describe('idGenerator', () => {
       const controlsWithNaN = [
         { id: NaN },
         { id: 'invalid' },
-        { id: 10 }
+        { id: 10 },
       ];
       const idGenerator = new IDGenerator(controlsWithNaN);
       expect(idGenerator.getId()).toBe(1);

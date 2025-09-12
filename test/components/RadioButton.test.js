@@ -87,7 +87,7 @@ describe('RadioButton Component', () => {
       <RadioButton
         onValueChange={valueChangeSpy}
         options={options}
-        validate={true}
+        validate
         validations={[constants.validations.mandatory]}
         value={undefined}
       />
@@ -117,7 +117,7 @@ describe('RadioButton Component', () => {
         options={options}
         validate={false}
         validations={[]}
-        value={true}
+        value
       />
     );
 

@@ -39,7 +39,7 @@ class MockWrapper extends Component {
         concept: this.props.metadata.concept,
         label: this.props.metadata.label,
         properties: this.props.metadata.properties,
-        controls: []
+        controls: [],
       };
     }
     return undefined;
@@ -188,7 +188,7 @@ describe('ObsGroupControlDesigner', () => {
       concept,
       label,
       properties: {
-        location: { row: 0, column: 0 }
+        location: { row: 0, column: 0 },
       },
     };
 
@@ -320,7 +320,7 @@ describe('ObsGroupControlDesigner', () => {
           idGenerator={idGenerator}
           metadata={metadata}
           onSelect={onSelectSpy}
-          showDeleteButton={true}
+          showDeleteButton
           wrapper={MockWrapper}
         />
       );
@@ -342,7 +342,7 @@ describe('ObsGroupControlDesigner', () => {
           idGenerator={idGenerator}
           metadata={metadata}
           onSelect={() => {}}
-          showDeleteButton={true}
+          showDeleteButton
           wrapper={MockWrapper}
         />
       );

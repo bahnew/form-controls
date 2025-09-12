@@ -20,7 +20,7 @@ jest.mock('components/Row.jsx', () => ({
     <div data-testid="mock-row" data-has-event-trigger={!!onEventTrigger}>
       Row Mock
     </div>
-  ))
+  )),
 }));
 
 jest.mock('src/helpers/controlsParser', () => ({
@@ -29,7 +29,7 @@ jest.mock('src/helpers/controlsParser', () => ({
     const Row = require('components/Row.jsx').Row;
     const props = args[2] || {};
     return <Row {...props} />;
-  })
+  }),
 }));
 
 const messages = { TEST_KEY: 'test value', HTML_DESC_KEY: 'test value <h1>Heading goes here</h1>' };
@@ -40,7 +40,7 @@ const renderWithIntl = (component, options = {}) => {
       {children}
     </IntlProvider>
   );
-  
+
   return render(component, { wrapper: Wrapper, ...options });
 };
 
@@ -115,7 +115,7 @@ describe('Section', () => {
   const formVersion = '1';
   const sectionFormFieldPath = 'Section_Test.1/1-0';
   const obsFormFieldPath = 'Section_Test.1/2-0';
-  
+
   const children = List.of(new ControlRecord({
     control: {
       concept: obsConcept,
@@ -170,7 +170,7 @@ describe('Section', () => {
   describe('rendering', () => {
     it('should render section control with basic elements', () => {
       renderWithIntl(<SectionWithIntl {...defaultProps} />);
-      
+
       expect(screen.getByRole('group')).toBeInTheDocument();
       expect(screen.getByText('Section')).toBeInTheDocument();
       expect(screen.getAllByTestId('mock-row')).toHaveLength(1);
@@ -178,17 +178,17 @@ describe('Section', () => {
 
     it('should handle enabled and disabled states', () => {
       const Row = require('components/Row.jsx').Row;
-      
+
       renderWithIntl(<SectionWithIntl {...defaultProps} enabled={false} />);
-      
+
       const legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('form-builder-toggle');
       expect(legend).toHaveClass('disabled');
-      
+
       const controlsDiv = screen.getByRole('group').querySelector('.obsGroup-controls');
       expect(controlsDiv).toHaveClass('obsGroup-controls');
       expect(controlsDiv).toHaveClass('disabled');
-      
+
       expect(Row).toHaveBeenCalledWith(
         expect.objectContaining({ enabled: false }),
         {}
@@ -197,7 +197,7 @@ describe('Section', () => {
 
     it('should be enabled by default', () => {
       renderWithIntl(<SectionWithIntl {...defaultProps} />);
-      
+
       const legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('disabled');
     });
@@ -206,15 +206,15 @@ describe('Section', () => {
   describe('collapse functionality', () => {
     it('should toggle collapse state when legend is clicked', () => {
       renderWithIntl(<SectionWithIntl {...defaultProps} collapse={false} />);
-      
+
       const legend = screen.getByText('Section').closest('legend');
       const controlsDiv = screen.getByRole('group').querySelector('.obsGroup-controls');
-      
+
       expect(legend).toHaveClass('form-builder-toggle active');
       expect(controlsDiv).toHaveClass('obsGroup-controls active-group-controls');
-      
+
       fireEvent.click(legend);
-      
+
       expect(legend).toHaveClass('form-builder-toggle');
       expect(legend).not.toHaveClass('active');
       expect(controlsDiv).toHaveClass('obsGroup-controls closing-group-controls');
@@ -222,51 +222,51 @@ describe('Section', () => {
 
     it('should update collapse state when collapse prop changes', () => {
       const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse={false} />);
-      
+
       let legend = screen.getByText('Section').closest('legend');
       let controlsDiv = screen.getByRole('group').querySelector('.obsGroup-controls');
-      
+
       expect(legend).toHaveClass('form-builder-toggle active');
       expect(controlsDiv).toHaveClass('obsGroup-controls active-group-controls');
-      
-      rerender(<SectionWithIntl {...defaultProps} collapse={true} />);
-      
+
+      rerender(<SectionWithIntl {...defaultProps} collapse />);
+
       legend = screen.getByText('Section').closest('legend');
       controlsDiv = screen.getByRole('group').querySelector('.obsGroup-controls');
-      
+
       expect(legend).toHaveClass('form-builder-toggle');
       expect(legend).not.toHaveClass('active');
       expect(controlsDiv).toHaveClass('obsGroup-controls closing-group-controls');
     });
 
     it('should not update state when collapse conditions do not warrant change', () => {
-      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse={true} />);
-      
+      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse />);
+
       let legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
-      
+
       rerender(<SectionWithIntl {...defaultProps} collapse={undefined} />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
     });
 
     it('should not update state when collapse prop equals both current prop and state', () => {
-      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse={true} />);
-      
+      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse />);
+
       let legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
 
-      rerender(<SectionWithIntl {...defaultProps} collapse={true} />);
+      rerender(<SectionWithIntl {...defaultProps} collapse />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
     });
 
     it('should update state when collapse prop differs', () => {
-      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse={true} />);
-      
+      const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse />);
+
       let legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
-      
+
       rerender(<SectionWithIntl {...defaultProps} collapse={false} />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('active');
@@ -275,9 +275,9 @@ describe('Section', () => {
     it('should update state when collapse prop differs from current state', () => {
       const sectionRef = React.createRef();
       const { rerender } = renderWithIntl(
-        <Section 
+        <Section
           ref={sectionRef}
-          {...defaultProps} 
+          {...defaultProps}
           collapse={false}
           intl={{ formatMessage: ({ defaultMessage }) => defaultMessage }}
         />
@@ -289,9 +289,9 @@ describe('Section', () => {
       sectionRef.current.setState({ collapse: true });
 
       rerender(
-        <Section 
+        <Section
           ref={sectionRef}
-          {...defaultProps} 
+          {...defaultProps}
           collapse={false}
           intl={{ formatMessage: ({ defaultMessage }) => defaultMessage }}
         />
@@ -303,18 +303,18 @@ describe('Section', () => {
 
     it('should handle collapse state transitions correctly', () => {
       const { rerender } = renderWithIntl(<SectionWithIntl {...defaultProps} collapse={false} />);
-      
+
       let legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('active');
 
-      rerender(<SectionWithIntl {...defaultProps} collapse={true} />);
+      rerender(<SectionWithIntl {...defaultProps} collapse />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).not.toHaveClass('active');
 
       rerender(<SectionWithIntl {...defaultProps} collapse={false} />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('active');
-      
+
       rerender(<SectionWithIntl {...defaultProps} collapse={undefined} />);
       legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('active');
@@ -325,23 +325,23 @@ describe('Section', () => {
     it('should call onValueChanged when onChange is triggered', () => {
       const onValueChangedMock = jest.fn();
       const sectionRef = React.createRef();
-      
+
       renderWithIntl(
-        <Section 
+        <Section
           ref={sectionRef}
-          {...defaultProps} 
+          {...defaultProps}
           onValueChanged={onValueChangedMock}
           intl={{ formatMessage: ({ defaultMessage }) => defaultMessage }}
         />
       );
-      
+
       const updatedValue = { value: 1, comment: undefined };
       sectionRef.current.onChange(obsFormFieldPath, updatedValue, undefined, undefined);
-      
+
       expect(onValueChangedMock).toHaveBeenCalledWith(
-        obsFormFieldPath, 
-        updatedValue, 
-        undefined, 
+        obsFormFieldPath,
+        updatedValue,
+        undefined,
         undefined
       );
     });
@@ -349,19 +349,19 @@ describe('Section', () => {
     it('should pass onEventTrigger property to Row components', () => {
       const onEventTriggerMock = jest.fn();
       const Row = require('components/Row.jsx').Row;
-      
+
       renderWithIntl(
-        <SectionWithIntl 
-          {...defaultProps} 
+        <SectionWithIntl
+          {...defaultProps}
           onEventTrigger={onEventTriggerMock}
         />
       );
-      
+
       expect(Row).toHaveBeenCalledWith(
         expect.objectContaining({ onEventTrigger: onEventTriggerMock }),
         {}
       );
-      
+
       const rowElement = screen.getByTestId('mock-row');
       expect(rowElement).toHaveAttribute('data-has-event-trigger', 'true');
     });
@@ -370,20 +370,20 @@ describe('Section', () => {
       const onControlAddMock = jest.fn();
       const onControlRemoveMock = jest.fn();
       const sectionRef = React.createRef();
-      
+
       renderWithIntl(
-        <Section 
+        <Section
           ref={sectionRef}
-          {...defaultProps} 
+          {...defaultProps}
           onControlAdd={onControlAddMock}
           onControlRemove={onControlRemoveMock}
           intl={{ formatMessage: ({ defaultMessage }) => defaultMessage }}
         />
       );
-      
+
       sectionRef.current.onControlAdd(obsFormFieldPath, true);
       expect(onControlAddMock).toHaveBeenCalledWith(obsFormFieldPath, true);
-      
+
       sectionRef.current.onControlRemove(obsFormFieldPath);
       expect(onControlRemoveMock).toHaveBeenCalledWith(obsFormFieldPath);
     });
@@ -397,16 +397,16 @@ describe('Section', () => {
           translationKey: 'TEST_KEY',
           type: 'label',
           value: 'label',
-        }
+        },
       };
-      
+
       renderWithIntl(
-        <SectionWithIntl 
-          {...defaultProps} 
+        <SectionWithIntl
+          {...defaultProps}
           metadata={translatedMetadata}
         />
       );
-      
+
       expect(screen.getByText('test value')).toBeInTheDocument();
     });
   });

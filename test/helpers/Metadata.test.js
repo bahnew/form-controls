@@ -1,9 +1,9 @@
-import { Concept } from "src/helpers/Concept";
-import { Metadata } from "src/helpers/Metadata";
+import { Concept } from 'src/helpers/Concept';
+import { Metadata } from 'src/helpers/Metadata';
 import { IDGenerator } from 'src/helpers/idGenerator';
 
 jest.mock('src/helpers/componentStore', () => ({
-  getDesignerComponent: jest.fn()
+  getDesignerComponent: jest.fn(),
 }));
 
 import ComponentStore from 'src/helpers/componentStore';
@@ -205,10 +205,10 @@ describe('Metadata', () => {
   });
 
   it('should add the required fields for the metadata', () => {
-    const idGenerator = new IDGenerator([{id:19}]);
+    const idGenerator = new IDGenerator([{ id: 19 }]);
     const concept = new Concept(abnormalConcept.setMembers[0]);
 
-    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 'obsControl', undefined, { row: 2, column: 4});
+    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 'obsControl', undefined, { row: 2, column: 4 });
     expect(metadata.id).toEqual('20');
     expect(metadata.properties.location).toEqual({ row: 2, column: 4 });
   });
@@ -217,9 +217,9 @@ describe('Metadata', () => {
     const nestedSetConcept = {
       uuid: 'nested-uuid',
       display: 'Nested Set',
-      name: { 
+      name: {
         uuid: 'nested-name-uuid',
-        name: 'Nested Set' 
+        name: 'Nested Set',
       },
       conceptClass: {
         uuid: 'nested-class-uuid',
@@ -234,9 +234,9 @@ describe('Metadata', () => {
         {
           uuid: 'nested-child-set-uuid',
           display: 'Nested Child Set',
-          name: { 
+          name: {
             uuid: 'nested-child-name-uuid',
-            name: 'Nested Child Set' 
+            name: 'Nested Child Set',
           },
           conceptClass: {
             uuid: 'nested-child-class-uuid',
@@ -251,9 +251,9 @@ describe('Metadata', () => {
             {
               uuid: 'nested-leaf-uuid',
               display: 'Nested Leaf',
-              name: { 
+              name: {
                 uuid: 'nested-leaf-name-uuid',
-                name: 'Nested Leaf' 
+                name: 'Nested Leaf',
               },
               conceptClass: {
                 uuid: 'nested-leaf-class-uuid',
@@ -263,16 +263,16 @@ describe('Metadata', () => {
                 uuid: 'nested-leaf-datatype-uuid',
                 name: 'Text',
               },
-              set: false
-            }
-          ]
+              set: false,
+            },
+          ],
         },
         {
           uuid: 'regular-child-uuid',
           display: 'Regular Child',
-          name: { 
+          name: {
             uuid: 'regular-child-name-uuid',
-            name: 'Regular Child' 
+            name: 'Regular Child',
           },
           conceptClass: {
             uuid: 'regular-child-class-uuid',
@@ -282,9 +282,9 @@ describe('Metadata', () => {
             uuid: 'regular-child-datatype-uuid',
             name: 'Text',
           },
-          set: false
-        }
-      ]
+          set: false,
+        },
+      ],
     };
 
     const idGenerator = new IDGenerator();
