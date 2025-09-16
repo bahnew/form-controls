@@ -1,33 +1,48 @@
 {
-  "globals": {
-    "describe": true,
-    "before": true,
-    "after": true,
-    "beforeEach": true,
-    "afterEach": true,
-    "context": true,
-    "it": true,
-    "test": true,
-    "expect": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
     "jest": true,
-    "beforeAll": true,
-    "afterAll": true
+    "node": true
   },
-  "plugins": ["react", "jest"],
-  "extends": ["airbnb", "plugin:jest/recommended"],
-  "rules": {
-    "react/prop-types": [1, { "ignore": ["children"] }],
-    "react/sort-prop-types": 2,
-    "react/jsx-sort-props": 0,
-    "max-len": [2, 120, 2, { "ignoreComments": true }]
-  },
-  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:jest/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2021,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true,
-      "experimentalObjectRestSpread": true
+      "jsx": true
+    },
+    "requireConfigFile": true
+  },
+  "plugins": ["react", "jest", "jsx-a11y", "import"],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": ["warn", { "ignore": ["children"] }],
+    "react/sort-prop-types": "error",
+    "react/jsx-sort-props": "off",
+    "max-len": ["error", { "code": 120, "ignoreComments": true }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "import/order": ["error", {
+      "groups": [["builtin", "external", "internal"]],
+      "newlines-between": "never"
+    }]
+  },
+  "settings": {
+    "react": {
+      "version": "17.0"
+    },
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.js"
+      }
     }
   }
 }
