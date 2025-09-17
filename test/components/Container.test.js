@@ -381,21 +381,20 @@ describe('Container', () => {
         />,
       );
 
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
 
-        expect(result).toHaveProperty('errors');
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.errors)).toBe(true);
-        expect(result.errors.length).toBeGreaterThan(0);
-        expect(result.errors[0]).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              message: 'mandatory',
-            }),
-          ]),
-        );
-      }
+      expect(result).toHaveProperty('errors');
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.errors)).toBe(true);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0]).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: 'mandatory',
+          }),
+        ]),
+      );
     });
 
     it('should return valid observations when form data is complete', () => {
@@ -409,21 +408,20 @@ describe('Container', () => {
       const input = screen.getByRole('spinbutton');
       fireEvent.change(input, { target: { value: '75' } });
 
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
 
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
-        expect(result.observations[0]).toEqual(
-          expect.objectContaining({
-            concept: expect.objectContaining({
-              uuid: PULSE_UUID,
-            }),
-            value: '75',
-            formFieldPath: expect.stringMatching(/PulseForm\.1\/1-0/),
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
+      expect(result.observations[0]).toEqual(
+        expect.objectContaining({
+          concept: expect.objectContaining({
+            uuid: PULSE_UUID,
           }),
-        );
-      }
+          value: '75',
+          formFieldPath: expect.stringMatching(/PulseForm\.1\/1-0/),
+        }),
+      );
     });
   });
 
@@ -495,24 +493,23 @@ describe('Container', () => {
         />,
       );
 
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
 
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
 
-        const allVoidedResult =
-          containerRef.current.areAllVoided(voidedObservations);
-        expect(allVoidedResult).toBe(true);
+      const allVoidedResult =
+        containerRef.current.areAllVoided(voidedObservations);
+      expect(allVoidedResult).toBe(true);
 
-        const mixedObservations = [
-          ...voidedObservations,
-          { ...voidedObservations[0], voided: false, value: '80' },
-        ];
-        const mixedResult =
-          containerRef.current.areAllVoided(mixedObservations);
-        expect(mixedResult).toBe(false);
-      }
+      const mixedObservations = [
+        ...voidedObservations,
+        { ...voidedObservations[0], voided: false, value: '80' },
+      ];
+      const mixedResult =
+        containerRef.current.areAllVoided(mixedObservations);
+      expect(mixedResult).toBe(false);
     });
 
     it('should verify onValueUpdated receives correct data structure', async () => {
@@ -601,22 +598,21 @@ describe('Container', () => {
         <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
       );
 
-      if (containerRef.current) {
-        const originalCanAdd = containerRef.current.canAddNextFormFieldPath;
-        containerRef.current.canAddNextFormFieldPath = jest
-          .fn()
-          .mockReturnValue(true);
+      expect(containerRef.current).toBeTruthy();
+      const originalCanAdd = containerRef.current.canAddNextFormFieldPath;
+      containerRef.current.canAddNextFormFieldPath = jest
+        .fn()
+        .mockReturnValue(true);
 
-        containerRef.current.onControlAdd('PulseForm.1/1-0', false);
+      containerRef.current.onControlAdd('PulseForm.1/1-0', false);
 
-        await waitFor(() => {
-          expect(screen.getAllByRole('spinbutton')).toHaveLength(2);
-        });
+      await waitFor(() => {
+        expect(screen.getAllByRole('spinbutton')).toHaveLength(2);
+      });
 
-        expect(screen.queryByText(/added/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/added/i)).not.toBeInTheDocument();
 
-        containerRef.current.canAddNextFormFieldPath = originalCanAdd;
-      }
+      containerRef.current.canAddNextFormFieldPath = originalCanAdd;
     });
 
     it('should handle getValue with errors and observations (lines 116-117)', () => {
@@ -646,16 +642,13 @@ describe('Container', () => {
       const input = screen.getByRole('spinbutton');
       fireEvent.change(input, { target: { value: '75' } });
 
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
 
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
 
-        if (result.errors) {
-          expect(Array.isArray(result.errors)).toBe(true);
-        }
-      }
+      expect(result.errors === undefined || Array.isArray(result.errors)).toBe(true);
     });
 
     it('should handle storeChildRef with null reference (lines 126-127)', () => {
@@ -666,15 +659,14 @@ describe('Container', () => {
         <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
       );
 
-      if (containerRef.current) {
-        expect(() => {
-          containerRef.current.storeChildRef(null);
-        }).not.toThrow();
+      expect(containerRef.current).toBeTruthy();
+      expect(() => {
+        containerRef.current.storeChildRef(null);
+      }).not.toThrow();
 
-        expect(() => {
-          containerRef.current.storeChildRef(undefined);
-        }).not.toThrow();
-      }
+      expect(() => {
+        containerRef.current.storeChildRef(undefined);
+      }).not.toThrow();
     });
 
     it('should test areAllVoided method directly (line 147)', () => {
@@ -685,27 +677,26 @@ describe('Container', () => {
         <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
       );
 
-      if (containerRef.current) {
-        expect(containerRef.current.areAllVoided([])).toBe(true);
+      expect(containerRef.current).toBeTruthy();
+      expect(containerRef.current.areAllVoided([])).toBe(true);
 
-        const allVoided = [
-          { voided: true, value: '1' },
-          { voided: true, value: '2' },
-        ];
-        expect(containerRef.current.areAllVoided(allVoided)).toBe(true);
+      const allVoided = [
+        { voided: true, value: '1' },
+        { voided: true, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(allVoided)).toBe(true);
 
-        const mixed = [
-          { voided: true, value: '1' },
-          { voided: false, value: '2' },
-        ];
-        expect(containerRef.current.areAllVoided(mixed)).toBe(false);
+      const mixed = [
+        { voided: true, value: '1' },
+        { voided: false, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(mixed)).toBe(false);
 
-        const nonVoided = [
-          { voided: false, value: '1' },
-          { voided: false, value: '2' },
-        ];
-        expect(containerRef.current.areAllVoided(nonVoided)).toBe(false);
-      }
+      const nonVoided = [
+        { voided: false, value: '1' },
+        { voided: false, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(nonVoided)).toBe(false);
     });
 
     it('should handle patient uuid extraction in render method', () => {
@@ -738,12 +729,11 @@ describe('Container', () => {
         />,
       );
 
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
 
-        expect(result).toHaveProperty('observations');
-        expect(result).not.toHaveProperty('errors');
-      }
+      expect(result).toHaveProperty('observations');
+      expect(result).not.toHaveProperty('errors');
     });
   });
 
@@ -802,11 +792,10 @@ describe('Container', () => {
         <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
       );
 
-      if (containerRef.current) {
-        expect(() => {
-          containerRef.current.onEventTrigger('some-path', 'onValueChange');
-        }).not.toThrow();
-      }
+      expect(containerRef.current).toBeTruthy();
+      expect(() => {
+        containerRef.current.onEventTrigger('some-path', 'onValueChange');
+      }).not.toThrow();
     });
   });
 });

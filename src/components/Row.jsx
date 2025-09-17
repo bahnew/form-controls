@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { getControls, getGroupedControls } from '../helpers/controlsParser';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import classNames from 'classnames';
 import find from 'lodash/find';
 import { injectIntl } from 'react-intl';
+import { getControls, getGroupedControls } from '../helpers/controlsParser';
 
 export class Row extends Component {
   getControlsByColumn(sortedColumnControls, records, childProps) {
@@ -25,12 +25,11 @@ export class Row extends Component {
   getAddMoreControls(controls, className) {
     return controls.map((control, index) => (
       control.map(ctrl =>
-        <div className="form-builder-column-wrapper">
+        <div className="form-builder-column-wrapper" key={ctrl.props.formFieldPath}>
           <div className={classNames(`${className}-index${index}`, { hidden: ctrl.props.hidden },
             { 'same-line': find(ctrl.props.metadata.properties,
               (value, key) => (key === 'sameLine' && value)) }
             )}
-            key={ ctrl.props.formFieldPath }
           >
             {ctrl}
           </div>

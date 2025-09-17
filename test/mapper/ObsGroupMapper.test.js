@@ -203,7 +203,8 @@ describe('ObsGroupMapper', () => {
     expect(result).toEqual([]);
   });
 
-  it('should handle updateOldObsGroupFormFieldPathForBackwardCompatibility with observations that include control prefix', () => {
+  it('should handle updateOldObsGroupFormFieldPathForBackwardCompatibility with observations ' +
+     'that include control prefix', () => {
     const control = { id: '1', properties: { addMore: true } };
     const observations = [
       new Obs({ formFieldPath: 'Test1.1/1-0' }),
@@ -253,7 +254,8 @@ describe('ObsGroupMapper', () => {
     expect(result.groupMembers.get(0).formFieldPath).toBeDefined();
   });
 
-  it('should handle updateOldObsGroupFormFieldPathForBackwardCompatibility with observations not including control prefix', () => {
+  it('should handle updateOldObsGroupFormFieldPathForBackwardCompatibility with observations ' +
+     'not including control prefix', () => {
     const control = { id: '5', properties: { addMore: true } };
     const observations = [
       new Obs({ formFieldPath: 'Test1.1/1-0' }),
@@ -349,7 +351,8 @@ describe('ObsGroupMapper', () => {
     expect(result).toBeNull();
   });
 
-  it('should return same amount obsGroups having add more property false and group members should not have obs group form field path', () => {
+  it('should return same amount obsGroups having add more property false and group members ' +
+     'should not have obs group form field path', () => {
     const formName = 'Test1';
     const formVersion = '1';
     const control = {

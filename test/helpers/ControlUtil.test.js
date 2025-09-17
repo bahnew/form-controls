@@ -19,7 +19,8 @@ describe('ControlsParser', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false when parentFormFieldPath is empty and control has addMore property with value false', () => {
+    it('should return false when parentFormFieldPath is empty and control has addMore property with ' +
+       'value false', () => {
       const control = {
         properties: {
           addMore: false,
@@ -50,7 +51,8 @@ describe('ControlsParser', () => {
       expect(result).toBe('Form.1/2-0');
     });
 
-    it('should return empty formFieldPath when parentFormFieldPath is empty and control has addMore property is false', () => {
+    it('should return empty formFieldPath when parentFormFieldPath is empty and control has ' +
+       'addMore property is false', () => {
       const control = {
         id: 2,
         properties: {

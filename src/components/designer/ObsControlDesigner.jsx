@@ -234,6 +234,7 @@ ObsControlDesigner.propTypes = {
       }),
     }),
     type: PropTypes.string.isRequired,
+    units: PropTypes.string,
   }),
   onSelect: PropTypes.func.isRequired,
   setError: PropTypes.func,

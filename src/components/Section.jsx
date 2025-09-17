@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import classNames from 'classnames';
 import ComponentStore from 'src/helpers/componentStore';
+import { injectIntl, IntlProvider } from 'react-intl';
 import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 import addMoreDecorator from './AddMoreDecorator';
-import { injectIntl, IntlProvider } from 'react-intl';
 
 export class Section extends addMoreDecorator(Component) {
 

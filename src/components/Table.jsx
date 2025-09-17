@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import classNames from 'classnames';
 import ComponentStore from 'src/helpers/componentStore';
-import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 import { injectIntl, IntlProvider, IntlShape } from 'react-intl';
+import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 
 export class Table extends Component {
 
@@ -96,6 +96,7 @@ Table.propTypes = {
     label: PropTypes.shape({
       type: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
+      translationKey: PropTypes.string,
     }).isRequired,
     properties: PropTypes.object,
     type: PropTypes.string.isRequired,

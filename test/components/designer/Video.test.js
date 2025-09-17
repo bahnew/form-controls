@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { VideoDesigner } from 'components/designer/Video.jsx';
 
 describe('VideoDesigner', () => {

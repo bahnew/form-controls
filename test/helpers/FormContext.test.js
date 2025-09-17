@@ -440,7 +440,8 @@ describe('FormContext', () => {
       expect(targetRecordWrapper.currentRecord.formFieldPath).toBe('Vitals.2/1-0');
     });
 
-    it('should get first obs record out of two add-more records with the given id where obs lies under a section', () => {
+    it('should get first obs record out of two add-more records with the given id where obs ' +
+       'lies under a section', () => {
       const rootRecord = new ControlRecord({
         children: List.of(rootSectionRecord),
       });

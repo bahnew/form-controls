@@ -11,7 +11,8 @@ window.renderWithControls =
     const container = React.createElement(Container,
       { metadata: formDetails, observations, validate: true,
         validateForm, collapse, patient, locale, translations: formTranslations });
-    return ReactDOM.render(container, document.getElementById(nodeId));
+    ReactDOM.render(container, document.getElementById(nodeId));
+    return document.getElementById(nodeId);
   };
 
 window.unMountForm = (container) => {

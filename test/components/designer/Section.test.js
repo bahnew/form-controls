@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { SectionDesigner } from 'components/designer/Section.jsx';
-import * as Grid from 'components/designer/Grid.jsx';
 import { IDGenerator } from 'src/helpers/idGenerator';
+
+jest.mock('components/designer/Grid.jsx', () => {
+  const React = require('react');
+  
+  class MockGridDesigner extends React.Component {
+    constructor(props) {
+      super(props);
+      this.cellRef = {};
+    }
+    getControls() { return this.props.controls || []; }
+    render() { return React.createElement('div', { 'data-testid': 'grid-designer' }); }
+  }
+  
+  return {
+    GridDesigner: MockGridDesigner,
+  };
+});
+
+import * as Grid from 'components/designer/Grid.jsx';
 
 const concept = { name: 'dummyPulse', datatype: 'text', uuid: 'dummyUuid' };
 const properties = {};
@@ -36,21 +54,6 @@ describe('SectionDesigner', () => {
       properties,
     };
 
-    class GridStub extends Component {
-      getControls() { return [childControl]; }
-      render() { return (<div data-testid="grid-designer" />); }
-    }
-
-    let originalGridDesigner;
-
-    beforeAll(() => {
-      originalGridDesigner = Grid.GridDesigner;
-      Grid.GridDesigner = GridStub;
-    });
-
-    afterAll(() => {
-      Grid.GridDesigner = originalGridDesigner;
-    });
 
     beforeEach(() => {
       jest.clearAllMocks();
@@ -130,17 +133,16 @@ describe('SectionDesigner', () => {
         ref: (ref) => { sectionRef = ref; },
       });
 
-      if (sectionRef) {
-        const expectSectionLabel = Object.assign({}, metadata.label,
-          { id: '123', translationKey: 'DUMMYPULSE_123' });
-        const expectObsLabel = Object.assign({}, metadata.label,
-          { id: '124', translationKey: 'DUMMYPULSE_124' });
+      expect(sectionRef).toBeTruthy();
+      const expectSectionLabel = Object.assign({}, metadata.label,
+        { id: '123', translationKey: 'DUMMYPULSE_123' });
+      const expectObsLabel = Object.assign({}, metadata.label,
+        { id: '124', translationKey: 'DUMMYPULSE_124' });
 
-        metadata.label = expectSectionLabel;
-        metadata.controls[0].label = expectObsLabel;
+      metadata.label = expectSectionLabel;
+      metadata.controls[0].label = expectObsLabel;
 
-        expect(sectionRef.getJsonDefinition()).toEqual(metadata);
-      }
+      expect(sectionRef.getJsonDefinition()).toEqual(metadata);
     });
 
     it('should stop event propagation to upper component when click on section', () => {

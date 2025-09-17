@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import ComponentStore from '../../helpers/componentStore';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { LabelDesigner } from 'components/designer/Label.jsx';
 import { GridDesigner } from 'components/designer/Grid.jsx';
 import { CellDesigner } from 'components/designer/Cell.jsx';
+import ComponentStore from '../../helpers/componentStore';
 
 const supportedControlTypes = ['obsControl'];
 const unsupportedProperties = ['addMore'];
@@ -183,6 +183,7 @@ TableDesigner.propTypes = {
   loadFormJson: PropTypes.func,
   metadata: PropTypes.shape({
     columnHeaders: PropTypes.arrayOf(PropTypes.string),
+    controls: PropTypes.array,
     displayType: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.object,

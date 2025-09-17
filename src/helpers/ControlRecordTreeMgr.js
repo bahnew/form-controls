@@ -1,6 +1,6 @@
-import { Util } from './Util';
 import sortBy from 'lodash/sortBy';
 import { getUpdatedFormFieldPath } from 'src/helpers/formNamespace';
+import { Util } from './Util';
 
 export default class ControlRecordTreeMgr {
 

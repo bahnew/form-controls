@@ -121,7 +121,8 @@ describe('ControlRecordTreeMgr', () => {
     expect(brotherTree.formFieldPath).toBe(expectedFormFieldPath);
   });
 
-  it('should return obsControl with path as an incremented value when obsControl is the root tree and parent is section without add more', () => {
+  it('should return obsControl with path as an incremented value when obsControl is the root tree ' +
+     'and parent is section without add more', () => {
     const obsRecord = new ControlRecord({
       control: obsControl,
       value: {},
@@ -143,7 +144,8 @@ describe('ControlRecordTreeMgr', () => {
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-1');
   });
 
-  it('should return obsControl with path as an incremented value when obsControl is the root tree and parent is section with add more', () => {
+  it('should return obsControl with path as an incremented value when obsControl is the root tree ' +
+     'and parent is section with add more', () => {
     const obsFormFieldPath = 'FormName.V/2-0/1-0';
     const observationRecord = new ControlRecord({
       control: obsControl,
@@ -168,7 +170,8 @@ describe('ControlRecordTreeMgr', () => {
     expect(nextObsTree.formFieldPath).toBe('FormName.V/2-0/1-1');
   });
 
-  it('should return section control tree with obsControl as a child and increment the path value for section control id, when section control is the root tree', () => {
+  it('should return section control tree with obsControl as a child and increment the path value ' +
+     'for section control id, when section control is the root tree', () => {
     const sectionFormFieldPath = 'FormName.V/2-0';
     const obsFormFieldPath = 'FormName.V/2-0/1-0';
     const observationRecord = new ControlRecord({
@@ -207,7 +210,8 @@ describe('ControlRecordTreeMgr', () => {
     );
   });
 
-  it('should increment path for section 1 when section 1 has child as section 2 which is add more and has child obs control, where root is section 2', () => {
+  it('should increment path for section 1 when section 1 has child as section 2 which is add more ' +
+     'and has child obs control, where root is section 2', () => {
     const section2FormFieldPath = 'FormName.V/2-0';
     const obsFormFieldPath = 'FormName.V/2-0/3-0';
     const observationRecord = new ControlRecord({
@@ -251,7 +255,8 @@ describe('ControlRecordTreeMgr', () => {
     );
   });
 
-  it('should increment path for section 1 with add more when section 1 has child as section 2 which is also add more and has child obs control, where root is section 1', () => {
+  it('should increment path for section 1 with add more when section 1 has child as section 2 ' +
+     'which is also add more and has child obs control, where root is section 1', () => {
     const section1FormFieldPath = 'FormName.V/1-0';
     const section2FormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
@@ -329,7 +334,8 @@ describe('ControlRecordTreeMgr', () => {
     );
   });
 
-  it('should increment path for section 2 with add more when section 1 has child as section 2 which is also add more and has child obs control, where root tree is section 2', () => {
+  it('should increment path for section 2 with add more when section 1 has child as section 2 ' +
+     'which is also add more and has child obs control, where root tree is section 2', () => {
     const section2FormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
     const observationRecord = new ControlRecord({
@@ -373,7 +379,8 @@ describe('ControlRecordTreeMgr', () => {
     );
   });
 
-  it('should increment path for section with add more which has child as obsGroup which is also add more and has child obs control, where root tree is section', () => {
+  it('should increment path for section with add more which has child as obsGroup which is ' +
+     'also add more and has child obs control, where root tree is section', () => {
     const sectionFormFieldPath = 'FormName.V/1-0';
     const obsGroupFormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
@@ -451,7 +458,8 @@ describe('ControlRecordTreeMgr', () => {
     );
   });
 
-  it('should increment path for obs group with add more which has child as obs and parent as section, where root tree is obsgroup', () => {
+  it('should increment path for obs group with add more which has child as obs and parent as ' +
+     'section, where root tree is obsgroup', () => {
     const obsGroupFormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
     const observationRecord = new ControlRecord({

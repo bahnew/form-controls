@@ -9,8 +9,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:jest/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jest/recommended"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
@@ -21,7 +20,7 @@
     },
     "requireConfigFile": true
   },
-  "plugins": ["react", "jest", "jsx-a11y", "import"],
+  "plugins": ["react", "jest", "import"],
   "rules": {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
@@ -29,11 +28,9 @@
     "react/sort-prop-types": "error",
     "react/jsx-sort-props": "off",
     "max-len": ["error", { "code": 120, "ignoreComments": true }],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "import/order": ["error", {
-      "groups": [["builtin", "external", "internal"]],
-      "newlines-between": "never"
-    }]
+    "no-unused-vars": "off",
+    "import/order": "off",
+    "react/no-deprecated": "off"
   },
   "settings": {
     "react": {

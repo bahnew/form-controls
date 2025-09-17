@@ -172,9 +172,11 @@ describe('execute control events', () => {
     const recordWithChildren = new ControlRecord({
       children: List.of(recordTreeWithEvent),
     });
-    const executeStub = jest.spyOn(ScriptRunner.prototype, 'execute').mockReturnValue(updatedRecordTreeAfterExecutingEvent);
+    const executeStub = jest.spyOn(ScriptRunner.prototype, 'execute')
+      .mockReturnValue(updatedRecordTreeAfterExecutingEvent);
 
-    expect(executeEventsFromCurrentRecord(recordWithChildren, undefined, patient)).toBe(updatedRecordTreeAfterExecutingEvent);
+    expect(executeEventsFromCurrentRecord(recordWithChildren, undefined, patient))
+      .toBe(updatedRecordTreeAfterExecutingEvent);
 
     executeStub.mockRestore();
   });

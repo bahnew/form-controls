@@ -204,7 +204,8 @@ describe('Row', () => {
       expect(emptyRight).toBeInTheDocument();
     });
 
-    it('should show the cell skeleton and hide its content when one of the two cells is hidden and other is visible', () => {
+    it('should show the cell skeleton and hide its content ' +
+       'when one of the two cells is hidden and other is visible', () => {
       const tableControls = [
         {
           id: '100',

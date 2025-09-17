@@ -1353,7 +1353,7 @@ describe('ControlRecordTreeBuilder', () => {
         control: { id: '1' },
       });
       const result = controlRecord.getActive();
-      expect(result).toBeNull;
+      expect(result).toBeNull();
     });
   });
 
@@ -1420,7 +1420,7 @@ describe('ControlRecordTreeBuilder', () => {
       });
 
       const result = controlRecord.removeObsUuidsInDataSource();
-      expect(result.dataSource.uuid).toBeUndefined;
+      expect(result.dataSource.uuid).toBeUndefined();
     });
 
     it('should return unchanged record when removeObsUuidsInDataSource is called on inactive record', () => {

@@ -2,9 +2,9 @@ import { Record, List } from 'immutable';
 import MapperStore from 'src/helpers/MapperStore';
 import constants from 'src/constants';
 import isEmpty from 'lodash/isEmpty';
-import ValueMapperStore from './ValueMapperStore';
 import { isAnyAncestorOrControlHasAddMore,
     getCurrentFormFieldPathIfAddMore } from 'src/helpers/ControlUtil';
+import ValueMapperStore from './ValueMapperStore';
 import { Obs } from './Obs';
 
 export const ControlRecord = new Record({

@@ -3,7 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { DropTarget } from 'src/components/DropTarget.jsx';
 
-const DropTargetWrapper = ({ children = 'Drop target content', onProcessDrop, onProcessMove, onProcessDragEnter, onProcessDragLeave, onProcessDragOver }) => {
+const DropTargetWrapper = ({
+  children = 'Drop target content',
+  onProcessDrop,
+  onProcessMove,
+  onProcessDragEnter,
+  onProcessDragLeave,
+  onProcessDragOver
+}) => {
   const dropTarget = new DropTarget();
 
   if (onProcessDrop) dropTarget.processDrop = onProcessDrop;
@@ -365,29 +372,44 @@ describe('DropTarget', () => {
       }).not.toThrow();
     });
 
-    it('should handle various dropEffect values', () => {
+    it('should call processMove for copy effect', () => {
       const dropTarget = new DropTarget();
       const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'copy';
 
-      const testCases = [
-        { effect: 'copy', shouldCall: true },
-        { effect: 'link', shouldCall: true },
-        { effect: 'move', shouldCall: true },
-        { effect: 'none', shouldCall: false },
-      ];
+      dropTarget.notifyMove(mockEventData, testContext);
 
-      testCases.forEach(({ effect, shouldCall }) => {
-        processMoveSpy.mockClear();
-        mockEventData.dataTransfer.dropEffect = effect;
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
 
-        dropTarget.notifyMove(mockEventData, testContext);
+    it('should call processMove for link effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'link';
 
-        if (shouldCall) {
-          expect(processMoveSpy).toHaveBeenCalledWith(testContext);
-        } else {
-          expect(processMoveSpy).not.toHaveBeenCalled();
-        }
-      });
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
+
+    it('should call processMove for move effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'move';
+
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
+
+    it('should not call processMove for none effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'none';
+
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).not.toHaveBeenCalled();
     });
   });
 });

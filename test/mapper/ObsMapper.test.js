@@ -188,7 +188,8 @@ describe('ObsMapper', () => {
     expect(updatedObs).toBeNull();
   });
 
-  it('should mark voided of obs as true when given obs control with complex media type and the value contains voided and also remove voided suffix from the value', () => {
+  it('should mark voided of obs as true when given obs control with complex media type and the ' +
+     'value contains voided and also remove voided suffix from the value', () => {
     const complexConcept = {
       answers: [],
       datatype: 'Complex',

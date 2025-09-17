@@ -1,6 +1,6 @@
-import { DescriptorParser as Descriptor } from './descriptorParser';
 import ComponentStore from 'src/helpers/componentStore';
 import { Concept } from 'src/helpers/Concept';
+import { DescriptorParser as Descriptor } from './descriptorParser';
 
 export class Metadata {
   getMetadataForConcept(concept, idGenerator, type = 'obsGroupControl',

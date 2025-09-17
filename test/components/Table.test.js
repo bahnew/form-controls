@@ -352,7 +352,7 @@ describe('Table', () => {
 
   describe('children handling', () => {
     it('should handle empty children list', () => {
-      renderWithIntl(<TableWithIntl {...defaultProps} children={List.of()} />);
+      renderWithIntl(<TableWithIntl {...defaultProps}>{List.of()}</TableWithIntl>);
 
       expect(screen.getByText('Table')).toBeInTheDocument();
       expect(document.querySelector('.test-Rows')).toBeInTheDocument();
@@ -377,7 +377,7 @@ describe('Table', () => {
         })
       );
 
-      renderWithIntl(<TableWithIntl {...defaultProps} children={multipleChildren} />);
+      renderWithIntl(<TableWithIntl {...defaultProps}>{multipleChildren}</TableWithIntl>);
 
       expect(screen.getByText('Table')).toBeInTheDocument();
     });

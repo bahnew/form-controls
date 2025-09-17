@@ -7,10 +7,10 @@ import find from 'lodash/find';
 import { Comment } from 'components/Comment.jsx';
 import { getValidations } from 'src/helpers/controlsHelper';
 import { UnSupportedComponent } from 'components/UnSupportedComponent.jsx';
-import addMoreDecorator from './AddMoreDecorator';
 import constants from 'src/constants';
 import { Util } from 'src/helpers/Util';
 import { injectIntl } from 'react-intl';
+import addMoreDecorator from './AddMoreDecorator';
 
 export class ObsControl extends addMoreDecorator(Component) {
 

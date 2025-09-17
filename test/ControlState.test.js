@@ -301,8 +301,12 @@ describe('controlStateFactory', () => {
 
     const result = controlStateFactory(metadata, bahmniObs, customFormName, customVersion);
 
-    expect(mockMapper.getInitialObject).toHaveBeenCalledWith(customFormName, customVersion, metadata.controls[0], bahmniObs);
-    expect(mockMapper.getInitialObject).toHaveBeenCalledWith(customFormName, customVersion, metadata.controls[1], bahmniObs);
+    expect(mockMapper.getInitialObject).toHaveBeenCalledWith(
+      customFormName, customVersion, metadata.controls[0], bahmniObs
+    );
+    expect(mockMapper.getInitialObject).toHaveBeenCalledWith(
+      customFormName, customVersion, metadata.controls[1], bahmniObs
+    );
   });
 
   it('should handle multiple obs per control', () => {

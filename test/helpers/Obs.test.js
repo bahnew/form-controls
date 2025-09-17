@@ -286,7 +286,8 @@ describe('Obs', () => {
       expect(newCreatedObs.formFieldPath).toBe('3116_2.1/2-0');
     });
 
-    it('should filter out obs from given observations whose form field path matches with parent form field path', () => {
+    it('should filter out obs from given observations whose form field path matches with ' +
+       'parent form field path', () => {
       const controlExistInObservations = { id: '18' };
       const bahmniObservations = [
         { formFieldPath: 'FormName.1/1-0/2-0/18-0' },
@@ -311,7 +312,8 @@ describe('Obs', () => {
       expect(result.indexOf(bahmniObservations[2])).toBe(-1);
     });
 
-    it('should create an observation along with parent form field path, when given observations have form field path that does not matches with parent form field path', () => {
+    it('should create an observation along with parent form field path, when given observations ' +
+       'have form field path that does not matches with parent form field path', () => {
       const controlNotExistInObservations = { id: '2' };
       const bahmniObservations = [
         { formFieldPath: 'FormName.1/28-0' },

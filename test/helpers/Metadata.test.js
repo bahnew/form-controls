@@ -1,6 +1,6 @@
 import { Concept } from 'src/helpers/Concept';
-import { Metadata } from 'src/helpers/Metadata';
 import { IDGenerator } from 'src/helpers/idGenerator';
+import { Metadata } from 'src/helpers/Metadata';
 
 jest.mock('src/helpers/componentStore', () => ({
   getDesignerComponent: jest.fn(),
@@ -175,7 +175,8 @@ describe('Metadata', () => {
   it('should retrieve metadata for concept set', () => {
     const idGenerator = new IDGenerator();
     const concept = new Concept(abnormalConcept);
-    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 'obsGroupControl', 'obsControl');
+    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 
+      'obsGroupControl', 'obsControl');
 
     expect(metadata.id).toEqual('3');
     expect(metadata.type).toEqual('obsGroupControl');
@@ -208,7 +209,8 @@ describe('Metadata', () => {
     const idGenerator = new IDGenerator([{ id: 19 }]);
     const concept = new Concept(abnormalConcept.setMembers[0]);
 
-    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 'obsControl', undefined, { row: 2, column: 4 });
+    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 
+      'obsControl', undefined, { row: 2, column: 4 });
     expect(metadata.id).toEqual('20');
     expect(metadata.properties.location).toEqual({ row: 2, column: 4 });
   });
@@ -289,7 +291,8 @@ describe('Metadata', () => {
 
     const idGenerator = new IDGenerator();
     const concept = new Concept(nestedSetConcept);
-    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 'obsGroupControl', 'obsControl');
+    const metadata = new Metadata().getMetadataForConcept(concept.getConcept(), idGenerator, 
+      'obsGroupControl', 'obsControl');
 
     expect(metadata.controls).toHaveLength(2);
     expect(metadata.controls[0].type).toEqual('obsGroupControl');

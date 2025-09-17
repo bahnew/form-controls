@@ -58,7 +58,7 @@ describe('FormRenderer', () => {
 
   describe('renderWithControls', () => {
     it('should create container element and render to specified node', () => {
-      const result = renderWithControls(validFormDetails, [], 'test-container', false);
+      const result = window.renderWithControls(validFormDetails, [], 'test-container', false);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -73,11 +73,11 @@ describe('FormRenderer', () => {
         'mock-react-element',
         document.getElementById('test-container')
       );
-      expect(result).toBe('mock-component-instance');
+      expect(result).toBe(document.getElementById('test-container'));
     });
 
     it('should pass collapse parameter correctly', () => {
-      renderWithControls(validFormDetails, [], 'test-container', true);
+      window.renderWithControls(validFormDetails, [], 'test-container', true);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -90,7 +90,7 @@ describe('FormRenderer', () => {
     it('should pass patient data when provided', () => {
       const patient = { uuid: '123', display: 'Test Patient' };
 
-      renderWithControls(validFormDetails, [], 'test-container', false, patient);
+      window.renderWithControls(validFormDetails, [], 'test-container', false, patient);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -103,7 +103,7 @@ describe('FormRenderer', () => {
     it('should pass validation function when provided', () => {
       const validateForm = jest.fn();
 
-      renderWithControls(validFormDetails, [], 'test-container', false, null, validateForm);
+      window.renderWithControls(validFormDetails, [], 'test-container', false, null, validateForm);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -117,7 +117,7 @@ describe('FormRenderer', () => {
       const locale = 'en';
       const translations = { Pulse: 'Pulse Rate' };
 
-      renderWithControls(validFormDetails, [], 'test-container', false, null, null, locale, translations);
+      window.renderWithControls(validFormDetails, [], 'test-container', false, null, null, locale, translations);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -131,7 +131,7 @@ describe('FormRenderer', () => {
     it('should handle observations when provided', () => {
       const observations = [{ concept: { name: 'Test' }, value: '123' }];
 
-      renderWithControls(validFormDetails, observations, 'test-container', false);
+      window.renderWithControls(validFormDetails, observations, 'test-container', false);
 
       expect(React.createElement).toHaveBeenCalledWith(
         expect.any(Function),
@@ -144,28 +144,28 @@ describe('FormRenderer', () => {
 
   describe('unMountForm', () => {
     it('should unmount form and return true when container exists', () => {
-      renderWithControls(validFormDetails, [], 'test-container', false);
+      window.renderWithControls(validFormDetails, [], 'test-container', false);
       const container = document.getElementById('test-container');
 
-      const result = unMountForm(container);
+      const result = window.unMountForm(container);
 
       expect(result).toBe(true);
     });
 
     it('should return false when no container provided', () => {
-      const result = unMountForm();
+      const result = window.unMountForm();
 
       expect(result).toBe(false);
     });
 
     it('should return false when null container provided', () => {
-      const result = unMountForm(null);
+      const result = window.unMountForm(null);
 
       expect(result).toBe(false);
     });
 
     it('should return false when undefined container provided', () => {
-      const result = unMountForm(undefined);
+      const result = window.unMountForm(undefined);
 
       expect(result).toBe(false);
     });
@@ -184,7 +184,7 @@ describe('FormRenderer', () => {
       const eventScript = 'function() { return true; }';
       const patient = { uuid: '123' };
 
-      runEventScript(formData, eventScript, patient);
+      window.runEventScript(formData, eventScript, patient);
 
       expect(ScriptRunner).toHaveBeenCalledWith(formData, patient);
     });
@@ -194,7 +194,7 @@ describe('FormRenderer', () => {
       const eventScript = 'function() { return formData.field1; }';
       const patient = { uuid: '123' };
 
-      const result = runEventScript(formData, eventScript, patient);
+      const result = window.runEventScript(formData, eventScript, patient);
 
       expect(ScriptRunner().execute).toHaveBeenCalledWith(eventScript);
       expect(result).toEqual(['result']);
@@ -205,7 +205,7 @@ describe('FormRenderer', () => {
       const eventScript = 'function() { return true; }';
       const patient = { uuid: '123' };
 
-      runEventScript(formData, eventScript, patient);
+      window.runEventScript(formData, eventScript, patient);
 
       expect(ScriptRunner).toHaveBeenCalledWith(formData, patient);
     });
@@ -222,7 +222,7 @@ describe('FormRenderer', () => {
     it('should create observation mapper and call from method', () => {
       const records = { children: [] };
 
-      getObservations(records);
+      window.getObservations(records);
 
       expect(ObservationMapper().from).toHaveBeenCalledWith(records);
     });
@@ -232,7 +232,7 @@ describe('FormRenderer', () => {
       const expectedObservations = [{ concept: 'Test', value: '123' }];
       ObservationMapper().from.mockReturnValue(expectedObservations);
 
-      const result = getObservations(records);
+      const result = window.getObservations(records);
 
       expect(result).toEqual(expectedObservations);
     });
@@ -250,7 +250,7 @@ describe('FormRenderer', () => {
       const formDef = { controls: [] };
       const observations = [];
 
-      getRecordTree(formDef, observations);
+      window.getRecordTree(formDef, observations);
 
       expect(ControlRecordTreeBuilder().build).toHaveBeenCalledWith(formDef, observations);
     });
@@ -261,7 +261,7 @@ describe('FormRenderer', () => {
       const expectedTree = { children: [{ id: 'test' }] };
       ControlRecordTreeBuilder().build.mockReturnValue(expectedTree);
 
-      const result = getRecordTree(formDef, observations);
+      const result = window.getRecordTree(formDef, observations);
 
       expect(result).toEqual(expectedTree);
     });
