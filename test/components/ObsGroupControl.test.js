@@ -10,9 +10,9 @@ import { NumericBox } from 'components/NumericBox.jsx';
 import { Label } from 'components/Label.jsx';
 import { AddMore } from 'components/AddMore.jsx';
 
-const messages = { 
-  TEST_KEY: 'test value', 
-  HTML_DESC_KEY: 'test value <h1>Heading goes here</h1>' 
+const messages = {
+  TEST_KEY: 'test value',
+  HTML_DESC_KEY: 'test value <h1>Heading goes here</h1>',
 };
 
 const mockComponentStore = () => {
@@ -194,7 +194,7 @@ const createTestData = () => {
 
 const defaultProps = () => {
   const { children, formName, formVersion, metadata, emptyValue } = createTestData();
-  
+
   return {
     children,
     collapse: false,
@@ -230,14 +230,14 @@ describe('ObsGroupControl', () => {
 
     it('should render obsGroup control with only registered components', () => {
       ComponentStore.deRegisterComponent('obsControl');
-      
+
       const props = defaultProps();
       renderWithIntl(<ObsGroupControlWithIntl {...props} />);
 
       expect(screen.getByRole('group')).toBeInTheDocument();
       expect(screen.getByText('test value')).toBeInTheDocument();
       expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument();
-      
+
       ComponentStore.registerComponent('obsControl', ObsControl);
     });
 
@@ -249,10 +249,10 @@ describe('ObsGroupControl', () => {
       };
 
       renderWithIntl(
-        <ObsGroupControlWithIntl 
-          {...props} 
-          metadata={updatedMetadata} 
-          showAddMore={true}
+        <ObsGroupControlWithIntl
+          {...props}
+          metadata={updatedMetadata}
+          showAddMore
         />
       );
 
@@ -306,7 +306,7 @@ describe('ObsGroupControl', () => {
     it('should handle value changes and trigger onValueChanged callback', async () => {
       const onValueChangedSpy = jest.fn();
       const props = { ...defaultProps(), onValueChanged: onValueChangedSpy };
-      
+
       renderWithIntl(<ObsGroupControlWithIntl {...props} />);
 
       const input = screen.getByRole('spinbutton');
@@ -342,7 +342,7 @@ describe('ObsGroupControl', () => {
 
       rerender(
         <IntlProvider locale="en" messages={messages}>
-          <ObsGroupControlWithIntl {...props} collapse={true} />
+          <ObsGroupControlWithIntl {...props} collapse />
         </IntlProvider>
       );
 
@@ -355,7 +355,7 @@ describe('ObsGroupControl', () => {
     it('should expand controls when collapse prop changes to false', async () => {
       const props = defaultProps();
       const { rerender } = renderWithIntl(
-        <ObsGroupControlWithIntl {...props} collapse={true} />
+        <ObsGroupControlWithIntl {...props} collapse />
       );
 
       const controlsContainer = screen.getByRole('group').querySelector('.obsGroup-controls');
@@ -421,7 +421,7 @@ describe('ObsGroupControl', () => {
     it('should handle enabled prop changes', () => {
       const props = defaultProps();
       const { rerender } = renderWithIntl(
-        <ObsGroupControlWithIntl {...props} enabled={true} />
+        <ObsGroupControlWithIntl {...props} enabled />
       );
 
       let legend = screen.getByText('test value').closest('legend');
@@ -448,7 +448,7 @@ describe('ObsGroupControl', () => {
 
       rerender(
         <IntlProvider locale="en" messages={messages}>
-          <ObsGroupControlWithIntl {...props} hidden={true} />
+          <ObsGroupControlWithIntl {...props} hidden />
         </IntlProvider>
       );
 
@@ -575,7 +575,7 @@ describe('ObsGroupControl', () => {
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
 
       ComponentStore.deRegisterComponent('obsControl');
-      
+
       rerender(
         <IntlProvider locale="en" messages={messages}>
           <ObsGroupControlWithIntl {...props} />
@@ -583,7 +583,7 @@ describe('ObsGroupControl', () => {
       );
 
       expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument();
-      
+
       ComponentStore.registerComponent('obsControl', ObsControl);
     });
   });

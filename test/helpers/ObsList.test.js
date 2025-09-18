@@ -106,7 +106,7 @@ describe('ObsList', () => {
     expect(obsList.isVoided()).toBe(false);
   });
 
-  it('should clone for add more', () => {
+  it('should clone for add more with observationList', () => {
     const obs = new Obs({ concept, formFieldPath });
     const nextFormFieldPath = 'nextFormFieldPath';
     const formNameSpace = 'Bahmni';
@@ -122,7 +122,7 @@ describe('ObsList', () => {
     expect(updatedObsList.toJS()).toEqual(expectedObsList.toJS());
   });
 
-  it('should void obsList', () => {
+  it('should void obsList with multiple observations', () => {
     const obs = new Obs({ concept, formFieldPath });
     const obs1 = new Obs({ concept, formFieldPath, value: 2 });
     const obs2 = new Obs({ concept, formFieldPath });

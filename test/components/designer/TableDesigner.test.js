@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { TableDesigner } from 'components/designer/TableDesigner.jsx';
-import * as Grid from 'components/designer/Grid.jsx';
 import { IDGenerator } from 'src/helpers/idGenerator';
+
+jest.mock('components/designer/Grid.jsx', () => {
+  const React = require('react');
+  
+  class MockGridDesigner extends React.Component {
+    constructor(props) {
+      super(props);
+      this.cellRef = {};
+    }
+    getControls() { return this.props.controls || []; }
+    render() { return React.createElement('div', { 'data-testid': 'grid-designer' }); }
+  }
+  
+  return {
+    GridDesigner: MockGridDesigner,
+  };
+});
+
+import * as Grid from 'components/designer/Grid.jsx';
 
 const concept = { name: 'dummyPulse', datatype: 'text', uuid: 'dummyUuid' };
 const properties = {};
@@ -49,21 +67,6 @@ describe('TableDesigner', () => {
       id: '6',
     };
 
-    class GridStub extends Component {
-      getControls() { return [childControl]; }
-      render() { return (<div data-testid="grid-designer" />); }
-    }
-
-    let originalGridDesigner;
-
-    beforeAll(() => {
-      originalGridDesigner = Grid.GridDesigner;
-      Grid.GridDesigner = GridStub;
-    });
-
-    afterAll(() => {
-      Grid.GridDesigner = originalGridDesigner;
-    });
 
     beforeEach(() => {
       jest.clearAllMocks();
@@ -120,7 +123,7 @@ describe('TableDesigner', () => {
         controls: undefined,
         columnHeaders: undefined,
       };
-      
+
       renderTableDesigner({ metadata: metadataWithoutHeaders });
 
       expect(screen.getByRole('group')).toBeInTheDocument();
@@ -147,7 +150,7 @@ describe('TableDesigner', () => {
         columnHeaders: [column1LabelJson, column2LabelJson],
         controls: [childControl],
       };
-      
+
       renderTableDesigner({ metadata: updatedMetadata });
 
       expect(screen.getByRole('group')).toBeInTheDocument();
@@ -164,7 +167,7 @@ describe('TableDesigner', () => {
 
     it('should render section without any controls', () => {
       const metadataWithoutControls = { ...metadata, controls: undefined };
-      
+
       renderTableDesigner({ metadata: metadataWithoutControls });
 
       expect(screen.getByTestId('grid-designer')).toBeInTheDocument();
@@ -172,7 +175,7 @@ describe('TableDesigner', () => {
 
     it('should show delete button if the showDeleteButton props is true', () => {
       renderTableDesigner({ showDeleteButton: true });
-      
+
       const deleteButton = screen.getByRole('button');
       expect(deleteButton).toBeInTheDocument();
       expect(deleteButton.textContent).toBe('');
@@ -180,165 +183,160 @@ describe('TableDesigner', () => {
 
     it('should not show delete button if the showDeleteButton props is false', () => {
       renderTableDesigner({ showDeleteButton: false });
-      
+
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
 
     it('should call deleteControl when delete button is clicked', () => {
       const deleteControlSpy = jest.fn();
       const clearSelectedControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         deleteControl: deleteControlSpy,
         clearSelectedControl: clearSelectedControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(deleteControlSpy).toHaveBeenCalledTimes(1);
       expect(clearSelectedControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call clearSelectedControl prop when delete button is clicked', () => {
       const clearSelectedControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         clearSelectedControl: clearSelectedControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(clearSelectedControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call deleteControl prop when delete button is clicked', () => {
       const deleteControlSpy = jest.fn();
-      
+
       renderTableDesigner({
         deleteControl: deleteControlSpy,
         showDeleteButton: true,
       });
-      
+
       const deleteButton = screen.getByRole('button');
       fireEvent.click(deleteButton);
-      
+
       expect(deleteControlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should return json definition', () => {
       let tableRef;
       renderTableDesigner({
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
-      if (tableRef) {
-        tableRef.gridRef = { getControls: jest.fn().mockReturnValue([childControl]) };
-        tableRef.labelControls = [
-          { getJsonDefinition: jest.fn().mockReturnValue(column1LabelJson) },
-          { getJsonDefinition: jest.fn().mockReturnValue(column2LabelJson) },
-        ];
-        tableRef.headerControl = { getJsonDefinition: jest.fn().mockReturnValue(tableHeader) };
+      expect(tableRef).toBeTruthy();
+      tableRef.gridRef = { getControls: jest.fn().mockReturnValue([childControl]) };
+      tableRef.labelControls = [
+        { getJsonDefinition: jest.fn().mockReturnValue(column1LabelJson) },
+        { getJsonDefinition: jest.fn().mockReturnValue(column2LabelJson) },
+      ];
+      tableRef.headerControl = { getJsonDefinition: jest.fn().mockReturnValue(tableHeader) };
 
-        const expectedMetadata = { ...metadata, controls: [childControl] };
-        expect(tableRef.getJsonDefinition()).toEqual(expectedMetadata);
-      }
+      const expectedMetadata = { ...metadata, controls: [childControl] };
+      expect(tableRef.getJsonDefinition()).toEqual(expectedMetadata);
     });
 
     it('should have addMore in unsupportedProperties', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
-      if (tableRef) {
-        tableRef.handleControlDrop({
-          metadata: { type: 'obsControl' },
-          cellMetadata: [],
-          successCallback: processDropSuccessCallback
-        });
+      expect(tableRef).toBeTruthy();
+      tableRef.handleControlDrop({
+        metadata: { type: 'obsControl' },
+        cellMetadata: [],
+        successCallback: processDropSuccessCallback,
+      });
 
-        expect(processDropSuccessCallback).toHaveBeenCalledWith(
-          expect.objectContaining({
-            type: 'obsControl',
-            unsupportedProperties: ['addMore']
-          })
-        );
-      }
+      expect(processDropSuccessCallback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'obsControl',
+          unsupportedProperties: ['addMore'],
+        })
+      );
     });
 
     it('should not allow unsupported controls to be dropped', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
-      if (tableRef) {
-        tableRef.handleControlDrop({
-          metadata: { type: 'section' },
-          cellMetadata: [],
-          successCallback: processDropSuccessCallback
-        });
+      expect(tableRef).toBeTruthy();
+      tableRef.handleControlDrop({
+        metadata: { type: 'section' },
+        cellMetadata: [],
+        successCallback: processDropSuccessCallback,
+      });
 
-        expect(processDropSuccessCallback).not.toHaveBeenCalled();
-      }
+      expect(processDropSuccessCallback).not.toHaveBeenCalled();
     });
 
     it('should update metadata of drag source cell when drop is not allowed', () => {
       const dragSourceCell = { updateMetadata: jest.fn() };
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         dragSourceCell,
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
-      if (tableRef) {
-        const sectionMetadata = { type: 'section' };
-        tableRef.handleControlDrop({
-          metadata: sectionMetadata,
-          cellMetadata: [],
-          successCallback: processDropSuccessCallback
-        });
+      expect(tableRef).toBeTruthy();
+      const sectionMetadata = { type: 'section' };
+      tableRef.handleControlDrop({
+        metadata: sectionMetadata,
+        cellMetadata: [],
+        successCallback: processDropSuccessCallback,
+      });
 
-        expect(processDropSuccessCallback).not.toHaveBeenCalled();
-        expect(dragSourceCell.updateMetadata).toHaveBeenCalledWith(sectionMetadata);
-      }
+      expect(processDropSuccessCallback).not.toHaveBeenCalled();
+      expect(dragSourceCell.updateMetadata).toHaveBeenCalledWith(sectionMetadata);
     });
 
     it('should not allow more than one control to be dropped in a cell', () => {
       const onControlDropSpy = jest.fn(({ successCallback }) => successCallback());
       const processDropSuccessCallback = jest.fn();
-      
+
       let tableRef;
       renderTableDesigner({
         onControlDrop: onControlDropSpy,
-        ref: (ref) => { tableRef = ref; }
+        ref: (ref) => { tableRef = ref; },
       });
 
-      if (tableRef) {
-        tableRef.handleControlDrop({
-          metadata: { type: 'obsControl' },
-          cellMetadata: [{ type: 'obsControl' }],
-          successCallback: processDropSuccessCallback
-        });
+      expect(tableRef).toBeTruthy();
+      tableRef.handleControlDrop({
+        metadata: { type: 'obsControl' },
+        cellMetadata: [{ type: 'obsControl' }],
+        successCallback: processDropSuccessCallback,
+      });
 
-        expect(processDropSuccessCallback).not.toHaveBeenCalled();
-      }
+      expect(processDropSuccessCallback).not.toHaveBeenCalled();
     });
   });
 });

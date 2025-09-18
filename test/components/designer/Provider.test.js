@@ -28,22 +28,22 @@ describe('ProviderDesigner', () => {
 
   it('should render the provider designer autocomplete component', async () => {
     httpInterceptor.get.mockResolvedValue(providerData);
-    
+
     render(<ProviderDesigner metadata={metadata} />);
-    
+
     await waitFor(() => {
       expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
-    
+
     expect(httpInterceptor.get).toHaveBeenCalledWith('/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)');
   });
 
   it('should render the provider designer dropdown component', async () => {
     metadata.properties.style = 'dropdown';
     httpInterceptor.get.mockResolvedValue(providerData);
-    
+
     render(<ProviderDesigner metadata={metadata} />);
-    
+
     await waitFor(() => {
       expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
@@ -52,9 +52,9 @@ describe('ProviderDesigner', () => {
   it('should call setError when given URL is invalid', async () => {
     const setErrorSpy = jest.fn();
     httpInterceptor.get.mockRejectedValue(new Error('Network error'));
-    
+
     render(<ProviderDesigner metadata={metadata} setError={setErrorSpy} />);
-    
+
     await waitFor(() => {
       expect(setErrorSpy).toHaveBeenCalledWith({ message: 'Invalid Provider URL' });
     });

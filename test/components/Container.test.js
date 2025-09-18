@@ -71,7 +71,7 @@ const createNumericControlMetadata = (overrides = {}) => {
     version: '1',
     defaultLocale: 'en',
   };
-  
+
   return { ...baseMetadata, ...overrides };
 };
 
@@ -224,7 +224,9 @@ describe('Container', () => {
       const metadata = createBooleanControlMetadata();
       renderContainer({ metadata });
 
-      expect(screen.getByText(/component.*boolean.*not supported/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/component.*boolean.*not supported/i),
+      ).toBeInTheDocument();
     });
 
     it('should handle empty metadata gracefully', () => {
@@ -240,11 +242,11 @@ describe('Container', () => {
     it('should handle input changes and trigger value updates', async () => {
       const onValueUpdated = jest.fn();
       const metadata = createNumericControlMetadata();
-      
+
       jest.spyOn(ControlRecordTreeMgr, 'find').mockReturnValue({
-        getEventScripts: () => ({})
+        getEventScripts: () => ({}),
       });
-      
+
       renderContainer({ metadata, onValueUpdated });
 
       const input = screen.getByRole('spinbutton');
@@ -252,23 +254,27 @@ describe('Container', () => {
 
       await waitFor(() => {
         expect(onValueUpdated).toHaveBeenCalledTimes(1);
-        expect(onValueUpdated).toHaveBeenCalledWith(expect.objectContaining({
-          children: expect.any(Object)
-        }));
+        expect(onValueUpdated).toHaveBeenCalledWith(
+          expect.objectContaining({
+            children: expect.any(Object),
+          }),
+        );
       });
     });
 
     it('should add controls and show notifications when using add more', async () => {
       const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            addMore: true,
+        controls: [
+          {
+            ...createNumericControlMetadata().controls[0],
+            properties: {
+              ...createNumericControlMetadata().controls[0].properties,
+              addMore: true,
+            },
           },
-        }]
+        ],
       });
-      
+
       const { container } = renderContainer({ metadata });
 
       const addButton = container.querySelector('.form-builder-add-more');
@@ -283,7 +289,9 @@ describe('Container', () => {
 
       jest.runAllTimers();
       await waitFor(() => {
-        expect(screen.queryByText(/new.*pulse.*added/i)).not.toBeInTheDocument();
+        expect(
+          screen.queryByText(/new.*pulse.*added/i),
+        ).not.toBeInTheDocument();
       });
     });
 
@@ -293,7 +301,7 @@ describe('Container', () => {
           onFormInit: "function(form){form.get('Pulse').setEnabled(false);}",
         },
       });
-      
+
       renderContainer({ metadata });
 
       await waitFor(() => {
@@ -313,13 +321,13 @@ describe('Container', () => {
       expect(complaintInput).toBeEnabled();
 
       fireEvent.change(admissionInput, { target: { value: 'yes' } });
-      
+
       await waitFor(() => {
         expect(complaintInput).toBeDisabled();
       });
 
       fireEvent.change(admissionInput, { target: { value: 'no' } });
-      
+
       await waitFor(() => {
         expect(complaintInput).toBeEnabled();
       });
@@ -329,74 +337,91 @@ describe('Container', () => {
   describe('Validation', () => {
     it('should show validation errors with proper accessibility attributes', () => {
       const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            mandatory: true,
+        controls: [
+          {
+            ...createNumericControlMetadata().controls[0],
+            properties: {
+              ...createNumericControlMetadata().controls[0].properties,
+              mandatory: true,
+            },
           },
-        }]
+        ],
       });
-      
+
       renderContainer({ metadata, validate: true, validateForm: true });
 
       const input = screen.getByRole('spinbutton');
-      
+
       expect(input).toHaveClass('form-builder-error');
-      expect(document.querySelector('.form-builder-asterisk')).toBeInTheDocument();
+      expect(
+        document.querySelector('.form-builder-asterisk'),
+      ).toBeInTheDocument();
     });
 
     it('should return detailed validation errors through getValue', () => {
       const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            mandatory: true,
+        controls: [
+          {
+            ...createNumericControlMetadata().controls[0],
+            properties: {
+              ...createNumericControlMetadata().controls[0].properties,
+              mandatory: true,
+            },
           },
-        }]
+        ],
       });
-      
+
       const containerRef = React.createRef();
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} validateForm />);
-      
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
-        
-        expect(result).toHaveProperty('errors');
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.errors)).toBe(true);
-        expect(result.errors.length).toBeGreaterThan(0);
-        expect(result.errors[0]).toEqual(expect.arrayContaining([
+      render(
+        <Container
+          ref={containerRef}
+          {...defaultProps}
+          metadata={metadata}
+          validateForm
+        />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
+
+      expect(result).toHaveProperty('errors');
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.errors)).toBe(true);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0]).toEqual(
+        expect.arrayContaining([
           expect.objectContaining({
-            message: 'mandatory'
-          })
-        ]));
-      }
+            message: 'mandatory',
+          }),
+        ]),
+      );
     });
 
     it('should return valid observations when form data is complete', () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
       const input = screen.getByRole('spinbutton');
       fireEvent.change(input, { target: { value: '75' } });
-      
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
-        
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
-        expect(result.observations[0]).toEqual(expect.objectContaining({
+
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
+
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
+      expect(result.observations[0]).toEqual(
+        expect.objectContaining({
           concept: expect.objectContaining({
-            uuid: PULSE_UUID
+            uuid: PULSE_UUID,
           }),
           value: '75',
-          formFieldPath: expect.stringMatching(/PulseForm\.1\/1-0/)
-        }));
-      }
+          formFieldPath: expect.stringMatching(/PulseForm\.1\/1-0/),
+        }),
+      );
     });
   });
 
@@ -404,15 +429,17 @@ describe('Container', () => {
     it('should display and auto-hide custom notifications', async () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
       if (containerRef.current) {
         containerRef.current.showNotification('Test notification', 'info');
       }
 
       expect(screen.getByText('Test notification')).toBeInTheDocument();
-      
+
       jest.runAllTimers();
       await waitFor(() => {
         expect(screen.queryByText('Test notification')).not.toBeInTheDocument();
@@ -422,63 +449,77 @@ describe('Container', () => {
     it('should support different notification types', async () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
       if (containerRef.current) {
         containerRef.current.showNotification('Error message', 'error');
       }
 
       const notification = screen.getByText('Error message');
-      expect(notification.closest('.error-message-container')).toBeInTheDocument();
+      expect(
+        notification.closest('.error-message-container'),
+      ).toBeInTheDocument();
     });
   });
 
   describe('Data Management', () => {
     it('should handle voided observations correctly', () => {
-      const voidedObservations = [{
-        concept: { 
-          uuid: PULSE_UUID,
-          name: 'Pulse',
-          datatype: 'Numeric'
+      const voidedObservations = [
+        {
+          concept: {
+            uuid: PULSE_UUID,
+            name: 'Pulse',
+            datatype: 'Numeric',
+          },
+          value: '72',
+          voided: true,
+          formFieldPath: 'PulseForm.1/1-0',
+          formNamespace: 'Bahmni',
         },
-        value: '72',
-        voided: true,
-        formFieldPath: 'PulseForm.1/1-0',
-        formNamespace: 'Bahmni'
-      }];
-      
+      ];
+
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} observations={voidedObservations} />);
-      
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
-        
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
-        
-        const allVoidedResult = containerRef.current.areAllVoided(voidedObservations);
-        expect(allVoidedResult).toBe(true);
-        
-        const mixedObservations = [
-          ...voidedObservations,
-          { ...voidedObservations[0], voided: false, value: '80' }
-        ];
-        const mixedResult = containerRef.current.areAllVoided(mixedObservations);
-        expect(mixedResult).toBe(false);
-      }
+
+      render(
+        <Container
+          ref={containerRef}
+          {...defaultProps}
+          metadata={metadata}
+          observations={voidedObservations}
+        />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
+
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
+
+      const allVoidedResult =
+        containerRef.current.areAllVoided(voidedObservations);
+      expect(allVoidedResult).toBe(true);
+
+      const mixedObservations = [
+        ...voidedObservations,
+        { ...voidedObservations[0], voided: false, value: '80' },
+      ];
+      const mixedResult =
+        containerRef.current.areAllVoided(mixedObservations);
+      expect(mixedResult).toBe(false);
     });
 
     it('should verify onValueUpdated receives correct data structure', async () => {
       const onValueUpdated = jest.fn();
       const metadata = createNumericControlMetadata();
-      
+
       jest.spyOn(ControlRecordTreeMgr, 'find').mockReturnValue({
-        getEventScripts: () => ({})
+        getEventScripts: () => ({}),
       });
-      
+
       renderContainer({ metadata, onValueUpdated });
 
       const input = screen.getByRole('spinbutton');
@@ -488,8 +529,8 @@ describe('Container', () => {
         expect(onValueUpdated).toHaveBeenCalledWith(
           expect.objectContaining({
             children: expect.any(Object),
-            getActive: expect.any(Function)
-          })
+            getActive: expect.any(Function),
+          }),
         );
       });
     });
@@ -500,13 +541,13 @@ describe('Container', () => {
       const metadata = createNumericControlMetadata();
       const translations = {
         labels: {},
-        concepts: { 'Pulse': 'Heart Rate' },
+        concepts: { Pulse: 'Heart Rate' },
       };
-      
+
       renderContainer({ metadata, translations });
 
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-      
+
       const labels = screen.getAllByText(/pulse.*\/min/i);
       expect(labels.length).toBeGreaterThan(0);
     });
@@ -514,7 +555,7 @@ describe('Container', () => {
     it('should fallback to original text when translations are missing', () => {
       const metadata = createNumericControlMetadata();
       const emptyTranslations = { labels: {}, concepts: {} };
-      
+
       renderContainer({ metadata, translations: emptyTranslations });
 
       expect(screen.getByText(/pulse.*\/min/i)).toBeInTheDocument();
@@ -524,11 +565,11 @@ describe('Container', () => {
   describe('Coverage Improvements', () => {
     it('should handle value updates when no onValueUpdated callback is provided', async () => {
       const metadata = createNumericControlMetadata();
-      
+
       jest.spyOn(ControlRecordTreeMgr, 'find').mockReturnValue({
-        getEventScripts: () => ({})
+        getEventScripts: () => ({}),
       });
-      
+
       renderContainer({ metadata });
 
       const input = screen.getByRole('spinbutton');
@@ -541,136 +582,158 @@ describe('Container', () => {
 
     it('should handle onControlAdd silent mode (line 101 else branch)', async () => {
       const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            addMore: true,
+        controls: [
+          {
+            ...createNumericControlMetadata().controls[0],
+            properties: {
+              ...createNumericControlMetadata().controls[0].properties,
+              addMore: true,
+            },
           },
-        }]
+        ],
       });
-      
+
       const containerRef = React.createRef();
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
-      if (containerRef.current) {
-        const originalCanAdd = containerRef.current.canAddNextFormFieldPath;
-        containerRef.current.canAddNextFormFieldPath = jest.fn().mockReturnValue(true);
-        
-        containerRef.current.onControlAdd('PulseForm.1/1-0', false);
-        
-        await waitFor(() => {
-          expect(screen.getAllByRole('spinbutton')).toHaveLength(2);
-        });
-        
-        expect(screen.queryByText(/added/i)).not.toBeInTheDocument();
-        
-        containerRef.current.canAddNextFormFieldPath = originalCanAdd;
-      }
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      const originalCanAdd = containerRef.current.canAddNextFormFieldPath;
+      containerRef.current.canAddNextFormFieldPath = jest
+        .fn()
+        .mockReturnValue(true);
+
+      containerRef.current.onControlAdd('PulseForm.1/1-0', false);
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('spinbutton')).toHaveLength(2);
+      });
+
+      expect(screen.queryByText(/added/i)).not.toBeInTheDocument();
+
+      containerRef.current.canAddNextFormFieldPath = originalCanAdd;
     });
 
     it('should handle getValue with errors and observations (lines 116-117)', () => {
       const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            mandatory: true,
+        controls: [
+          {
+            ...createNumericControlMetadata().controls[0],
+            properties: {
+              ...createNumericControlMetadata().controls[0].properties,
+              mandatory: true,
+            },
           },
-        }]
+        ],
       });
-      
+
       const containerRef = React.createRef();
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} validate validateForm={false} />);
-      
+      render(
+        <Container
+          ref={containerRef}
+          {...defaultProps}
+          metadata={metadata}
+          validate
+          validateForm={false}
+        />,
+      );
+
       const input = screen.getByRole('spinbutton');
       fireEvent.change(input, { target: { value: '75' } });
-      
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
-        
-        expect(result).toHaveProperty('observations');
-        expect(Array.isArray(result.observations)).toBe(true);
-        
-        if (result.errors) {
-          expect(Array.isArray(result.errors)).toBe(true);
-        }
-      }
+
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
+
+      expect(result).toHaveProperty('observations');
+      expect(Array.isArray(result.observations)).toBe(true);
+
+      expect(result.errors === undefined || Array.isArray(result.errors)).toBe(true);
     });
 
     it('should handle storeChildRef with null reference (lines 126-127)', () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
-      if (containerRef.current) {
-        expect(() => {
-          containerRef.current.storeChildRef(null);
-        }).not.toThrow();
-        
-        expect(() => {
-          containerRef.current.storeChildRef(undefined);
-        }).not.toThrow();
-      }
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      expect(() => {
+        containerRef.current.storeChildRef(null);
+      }).not.toThrow();
+
+      expect(() => {
+        containerRef.current.storeChildRef(undefined);
+      }).not.toThrow();
     });
 
     it('should test areAllVoided method directly (line 147)', () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
-      if (containerRef.current) {
-        expect(containerRef.current.areAllVoided([])).toBe(true);
-        
-        const allVoided = [
-          { voided: true, value: '1' },
-          { voided: true, value: '2' }
-        ];
-        expect(containerRef.current.areAllVoided(allVoided)).toBe(true);
-        
-        const mixed = [
-          { voided: true, value: '1' },
-          { voided: false, value: '2' }
-        ];
-        expect(containerRef.current.areAllVoided(mixed)).toBe(false);
-        
-        const nonVoided = [
-          { voided: false, value: '1' },
-          { voided: false, value: '2' }
-        ];
-        expect(containerRef.current.areAllVoided(nonVoided)).toBe(false);
-      }
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      expect(containerRef.current.areAllVoided([])).toBe(true);
+
+      const allVoided = [
+        { voided: true, value: '1' },
+        { voided: true, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(allVoided)).toBe(true);
+
+      const mixed = [
+        { voided: true, value: '1' },
+        { voided: false, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(mixed)).toBe(false);
+
+      const nonVoided = [
+        { voided: false, value: '1' },
+        { voided: false, value: '2' },
+      ];
+      expect(containerRef.current.areAllVoided(nonVoided)).toBe(false);
     });
 
     it('should handle patient uuid extraction in render method', () => {
       const metadata = createNumericControlMetadata();
-      
-      const { rerender } = renderContainer({ 
-        metadata, 
-        patient: { age: 30, gender: 'F', uuid: 'patient-123' } 
+
+      const { rerender } = renderContainer({
+        metadata,
+        patient: { age: 30, gender: 'F', uuid: 'patient-123' },
       });
-      
+
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
 
-      rerender(<Container {...defaultProps} metadata={metadata} patient={null} />);
-      
+      rerender(
+        <Container {...defaultProps} metadata={metadata} patient={null} />,
+      );
+
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
     });
 
     it('should test getValue edge case with non-empty errors but validateForm false', () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} validateForm={false} />);
-      
-      if (containerRef.current) {
-        const result = containerRef.current.getValue();
-        
-        expect(result).toHaveProperty('observations');
-        expect(result).not.toHaveProperty('errors');
-      }
+
+      render(
+        <Container
+          ref={containerRef}
+          {...defaultProps}
+          metadata={metadata}
+          validateForm={false}
+        />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      const result = containerRef.current.getValue();
+
+      expect(result).toHaveProperty('observations');
+      expect(result).not.toHaveProperty('errors');
     });
   });
 
@@ -678,22 +741,39 @@ describe('Container', () => {
     it('should handle prop changes correctly', () => {
       const metadata = createNumericControlMetadata();
       const patient = { age: 30, gender: 'F', uuid: 'patient-123' };
-      
-      const { rerender } = renderContainer({ metadata, collapse: false, patient });
+
+      const { rerender } = renderContainer({
+        metadata,
+        collapse: false,
+        patient,
+      });
 
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
 
-      rerender(<Container {...defaultProps} metadata={metadata} collapse patient={patient} />);
+      rerender(
+        <Container
+          {...defaultProps}
+          metadata={metadata}
+          collapse
+          patient={patient}
+        />,
+      );
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
 
       const newPatient = { age: 25, gender: 'M', uuid: 'patient-456' };
-      rerender(<Container {...defaultProps} metadata={metadata} patient={newPatient} />);
+      rerender(
+        <Container
+          {...defaultProps}
+          metadata={metadata}
+          patient={newPatient}
+        />,
+      );
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
     });
 
     it('should handle component store issues gracefully', () => {
       cleanupComponentStore();
-      
+
       const metadata = createNumericControlMetadata();
       const { container } = renderContainer({ metadata });
 
@@ -703,18 +783,19 @@ describe('Container', () => {
     it('should handle missing event scripts without errors', () => {
       const metadata = createNumericControlMetadata();
       const containerRef = React.createRef();
-      
+
       jest.spyOn(ControlRecordTreeMgr, 'find').mockReturnValue({
-        getEventScripts: () => null
+        getEventScripts: () => null,
       });
-      
-      render(<Container ref={containerRef} {...defaultProps} metadata={metadata} />);
-      
-      if (containerRef.current) {
-        expect(() => {
-          containerRef.current.onEventTrigger('some-path', 'onValueChange');
-        }).not.toThrow();
-      }
+
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
+      expect(containerRef.current).toBeTruthy();
+      expect(() => {
+        containerRef.current.onEventTrigger('some-path', 'onValueChange');
+      }).not.toThrow();
     });
   });
 });

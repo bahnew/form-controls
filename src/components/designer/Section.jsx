@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
-import { SectionMapper } from '../../mapper/SectionMapper';
 import { GridDesigner as Grid } from 'components/designer/Grid.jsx';
 import { LabelDesigner } from 'components/designer/Label.jsx';
 import { AddMoreDesigner } from 'components/designer/AddMore.jsx';
 import find from 'lodash/find';
 import { CellDesigner } from 'components/designer/Cell.jsx';
+import { SectionMapper } from '../../mapper/SectionMapper';
 
 export class SectionDesigner extends Component {
 
@@ -122,6 +122,7 @@ SectionDesigner.propTypes = {
   isBeingDragged: PropTypes.bool,
   loadFormJson: PropTypes.func,
   metadata: PropTypes.shape({
+    controls: PropTypes.array,
     displayType: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.object,

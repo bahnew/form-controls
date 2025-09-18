@@ -6,7 +6,7 @@ import { Draggable } from 'src/components/Draggable.jsx';
 // Test wrapper component to provide draggable functionality
 const DraggableWrapper = ({ context, parentRef, children = 'Draggable content' }) => {
   const draggable = new Draggable({ parentRef });
-  
+
   return (
     <div
       data-testid="draggable-element"
@@ -28,16 +28,16 @@ describe('Draggable', () => {
   describe('drag start behavior', () => {
     it('should set drag data when drag starts', () => {
       render(<DraggableWrapper context={mockContext} />);
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
       const mockSetData = jest.fn();
-      
+
       fireEvent.dragStart(draggableElement, {
         dataTransfer: {
           setData: mockSetData,
         },
       });
-      
+
       expect(mockSetData).toHaveBeenCalledWith(
         'data',
         JSON.stringify(mockContext)
@@ -48,7 +48,7 @@ describe('Draggable', () => {
       const mockProcessDragStart = jest.fn().mockReturnValue(mockContext);
       const draggableInstance = new Draggable();
       draggableInstance.processDragStart = mockProcessDragStart;
-      
+
       render(
         <div
           data-testid="draggable-element"
@@ -56,15 +56,15 @@ describe('Draggable', () => {
           onDragStart={draggableInstance.onDragStart(mockContext)}
         />
       );
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
-      
+
       fireEvent.dragStart(draggableElement, {
         dataTransfer: {
           setData: jest.fn(),
         },
       });
-      
+
       expect(mockProcessDragStart).toHaveBeenCalledWith(mockContext);
     });
 
@@ -77,10 +77,10 @@ describe('Draggable', () => {
         },
         stopPropagation: mockStopPropagation,
       };
-      
+
       const dragStartHandler = draggable.onDragStart(mockContext);
       dragStartHandler(mockEvent);
-      
+
       expect(mockStopPropagation).toHaveBeenCalled();
     });
   });
@@ -91,21 +91,21 @@ describe('Draggable', () => {
       const mockParentRef = {
         notifyMove: mockNotifyMove,
       };
-      
+
       render(
-        <DraggableWrapper 
-          context={mockContext} 
-          parentRef={mockParentRef} 
+        <DraggableWrapper
+          context={mockContext}
+          parentRef={mockParentRef}
         />
       );
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
-      
+
       fireEvent.dragEnd(draggableElement);
-      
+
       expect(mockNotifyMove).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: 'dragend'
+          type: 'dragend',
         }),
         mockContext
       );
@@ -113,9 +113,9 @@ describe('Draggable', () => {
 
     it('should not throw when drag ends without parent ref', () => {
       render(<DraggableWrapper context={mockContext} />);
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
-      
+
       expect(() => {
         fireEvent.dragEnd(draggableElement);
       }).not.toThrow();
@@ -127,10 +127,10 @@ describe('Draggable', () => {
       const mockEvent = {
         stopPropagation: mockStopPropagation,
       };
-      
+
       const dragEndHandler = draggable.onDragEnd(mockContext);
       dragEndHandler(mockEvent);
-      
+
       expect(mockStopPropagation).toHaveBeenCalled();
     });
   });
@@ -142,32 +142,32 @@ describe('Draggable', () => {
         notifyMove: mockNotifyMove,
       };
       const mockSetData = jest.fn();
-      
+
       render(
-        <DraggableWrapper 
-          context={mockContext} 
-          parentRef={mockParentRef} 
+        <DraggableWrapper
+          context={mockContext}
+          parentRef={mockParentRef}
         />
       );
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
-      
+
       fireEvent.dragStart(draggableElement, {
         dataTransfer: {
           setData: mockSetData,
         },
       });
-      
+
       // End drag
       fireEvent.dragEnd(draggableElement);
-      
+
       expect(mockSetData).toHaveBeenCalledWith(
         'data',
         JSON.stringify(mockContext)
       );
       expect(mockNotifyMove).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: 'dragend'
+          type: 'dragend',
         }),
         mockContext
       );
@@ -178,11 +178,11 @@ describe('Draggable', () => {
         ...mockContext,
         modified: true,
       };
-      
+
       const draggableInstance = new Draggable();
       draggableInstance.processDragStart = jest.fn().mockReturnValue(modifiedContext);
       const mockSetData = jest.fn();
-      
+
       render(
         <div
           data-testid="draggable-element"
@@ -190,15 +190,15 @@ describe('Draggable', () => {
           onDragStart={draggableInstance.onDragStart(mockContext)}
         />
       );
-      
+
       const draggableElement = screen.getByTestId('draggable-element');
-      
+
       fireEvent.dragStart(draggableElement, {
         dataTransfer: {
           setData: mockSetData,
         },
       });
-      
+
       expect(mockSetData).toHaveBeenCalledWith(
         'data',
         JSON.stringify(modifiedContext)
@@ -210,19 +210,19 @@ describe('Draggable', () => {
     it('should create instance with data', () => {
       const testData = { parentRef: { notifyMove: jest.fn() } };
       const draggable = new Draggable(testData);
-      
+
       expect(draggable.data).toBe(testData);
     });
 
     it('should create instance without data', () => {
       const draggable = new Draggable();
-      
+
       expect(draggable.data).toBeUndefined();
     });
 
     it('should bind methods correctly', () => {
       const draggable = new Draggable();
-      
+
       expect(typeof draggable.onDragStart).toBe('function');
       expect(typeof draggable.onDragEnd).toBe('function');
     });
@@ -230,7 +230,7 @@ describe('Draggable', () => {
     it('should return context unchanged from processDragStart by default', () => {
       const draggable = new Draggable();
       const result = draggable.processDragStart(mockContext);
-      
+
       expect(result).toBe(mockContext);
     });
   });

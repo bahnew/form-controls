@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { IntlShape } from 'react-intl';
-
 import ComponentStore from 'src/helpers/componentStore';
 import find from 'lodash/find';
 import map from 'lodash/map';

@@ -1,10 +1,10 @@
 import React from 'react';
-import Row from '../components/Row.jsx';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import map from 'lodash/map';
 import each from 'lodash/each';
 import ComponentStore from 'src/helpers/componentStore';
+import Row from '../components/Row.jsx';
 import { Util } from './Util';
 
 function getRecordsForControl(control, records) {

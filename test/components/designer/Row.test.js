@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { RowDesigner } from 'components/designer/Row.jsx';
 import Constants from 'src/constants';
 import { IDGenerator } from 'src/helpers/idGenerator';
@@ -10,7 +10,7 @@ describe('Row', () => {
 
   beforeEach(() => {
     mockRef = {
-      getCellDefinition: jest.fn(() => ({ id: 'test', type: 'test' }))
+      getCellDefinition: jest.fn(() => ({ id: 'test', type: 'test' })),
     };
   });
 
@@ -36,7 +36,7 @@ describe('Row', () => {
 
   it('should render specified number of cells', () => {
     const idGenerator = new IDGenerator();
-    
+
     const { container } = render(
       <RowDesigner
         columns={2}
@@ -62,7 +62,7 @@ describe('Row', () => {
       },
     };
     const idGenerator = new IDGenerator();
-    
+
     const { container } = render(
       <RowDesigner
         idGenerator={idGenerator}
@@ -82,10 +82,10 @@ describe('Row', () => {
 
   it('should update cell data when receiving new props', () => {
     const initialRowData = [
-      { properties: { location: { row: 0, column: 0 } } }
+      { properties: { location: { row: 0, column: 0 } } },
     ];
     const newRowData = [
-      { properties: { location: { row: 0, column: 1 } } }
+      { properties: { location: { row: 0, column: 1 } } },
     ];
     const idGenerator = new IDGenerator();
 
@@ -128,12 +128,11 @@ describe('Row', () => {
       />
     );
 
-    if (rowInstance) {
-      rowInstance.cellRef = { 0: mockRef };
-      const definition = rowInstance.getRowDefinition();
-      expect(Array.isArray(definition)).toBe(true);
-      expect(mockRef.getCellDefinition).toHaveBeenCalled();
-    }
+    expect(rowInstance).toBeTruthy();
+    rowInstance.cellRef = { 0: mockRef };
+    const definition = rowInstance.getRowDefinition();
+    expect(Array.isArray(definition)).toBe(true);
+    expect(mockRef.getCellDefinition).toHaveBeenCalled();
   });
 
   it('should handle changeHandler method', () => {
@@ -152,10 +151,9 @@ describe('Row', () => {
       />
     );
 
-    if (rowInstance) {
-      rowInstance.changeHandler();
-      expect(mockOnChange).toHaveBeenCalledWith(2);
-    }
+    expect(rowInstance).toBeTruthy();
+    rowInstance.changeHandler();
+    expect(mockOnChange).toHaveBeenCalledWith(2);
   });
 
   it('should handle cellReference method', () => {
@@ -173,11 +171,10 @@ describe('Row', () => {
       />
     );
 
-    if (rowInstance) {
-      const mockCellRef = { props: { location: { column: 1 } } };
-      rowInstance.cellReference(mockCellRef);
-      expect(rowInstance.cellRef[1]).toBe(mockCellRef);
-    }
+    expect(rowInstance).toBeTruthy();
+    const mockCellRef = { props: { location: { column: 1 } } };
+    rowInstance.cellReference(mockCellRef);
+    expect(rowInstance.cellRef[1]).toBe(mockCellRef);
   });
 
   it('should handle changeHandler when onChange is not provided', () => {
@@ -194,8 +191,7 @@ describe('Row', () => {
       />
     );
 
-    if (rowInstance) {
-      expect(() => rowInstance.changeHandler()).not.toThrow();
-    }
+    expect(rowInstance).toBeTruthy();
+    expect(() => rowInstance.changeHandler()).not.toThrow();
   });
 });

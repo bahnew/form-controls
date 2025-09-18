@@ -26,21 +26,21 @@ describe('Cell', () => {
 
     const { container } = render(<CellDesigner {...props} />);
     const cell = container.querySelector('.form-builder-column');
-    
+
     expect(cell).toBeInTheDocument();
-    
+
     const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
-      value: { getData: () => JSON.stringify(metadata) }
+      value: { getData: () => JSON.stringify(metadata) },
     });
-    
+
     fireEvent(cell, dropEvent);
     expect(mockOnControlDrop).toHaveBeenCalled();
   });
 
   it('should render empty cell when no cellData', () => {
     const { container } = render(<CellDesigner {...defaultProps} />);
-    
+
     const emptyCell = container.querySelector('.cell');
     expect(emptyCell).toBeInTheDocument();
   });
@@ -51,14 +51,14 @@ describe('Cell', () => {
 
     const { container } = render(<CellDesigner {...props} />);
     const cell = container.querySelector('.form-builder-column');
-    
+
     const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
-      value: { getData: () => JSON.stringify(metadata) }
+      value: { getData: () => JSON.stringify(metadata) },
     });
-    
+
     fireEvent(cell, dropEvent);
-    
+
     expect(screen.getByText('TestComponent')).toBeInTheDocument();
   });
 
@@ -69,21 +69,21 @@ describe('Cell', () => {
 
     const { container } = render(<CellDesigner {...props} />);
     const cell = container.querySelector('.form-builder-column');
-    
+
     const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
-      value: { getData: () => JSON.stringify(metadata) }
+      value: { getData: () => JSON.stringify(metadata) },
     });
-    
+
     fireEvent(cell, dropEvent);
-    
+
     expect(mockOnControlDrop).toHaveBeenCalledWith(
       expect.objectContaining({
         metadata: expect.objectContaining({
           id: '123',
-          type: 'obsControl'
+          type: 'obsControl',
         }),
-        successCallback: expect.any(Function)
+        successCallback: expect.any(Function),
       })
     );
   });
@@ -95,14 +95,14 @@ describe('Cell', () => {
 
     const { container } = render(<CellDesigner {...props} />);
     const cell = container.querySelector('.form-builder-column');
-    
+
     const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
-      value: { getData: () => JSON.stringify(metadata) }
+      value: { getData: () => JSON.stringify(metadata) },
     });
-    
+
     fireEvent(cell, dropEvent);
-    
+
     expect(mockOnChange).toHaveBeenCalled();
   });
 
@@ -110,7 +110,7 @@ describe('Cell', () => {
     const propsWithData = { ...defaultProps, cellData: [metadata] };
 
     render(<CellDesigner {...propsWithData} />);
-    
+
     expect(screen.getByText('TestComponent')).toBeInTheDocument();
   });
 
@@ -120,14 +120,14 @@ describe('Cell', () => {
 
     const { container } = render(<CellDesigner {...props} />);
     const cell = container.querySelector('.form-builder-column');
-    
+
     const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
-      value: { getData: () => JSON.stringify(metadata) }
+      value: { getData: () => JSON.stringify(metadata) },
     });
-    
+
     fireEvent(cell, dropEvent);
-    
+
     expect(mockOnControlDrop).not.toHaveBeenCalled();
     expect(screen.queryByText('TestComponent')).not.toBeInTheDocument();
   });
@@ -136,7 +136,7 @@ describe('Cell', () => {
     const propsWithDragging = { ...defaultProps, isBeingDragged: true, cellData: [metadata] };
 
     const { container } = render(<CellDesigner {...propsWithDragging} />);
-    
+
     const cell = container.querySelector('.form-builder-column');
     expect(cell).toBeInTheDocument();
     expect(screen.getByText('TestComponent')).toBeInTheDocument();
@@ -145,17 +145,17 @@ describe('Cell', () => {
   it('should toggle active class on drag enter and leave', () => {
     const { container, rerender } = render(<CellDesigner {...defaultProps} />);
     let cell = container.querySelector('.form-builder-column');
-    
+
     expect(cell).toHaveClass('form-builder-column');
-    
+
     fireEvent.dragEnter(cell);
     rerender(<CellDesigner {...defaultProps} />);
     cell = container.querySelector('.form-builder-column');
-    
+
     fireEvent.dragLeave(cell);
     rerender(<CellDesigner {...defaultProps} />);
     cell = container.querySelector('.form-builder-column');
-    
+
     expect(cell).toHaveClass('form-builder-column');
   });
 
@@ -171,23 +171,23 @@ describe('Cell', () => {
         </div>
       );
     };
-    
+
     const control1 = { id: '1', type: 'obsControl', properties: {} };
     const control2 = { id: '2', type: 'obsControl', properties: {} };
-    
+
     const propsWithMultipleControls = {
       ...defaultProps,
       cellData: [control1, control2],
-      wrapper: MockControlWithDelete
+      wrapper: MockControlWithDelete,
     };
 
     render(<CellDesigner {...propsWithMultipleControls} />);
-    
+
     expect(screen.getByTestId('control-1')).toBeInTheDocument();
     expect(screen.getByTestId('control-2')).toBeInTheDocument();
-    
+
     fireEvent.click(screen.getByTestId('delete-1'));
-    
+
     expect(screen.queryByTestId('control-1')).not.toBeInTheDocument();
     expect(screen.getByTestId('control-2')).toBeInTheDocument();
   });
@@ -198,23 +198,23 @@ describe('Cell', () => {
         if (ref && parentRef) {
           const mockRef = {
             props: { metadata },
-            getJsonDefinition: () => ({ id: metadata.id, type: metadata.type })
+            getJsonDefinition: () => ({ id: metadata.id, type: metadata.type }),
           };
           parentRef.storeChildRef(mockRef);
         }
       }, [metadata, parentRef, ref]);
-      
+
       return <div data-testid={`ref-control-${metadata.id}`}>RefControl-{metadata.id}</div>;
     };
-    
+
     const propsWithRef = {
       ...defaultProps,
       cellData: [metadata],
-      wrapper: MockControlWithRef
+      wrapper: MockControlWithRef,
     };
 
     const { container } = render(<CellDesigner {...propsWithRef} />);
-    
+
     expect(screen.getByTestId('ref-control-123')).toBeInTheDocument();
     expect(container.querySelector('.form-builder-column-wrapper')).toBeInTheDocument();
   });
@@ -224,15 +224,15 @@ describe('Cell', () => {
     const MockInitialComponent = ({ metadata }) => (
       <div data-testid={`initial-${metadata.id}`}>Initial-{metadata.id}</div>
     );
-    
+
     const propsWithInitialData = {
       ...defaultProps,
       cellData: initialData,
-      wrapper: MockInitialComponent
+      wrapper: MockInitialComponent,
     };
-    
+
     render(<CellDesigner {...propsWithInitialData} />);
-    
+
     expect(screen.getByTestId('initial-initial')).toBeInTheDocument();
     expect(screen.getByText('Initial-initial')).toBeInTheDocument();
   });

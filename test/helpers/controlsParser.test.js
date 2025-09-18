@@ -1,10 +1,9 @@
-import React from 'react';
-import { 
-  groupControlsByLocation, 
-  sortGroupedControls, 
+import {
+  groupControlsByLocation,
+  sortGroupedControls,
   setupAddRemoveButtonsForAddMore,
   getGroupedControls,
-  displayRowControls
+  displayRowControls,
 } from 'src/helpers/controlsParser';
 import { ControlRecord } from 'src/ControlState';
 
@@ -36,13 +35,21 @@ describe('ControlsParser', () => {
   describe('groupControlsByLocation', () => {
     it('should return the controls grouped by rows', () => {
       const groupedControls = groupControlsByLocation(controls, 'row');
-      const expectedControls = { 1: [control1, control2], 0: [control3, control4], 2: [control5] };
+      const expectedControls = {
+        1: [control1, control2],
+        0: [control3, control4],
+        2: [control5],
+      };
       expect(groupedControls).toEqual(expectedControls);
     });
 
     it('should return the controls grouped by columns', () => {
       const groupedControls = groupControlsByLocation(controls, 'column');
-      const expectedControls = { 0: [control1, control3, control5], 1: [control2], 2: [control4] };
+      const expectedControls = {
+        0: [control1, control3, control5],
+        1: [control2],
+        2: [control4],
+      };
       expect(groupedControls).toEqual(expectedControls);
     });
   });
@@ -51,7 +58,11 @@ describe('ControlsParser', () => {
     it('should return the grouped controls sorted in ascending order', () => {
       const groupedControls = groupControlsByLocation(controls, 'row');
       const sortedRows = sortGroupedControls(groupedControls);
-      const expectedControls = [[control3, control4], [control1, control2], [control5]];
+      const expectedControls = [
+        [control3, control4],
+        [control1, control2],
+        [control5],
+      ];
       expect(sortedRows).toHaveLength(3);
       expect(sortedRows).toEqual(expectedControls);
     });
@@ -59,7 +70,11 @@ describe('ControlsParser', () => {
 
   describe('setupAddRemoveButtonsForAddMore', () => {
     it('should properly set showAddMore and showRemove properties', () => {
-      const controlRecords = [new ControlRecord(), new ControlRecord(), new ControlRecord()];
+      const controlRecords = [
+        new ControlRecord(),
+        new ControlRecord(),
+        new ControlRecord(),
+      ];
       const modifiedRecords = setupAddRemoveButtonsForAddMore(controlRecords);
 
       expect(modifiedRecords[0].showAddMore).toBe(false);
@@ -77,13 +92,13 @@ describe('ControlsParser', () => {
     it('should group controls by property and sort them', () => {
       const result = getGroupedControls(controls, 'row');
       const expected = [[control3, control4], [control1, control2], [control5]];
-      
+
       expect(result).toEqual(expected);
     });
 
     it('should handle empty controls array', () => {
       const result = getGroupedControls([], 'row');
-      
+
       expect(result).toEqual([]);
     });
   });
@@ -93,27 +108,33 @@ describe('ControlsParser', () => {
     const mockRecords = [];
 
     it('should create Row components for each row of controls', () => {
-      const rowControls = [
-        [control1, control2],
-        [control3]
-      ];
+      const rowControls = [[control1, control2], [control3]];
 
-      const result = displayRowControls(rowControls, mockRecords, mockChildProps);
-      
+      const result = displayRowControls(
+        rowControls,
+        mockRecords,
+        mockChildProps,
+      );
+
       expect(result).toHaveLength(2);
     });
 
     it('should handle isInTable parameter', () => {
       const rowControls = [[control1]];
 
-      const result = displayRowControls(rowControls, mockRecords, mockChildProps, true);
-      
+      const result = displayRowControls(
+        rowControls,
+        mockRecords,
+        mockChildProps,
+        true,
+      );
+
       expect(result).toHaveLength(1);
     });
 
     it('should handle empty controls array', () => {
       const result = displayRowControls([], mockRecords, mockChildProps);
-      
+
       expect(result).toHaveLength(0);
     });
   });

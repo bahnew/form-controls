@@ -6,7 +6,7 @@ import ComponentStore from 'src/helpers/componentStore';
 jest.mock('src/helpers/componentStore', () => ({
   registerComponent: jest.fn(),
   deRegisterComponent: jest.fn(),
-  getRegisteredComponent: jest.fn()
+  getRegisteredComponent: jest.fn(),
 }));
 
 describe('Complex Control', () => {
@@ -16,7 +16,7 @@ describe('Complex Control', () => {
   const formFieldPath = 'test1.1/1-0';
 
   const DummyControl = (props) => (
-    <input 
+    <input
       data-testid="dummy-control"
       data-form-field-path={props.formFieldPath}
       data-on-change={props.onChange ? 'true' : 'false'}
@@ -48,7 +48,7 @@ describe('Complex Control', () => {
         showNotification={showNotificationSpy}
         validate={false}
         validations={[]}
-      />
+      />,
     );
 
     const dummyControl = screen.getByTestId('dummy-control');
@@ -57,7 +57,9 @@ describe('Complex Control', () => {
     expect(dummyControl).toHaveAttribute('data-on-change', 'true');
     expect(dummyControl).toHaveAttribute('data-properties', '{}');
     expect(dummyControl).toHaveAttribute('data-on-control-add', 'true');
-    expect(ComponentStore.getRegisteredComponent).toHaveBeenCalledWith('someHandler');
+    expect(ComponentStore.getRegisteredComponent).toHaveBeenCalledWith(
+      'someHandler',
+    );
   });
 
   it('should not render complex Control if corresponding control is not registered', () => {
@@ -74,11 +76,13 @@ describe('Complex Control', () => {
         showNotification={showNotificationSpy}
         validate={false}
         validations={[]}
-      />
+      />,
     );
 
     expect(container.firstChild).toBeNull();
     expect(screen.queryByTestId('dummy-control')).not.toBeInTheDocument();
-    expect(ComponentStore.getRegisteredComponent).toHaveBeenCalledWith('someHandler');
+    expect(ComponentStore.getRegisteredComponent).toHaveBeenCalledWith(
+      'someHandler',
+    );
   });
 });

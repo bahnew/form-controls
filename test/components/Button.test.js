@@ -35,7 +35,7 @@ describe('Button Component', () => {
       expect(buttons).toHaveLength(2);
       expect(screen.getByRole('button', { name: /yes/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /no/i })).toBeInTheDocument();
-      
+
       expect(buttons[0]).toHaveClass('fl');
       expect(buttons[1]).toHaveClass('fl');
       expect(buttons[0].closest('div')).toHaveClass('form-control-buttons');
@@ -316,7 +316,7 @@ describe('Button Component', () => {
           validate={false}
           validateForm={false}
           validations={validations}
-          value={true}
+          value
         />
       );
 
@@ -325,7 +325,7 @@ describe('Button Component', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           options={options}
-          validate={true}
+          validate
           validateForm={false}
           validations={validations}
           value={undefined}
@@ -404,7 +404,7 @@ describe('Button Component', () => {
     it('should disable buttons when enabled is false', () => {
       const { rerender } = render(
         <Button
-          enabled={true}
+          enabled
           formFieldPath="test1.1-0"
           onValueChange={mockOnValueChange}
           options={options}
@@ -436,7 +436,7 @@ describe('Button Component', () => {
     it('should trigger onValueChange when mounting component with value', () => {
       render(
         <Button
-          enabled={true}
+          enabled
           formFieldPath="test1.1-0"
           onValueChange={mockOnValueChange}
           options={[]}

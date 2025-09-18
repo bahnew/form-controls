@@ -3,7 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { DropTarget } from 'src/components/DropTarget.jsx';
 
-const DropTargetWrapper = ({ children = 'Drop target content', onProcessDrop, onProcessMove, onProcessDragEnter, onProcessDragLeave, onProcessDragOver }) => {
+const DropTargetWrapper = ({
+  children = 'Drop target content',
+  onProcessDrop,
+  onProcessMove,
+  onProcessDragEnter,
+  onProcessDragLeave,
+  onProcessDragOver
+}) => {
   const dropTarget = new DropTarget();
 
   if (onProcessDrop) dropTarget.processDrop = onProcessDrop;
@@ -11,7 +18,7 @@ const DropTargetWrapper = ({ children = 'Drop target content', onProcessDrop, on
   if (onProcessDragEnter) dropTarget.processDragEnter = onProcessDragEnter;
   if (onProcessDragLeave) dropTarget.processDragLeave = onProcessDragLeave;
   if (onProcessDragOver) dropTarget.processDragOver = onProcessDragOver;
-  
+
   return (
     <div
       data-testid="drop-target-element"
@@ -27,7 +34,7 @@ const DropTargetWrapper = ({ children = 'Drop target content', onProcessDrop, on
 
 describe('DropTarget', () => {
   const testContext = { type: 'testType', data: { id: '123' } };
-  
+
   let mockEventData;
 
   beforeEach(() => {
@@ -45,19 +52,19 @@ describe('DropTarget', () => {
     it('should create instance with data', () => {
       const testData = { some: 'data' };
       const dropTarget = new DropTarget(testData);
-      
+
       expect(dropTarget.data).toBe(testData);
     });
 
     it('should create instance without data', () => {
       const dropTarget = new DropTarget();
-      
+
       expect(dropTarget.data).toBeUndefined();
     });
 
     it('should bind methods correctly', () => {
       const dropTarget = new DropTarget();
-      
+
       expect(typeof dropTarget.onDragOver).toBe('function');
       expect(typeof dropTarget.onDrop).toBe('function');
       expect(typeof dropTarget.onDragEnter).toBe('function');
@@ -68,25 +75,25 @@ describe('DropTarget', () => {
   describe('drag over behavior', () => {
     it('should prevent default on drag over', () => {
       const dropTarget = new DropTarget();
-      
+
       dropTarget.onDragOver(mockEventData);
-      
+
       expect(mockEventData.preventDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should call processDragOver when drag over happens', () => {
       const dropTarget = new DropTarget();
       const processDragOverSpy = jest.spyOn(dropTarget, 'processDragOver');
-      
+
       dropTarget.onDragOver(mockEventData);
-      
+
       expect(processDragOverSpy).toHaveBeenCalledWith(mockEventData);
     });
 
     it('should return event from processDragOver by default', () => {
       const dropTarget = new DropTarget();
       const result = dropTarget.processDragOver(mockEventData);
-      
+
       expect(result).toBe(mockEventData);
     });
   });
@@ -94,9 +101,9 @@ describe('DropTarget', () => {
   describe('drop behavior', () => {
     it('should prevent default and stop propagation on drop', () => {
       const dropTarget = new DropTarget();
-      
+
       dropTarget.onDrop(mockEventData);
-      
+
       expect(mockEventData.preventDefault).toHaveBeenCalledTimes(1);
       expect(mockEventData.stopPropagation).toHaveBeenCalledTimes(1);
     });
@@ -104,23 +111,23 @@ describe('DropTarget', () => {
     it('should call processDrop with parsed context when drop happens', () => {
       const dropTarget = new DropTarget();
       const processDropSpy = jest.spyOn(dropTarget, 'processDrop');
-      
+
       dropTarget.onDrop(mockEventData);
-      
+
       expect(processDropSpy).toHaveBeenCalledWith(testContext);
     });
 
     it('should return context from processDrop by default', () => {
       const dropTarget = new DropTarget();
       const result = dropTarget.processDrop(testContext);
-      
+
       expect(result).toBe(testContext);
     });
 
     it('should handle malformed JSON data gracefully', () => {
       const dropTarget = new DropTarget();
       mockEventData.dataTransfer.getData.mockReturnValue('invalid json');
-      
+
       expect(() => {
         dropTarget.onDrop(mockEventData);
       }).toThrow();
@@ -162,7 +169,7 @@ describe('DropTarget', () => {
     it('should return context from processMove by default', () => {
       const dropTarget = new DropTarget();
       const result = dropTarget.processMove(testContext);
-      
+
       expect(result).toBe(testContext);
     });
   });
@@ -180,7 +187,7 @@ describe('DropTarget', () => {
     it('should return event from processDragEnter by default', () => {
       const dropTarget = new DropTarget();
       const result = dropTarget.processDragEnter(mockEventData);
-      
+
       expect(result).toBe(mockEventData);
     });
   });
@@ -198,7 +205,7 @@ describe('DropTarget', () => {
     it('should return event from processDragLeave by default', () => {
       const dropTarget = new DropTarget();
       const result = dropTarget.processDragLeave(mockEventData);
-      
+
       expect(result).toBe(mockEventData);
     });
   });
@@ -211,7 +218,7 @@ describe('DropTarget', () => {
       );
 
       const dropTargetElement = screen.getByTestId('drop-target-element');
-      
+
       fireEvent.dragOver(dropTargetElement);
 
       expect(mockProcessDragOver).toHaveBeenCalled();
@@ -224,7 +231,7 @@ describe('DropTarget', () => {
       );
 
       const dropTargetElement = screen.getByTestId('drop-target-element');
-      
+
       fireEvent.drop(dropTargetElement, {
         dataTransfer: {
           getData: jest.fn().mockReturnValue(JSON.stringify(testContext)),
@@ -241,7 +248,7 @@ describe('DropTarget', () => {
       );
 
       const dropTargetElement = screen.getByTestId('drop-target-element');
-      
+
       fireEvent.dragEnter(dropTargetElement);
 
       expect(mockProcessDragEnter).toHaveBeenCalled();
@@ -254,7 +261,7 @@ describe('DropTarget', () => {
       );
 
       const dropTargetElement = screen.getByTestId('drop-target-element');
-      
+
       fireEvent.dragLeave(dropTargetElement);
 
       expect(mockProcessDragLeave).toHaveBeenCalled();
@@ -264,7 +271,7 @@ describe('DropTarget', () => {
       const dropTarget = new DropTarget();
       const preventDefault = jest.fn();
       const mockEvent = { preventDefault };
-      
+
       dropTarget.onDragOver(mockEvent);
 
       expect(preventDefault).toHaveBeenCalled();
@@ -281,7 +288,7 @@ describe('DropTarget', () => {
           getData: jest.fn().mockReturnValue(JSON.stringify(testContext)),
         },
       };
-      
+
       dropTarget.onDrop(mockEvent);
 
       expect(preventDefault).toHaveBeenCalled();
@@ -295,9 +302,9 @@ describe('DropTarget', () => {
       const mockProcessDragOver = jest.fn();
       const mockProcessDrop = jest.fn();
       const mockProcessDragLeave = jest.fn();
-      
+
       render(
-        <DropTargetWrapper 
+        <DropTargetWrapper
           onProcessDragEnter={mockProcessDragEnter}
           onProcessDragOver={mockProcessDragOver}
           onProcessDrop={mockProcessDrop}
@@ -337,7 +344,7 @@ describe('DropTarget', () => {
     it('should handle empty context data', () => {
       const dropTarget = new DropTarget();
       const emptyContext = {};
-      
+
       expect(() => {
         dropTarget.processDrop(emptyContext);
         dropTarget.processMove(emptyContext);
@@ -346,7 +353,7 @@ describe('DropTarget', () => {
 
     it('should handle null context data', () => {
       const dropTarget = new DropTarget();
-      
+
       expect(() => {
         dropTarget.processDrop(null);
         dropTarget.processMove(null);
@@ -359,35 +366,50 @@ describe('DropTarget', () => {
         preventDefault: jest.fn(),
         stopPropagation: jest.fn(),
       };
-      
+
       expect(() => {
         dropTarget.notifyMove(eventWithoutDataTransfer, testContext);
       }).not.toThrow();
     });
 
-    it('should handle various dropEffect values', () => {
+    it('should call processMove for copy effect', () => {
       const dropTarget = new DropTarget();
       const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
-      
-      const testCases = [
-        { effect: 'copy', shouldCall: true },
-        { effect: 'link', shouldCall: true },
-        { effect: 'move', shouldCall: true },
-        { effect: 'none', shouldCall: false },
-      ];
+      mockEventData.dataTransfer.dropEffect = 'copy';
 
-      testCases.forEach(({ effect, shouldCall }) => {
-        processMoveSpy.mockClear();
-        mockEventData.dataTransfer.dropEffect = effect;
-        
-        dropTarget.notifyMove(mockEventData, testContext);
-        
-        if (shouldCall) {
-          expect(processMoveSpy).toHaveBeenCalledWith(testContext);
-        } else {
-          expect(processMoveSpy).not.toHaveBeenCalled();
-        }
-      });
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
+
+    it('should call processMove for link effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'link';
+
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
+
+    it('should call processMove for move effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'move';
+
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).toHaveBeenCalledWith(testContext);
+    });
+
+    it('should not call processMove for none effect', () => {
+      const dropTarget = new DropTarget();
+      const processMoveSpy = jest.spyOn(dropTarget, 'processMove');
+      mockEventData.dataTransfer.dropEffect = 'none';
+
+      dropTarget.notifyMove(mockEventData, testContext);
+
+      expect(processMoveSpy).not.toHaveBeenCalled();
     });
   });
 });

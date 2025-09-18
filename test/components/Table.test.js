@@ -10,10 +10,10 @@ import { Label } from 'components/Label.jsx';
 import { Table, TableWithIntl } from 'components/Table.jsx';
 
 const renderWithIntl = (component, locale = 'en') => {
-  const messages = { 
+  const messages = {
     COLUMN1_2: 'Column1',
     COLUMN2_2: 'Column2',
-    TABLE_LABEL: 'Table'
+    TABLE_LABEL: 'Table',
   };
 
   return render(
@@ -94,7 +94,7 @@ describe('Table', () => {
   const formVersion = '1';
   const tableFormFieldPath = 'Table_Test.1/1-0';
   const obsFormFieldPath = 'Table_Test.1/2-0';
-  
+
   const children = List.of(new ControlRecord({
     id: '2',
     control: metadata.controls[0],
@@ -158,7 +158,7 @@ describe('Table', () => {
 
       const headerElement = document.querySelector('.header');
       expect(headerElement).toBeInTheDocument();
-      
+
       expect(headerElement).toContainElement(screen.getByText('Column1'));
       expect(headerElement).toContainElement(screen.getByText('Column2'));
     });
@@ -200,9 +200,9 @@ describe('Table', () => {
     });
 
     it('should display translated column headers', () => {
-      const customMessages = { 
+      const customMessages = {
         COLUMN1_2: 'Columna 1',
-        COLUMN2_2: 'Columna 2'
+        COLUMN2_2: 'Columna 2',
       };
 
       render(
@@ -240,7 +240,7 @@ describe('Table', () => {
       const patientUuid = 'test-patient-uuid';
 
       renderWithIntl(
-        <TableWithIntl 
+        <TableWithIntl
           {...defaultProps}
           onEventTrigger={onEventTrigger}
           patientUuid={patientUuid}
@@ -253,7 +253,7 @@ describe('Table', () => {
 
     it('should handle validation props', () => {
       renderWithIntl(
-        <TableWithIntl 
+        <TableWithIntl
           {...defaultProps}
           validate
           validateForm
@@ -267,9 +267,9 @@ describe('Table', () => {
   describe('callback handling', () => {
     it('should call onValueChanged when table data changes', () => {
       const onValueChanged = jest.fn();
-      
+
       renderWithIntl(
-        <TableWithIntl 
+        <TableWithIntl
           {...defaultProps}
           onValueChanged={onValueChanged}
         />
@@ -280,9 +280,9 @@ describe('Table', () => {
 
     it('should handle showNotification callback', () => {
       const showNotification = jest.fn();
-      
+
       renderWithIntl(
-        <TableWithIntl 
+        <TableWithIntl
           {...defaultProps}
           showNotification={showNotification}
         />
@@ -352,7 +352,7 @@ describe('Table', () => {
 
   describe('children handling', () => {
     it('should handle empty children list', () => {
-      renderWithIntl(<TableWithIntl {...defaultProps} children={List.of()} />);
+      renderWithIntl(<TableWithIntl {...defaultProps}>{List.of()}</TableWithIntl>);
 
       expect(screen.getByText('Table')).toBeInTheDocument();
       expect(document.querySelector('.test-Rows')).toBeInTheDocument();
@@ -377,7 +377,7 @@ describe('Table', () => {
         })
       );
 
-      renderWithIntl(<TableWithIntl {...defaultProps} children={multipleChildren} />);
+      renderWithIntl(<TableWithIntl {...defaultProps}>{multipleChildren}</TableWithIntl>);
 
       expect(screen.getByText('Table')).toBeInTheDocument();
     });
@@ -405,8 +405,8 @@ describe('Table', () => {
       const customFormFieldPath = 'Custom_Form.1/5-3';
 
       renderWithIntl(
-        <TableWithIntl 
-          {...defaultProps} 
+        <TableWithIntl
+          {...defaultProps}
           formFieldPath={customFormFieldPath}
         />
       );
@@ -418,8 +418,8 @@ describe('Table', () => {
       const customFormVersion = '2.1';
 
       renderWithIntl(
-        <TableWithIntl 
-          {...defaultProps} 
+        <TableWithIntl
+          {...defaultProps}
           formVersion={customFormVersion}
         />
       );
@@ -431,8 +431,8 @@ describe('Table', () => {
       const specialFormName = 'Form-With_Special.Characters';
 
       renderWithIntl(
-        <TableWithIntl 
-          {...defaultProps} 
+        <TableWithIntl
+          {...defaultProps}
           formName={specialFormName}
         />
       );

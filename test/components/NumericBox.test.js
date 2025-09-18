@@ -107,9 +107,9 @@ describe('NumericBox', () => {
     fireEvent.change(input, { target: { value: '50.32' } });
 
     const allowDecimalError = new Error({ message: validations[0] });
-    expect(onChangeMock).toHaveBeenCalledWith({ 
-      value: '50.32', 
-      errors: [allowDecimalError] 
+    expect(onChangeMock).toHaveBeenCalledWith({
+      value: '50.32',
+      errors: [allowDecimalError],
     });
     expect(input).toHaveClass('form-builder-error');
   });
@@ -132,7 +132,7 @@ describe('NumericBox', () => {
         concept={concept}
         formFieldPath="test1.1-0"
         onChange={onChangeMock}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value="98.6"
@@ -150,7 +150,7 @@ describe('NumericBox', () => {
         concept={concept}
         formFieldPath="test1.1/1-1"
         onChange={onChangeMock}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value="98.6"
@@ -199,9 +199,9 @@ describe('NumericBox', () => {
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '51' } });
 
-    expect(onChangeMock).toHaveBeenCalledWith({ 
-      value: '51', 
-      errors: [allowRangeWarning] 
+    expect(onChangeMock).toHaveBeenCalledWith({
+      value: '51',
+      errors: [allowRangeWarning],
     });
   });
 
@@ -227,9 +227,9 @@ describe('NumericBox', () => {
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '51' } });
 
-    expect(onChangeMock).toHaveBeenCalledWith({ 
-      value: '51', 
-      errors: [allowRangeError] 
+    expect(onChangeMock).toHaveBeenCalledWith({
+      value: '51',
+      errors: [allowRangeError],
     });
   });
 
@@ -282,7 +282,7 @@ describe('NumericBox', () => {
   it('should show as enabled when NumericBox is set to be enabled', () => {
     render(
       <NumericBox
-        enabled={true}
+        enabled
         formFieldPath="test1.1/1-0"
         onChange={() => {}}
         validate={false}
@@ -316,7 +316,7 @@ describe('NumericBox', () => {
   it('should show as enabled when NumericBox with range is set to be enabled', () => {
     render(
       <NumericBox
-        enabled={true}
+        enabled
         formFieldPath="test1.1/1-0"
         hiNormal={20}
         lowNormal={10}
@@ -334,7 +334,7 @@ describe('NumericBox', () => {
   it('should display range indicator when hiNormal and lowNormal are provided', () => {
     render(
       <NumericBox
-        enabled={true}
+        enabled
         formFieldPath="test1.1/1-0"
         hiNormal={20}
         lowNormal={10}
@@ -363,10 +363,10 @@ describe('NumericBox', () => {
     );
 
     expect(onChangeMock).toHaveBeenCalledWith(
-      expect.objectContaining({ 
+      expect.objectContaining({
         value: '30',
         triggerControlEvent: false,
-        calledOnMount: true
+        calledOnMount: true,
       })
     );
   });
@@ -374,7 +374,7 @@ describe('NumericBox', () => {
   it('should not call onChange when mounting component with undefined value', () => {
     render(
       <NumericBox
-        enabled={true}
+        enabled
         formFieldPath="test1.1-0"
         onChange={onChangeMock}
         validate={false}
@@ -456,8 +456,8 @@ describe('NumericBox', () => {
     );
 
     expect(onChangeMock).toHaveBeenCalledWith(
-      expect.objectContaining({ 
-        value: '98.6'
+      expect.objectContaining({
+        value: '98.6',
       })
     );
   });

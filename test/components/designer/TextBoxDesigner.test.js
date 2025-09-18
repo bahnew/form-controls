@@ -20,19 +20,19 @@ describe('TextBoxDesigner', () => {
 
   it('should render the TextBox designer component', () => {
     render(<TextBoxDesigner metadata={metadata} />);
-    
+
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('should return json definition', () => {
     let componentRef;
     const TestWrapper = () => (
-      <TextBoxDesigner 
-        ref={ref => { componentRef = ref; }} 
-        metadata={metadata} 
+      <TextBoxDesigner
+        ref={ref => { componentRef = ref; }}
+        metadata={metadata}
       />
     );
-    
+
     render(<TestWrapper />);
     expect(componentRef.getJsonDefinition()).toEqual(metadata);
   });

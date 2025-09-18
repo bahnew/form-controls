@@ -182,7 +182,7 @@ describe('Coded Control Designer', () => {
   describe('getJsonDefinition method', () => {
     beforeEach(() => {
       TranslationKeyGenerator.mockImplementation(() => ({
-        build: () => 'ANSWER1_100'
+        build: () => 'ANSWER1_100',
       }));
     });
 
@@ -206,9 +206,9 @@ describe('Coded Control Designer', () => {
 
       const component = new CodedControlDesigner({ metadata: testMetadata });
       component.setState({ success: true });
-      
+
       const result = component.getJsonDefinition();
-      
+
       expect(result.concept.answers[0].translationKey).toBe('ANSWER1_100');
       expect(TranslationKeyGenerator).toHaveBeenCalledWith('answer1', '100');
     });
@@ -234,7 +234,7 @@ describe('Coded Control Designer', () => {
 
       const component = new CodedControlDesigner({ metadata: testMetadata });
       const result = component.getJsonDefinition();
-      
+
       expect(result.concept.answers[0].translationKey).toBe('EXISTING_KEY');
       expect(TranslationKeyGenerator).not.toHaveBeenCalled();
     });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AutoComplete } from 'components/AutoComplete.jsx';
 import constants from 'src/constants';
@@ -23,17 +23,19 @@ jest.mock('src/helpers/Util', () => ({
 jest.mock('src/helpers/httpInterceptor', () => ({
   httpInterceptor: {
     get: jest.fn().mockResolvedValue({
-      results: []
-    })
-  }
+      results: [],
+    }),
+  },
 }));
 
 describe('AutoComplete', () => {
-  const concept = [{
-    uuid: '70645842-be6a-4974-8d5f-45b52990e132',
-    name: 'Pulse',
-    dataType: 'Text',
-  }];
+  const concept = [
+    {
+      uuid: '70645842-be6a-4974-8d5f-45b52990e132',
+      name: 'Pulse',
+      dataType: 'Text',
+    },
+  ];
 
   const options = [
     { name: 'one', value: 'One' },
@@ -57,10 +59,12 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           validations={validations}
-        />
+        />,
       );
 
-      expect(document.querySelector('.obs-control-select-wrapper')).toHaveClass('form-builder-error');
+      expect(document.querySelector('.obs-control-select-wrapper')).toHaveClass(
+        'form-builder-error',
+      );
     });
 
     it('should not show error when initial value is not in options for asynchronous mode', () => {
@@ -71,10 +75,12 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           value={{ name: 'four', value: 'Four' }}
-        />
+        />,
       );
 
-      expect(document.querySelector('.obs-control-select-wrapper')).not.toHaveClass('form-builder-error');
+      expect(
+        document.querySelector('.obs-control-select-wrapper'),
+      ).not.toHaveClass('form-builder-error');
     });
 
     it('should not show error when mounted with formFieldPath suffix 0', () => {
@@ -86,10 +92,12 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           validations={validations}
-        />
+        />,
       );
 
-      expect(document.querySelector('.obs-control-select-wrapper')).not.toHaveClass('form-builder-error');
+      expect(
+        document.querySelector('.obs-control-select-wrapper'),
+      ).not.toHaveClass('form-builder-error');
     });
   });
 
@@ -123,7 +131,7 @@ describe('AutoComplete', () => {
           options={options}
           url="http://systemurl.com"
           terminologyServiceConfig={{ limit: 30 }}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -137,7 +145,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           url="http://systemurl.com"
-        />
+        />,
       );
 
       const input = document.querySelector('input');
@@ -154,7 +162,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           url="http://systemurl.com"
-        />
+        />,
       );
 
       const input = document.querySelector('input');
@@ -170,7 +178,7 @@ describe('AutoComplete', () => {
         <AutoComplete
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -183,7 +191,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           value={concept[0]}
-        />
+        />,
       );
 
       expect(mockOnValueChange).toHaveBeenCalledWith(concept[0], []);
@@ -195,7 +203,7 @@ describe('AutoComplete', () => {
           enabled={false}
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toHaveClass('is-disabled');
@@ -207,7 +215,7 @@ describe('AutoComplete', () => {
           enabled
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
@@ -219,7 +227,7 @@ describe('AutoComplete', () => {
           enabled
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
@@ -229,7 +237,7 @@ describe('AutoComplete', () => {
           enabled={false}
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toHaveClass('is-disabled');
@@ -244,7 +252,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           options={options}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -258,7 +266,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           value={options[0]}
-        />
+        />,
       );
 
       expect(mockOnValueChange).toHaveBeenCalled();
@@ -273,7 +281,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           value={options[0]}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
@@ -288,14 +296,14 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           validations={validations}
-        />
+        />,
       );
 
       expect(mockOnValueChange).toHaveBeenCalledWith(
-        undefined, 
+        undefined,
         expect.arrayContaining([
-          expect.objectContaining({ message: constants.validations.mandatory })
-        ])
+          expect.objectContaining({ message: constants.validations.mandatory }),
+        ]),
       );
     });
 
@@ -308,7 +316,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           minimumInput={1}
-        />
+        />,
       );
 
       const input = document.querySelector('input');
@@ -325,7 +333,7 @@ describe('AutoComplete', () => {
         <AutoComplete
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
-        />
+        />,
       );
 
       const input = document.querySelector('input');
@@ -342,7 +350,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           multiSelect
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toHaveClass('Select--multi');
@@ -356,7 +364,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           conceptUuid="test-uuid"
-        />
+        />,
       );
 
       expect(document.querySelector('#test-uuid')).toBeInTheDocument();
@@ -373,7 +381,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           minimumInput={1}
-        />
+        />,
       );
 
       const input = document.querySelector('input');
@@ -390,10 +398,12 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           searchable={false}
-        />
+        />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass('is-searchable');
+      expect(document.querySelector('.Select')).not.toHaveClass(
+        'is-searchable',
+      );
     });
   });
 
@@ -406,7 +416,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           validateForm
-        />
+        />,
       );
 
       expect(mockOnValueChange).toHaveBeenCalledWith(undefined, []);
@@ -420,7 +430,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           autofocus
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -432,7 +442,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           autoload
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -444,7 +454,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           cache
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -458,7 +468,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           value={undefined}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -472,7 +482,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           value={null}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -488,7 +498,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           minimumInput={0}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -501,7 +511,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           options={options}
-        />
+        />,
       );
 
       const newOptions = [
@@ -515,7 +525,7 @@ describe('AutoComplete', () => {
           formFieldPath="test1.1/1-0"
           onValueChange={mockOnValueChange}
           options={newOptions}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();
@@ -529,7 +539,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           enabled
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
@@ -541,7 +551,7 @@ describe('AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           enabled={false}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toHaveClass('is-disabled');
@@ -562,7 +572,7 @@ describe('AutoComplete', () => {
           multiSelect={false}
           minimumInput={1}
           conceptUuid="integration-test"
-        />
+        />,
       );
 
       expect(document.querySelector('#integration-test')).toBeInTheDocument();
@@ -578,7 +588,7 @@ describe('AutoComplete', () => {
           url="http://test.com"
           minimumInput={3}
           terminologyServiceConfig={{ limit: 20 }}
-        />
+        />,
       );
 
       expect(document.querySelector('.Select')).toBeInTheDocument();

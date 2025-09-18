@@ -57,9 +57,7 @@ describe('ControlRecordTreeMgr', () => {
       },
       id: '2',
       unsupportedProperties: [],
-      controls: [
-        obsControl,
-      ],
+      controls: [obsControl],
     };
   });
 
@@ -111,15 +109,20 @@ describe('ControlRecordTreeMgr', () => {
       },
       formFieldPath: mixedFormFieldPath,
     });
-    const obsTree = new ControlRecord({ children: List.of(obsRecord, mixedChildRecord) });
+    const obsTree = new ControlRecord({
+      children: List.of(obsRecord, mixedChildRecord),
+    });
 
-    const brotherTree = new ControlRecordTreeMgr()
-                              .getLatestBrotherTree(obsTree, expectedFormFieldPath);
+    const brotherTree = new ControlRecordTreeMgr().getLatestBrotherTree(
+      obsTree,
+      expectedFormFieldPath,
+    );
 
     expect(brotherTree.formFieldPath).toBe(expectedFormFieldPath);
   });
 
-  it('should return obsControl with path as an incremented value when obsControl is the root tree and parent is section without add more', () => {
+  it('should return obsControl with path as an incremented value when obsControl is the root tree ' +
+     'and parent is section without add more', () => {
     const obsRecord = new ControlRecord({
       control: obsControl,
       value: {},
@@ -133,12 +136,16 @@ describe('ControlRecordTreeMgr', () => {
     });
 
     const recordsTree = new ControlRecord({ children: List.of(obsRecord) });
-    const nextObsTree = new ControlRecordTreeMgr()
-          .generateNextTree(recordsTree, 'FormName.V/1-0', undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      'FormName.V/1-0',
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-1');
   });
 
-  it('should return obsControl with path as an incremented value when obsControl is the root tree and parent is section with add more', () => {
+  it('should return obsControl with path as an incremented value when obsControl is the root tree ' +
+     'and parent is section with add more', () => {
     const obsFormFieldPath = 'FormName.V/2-0/1-0';
     const observationRecord = new ControlRecord({
       control: obsControl,
@@ -151,14 +158,20 @@ describe('ControlRecordTreeMgr', () => {
       },
       formFieldPath: obsFormFieldPath,
     });
-    const recordsTree = new ControlRecord({ children: List.of(observationRecord) });
+    const recordsTree = new ControlRecord({
+      children: List.of(observationRecord),
+    });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, obsFormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      obsFormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/2-0/1-1');
   });
 
-  it('should return section control tree with obsControl as a child and increment the path value for section control id, when section control is the root tree', () => {
+  it('should return section control tree with obsControl as a child and increment the path value ' +
+     'for section control id, when section control is the root tree', () => {
     const sectionFormFieldPath = 'FormName.V/2-0';
     const obsFormFieldPath = 'FormName.V/2-0/1-0';
     const observationRecord = new ControlRecord({
@@ -186,13 +199,19 @@ describe('ControlRecordTreeMgr', () => {
     });
     const recordsTree = new ControlRecord({ children: List.of(sectionRecord) });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, sectionFormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      sectionFormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/2-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/2-1/1-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/2-1/1-0',
+    );
   });
 
-  it('should increment path for section 1 when section 1 has child as section 2 which is add more and has child obs control, where root is section 2', () => {
+  it('should increment path for section 1 when section 1 has child as section 2 which is add more ' +
+     'and has child obs control, where root is section 2', () => {
     const section2FormFieldPath = 'FormName.V/2-0';
     const obsFormFieldPath = 'FormName.V/2-0/3-0';
     const observationRecord = new ControlRecord({
@@ -221,15 +240,23 @@ describe('ControlRecordTreeMgr', () => {
       formFieldPath: section2FormFieldPath,
     });
 
-    const recordsTree = new ControlRecord({ children: List.of(sectionRecord2) });
+    const recordsTree = new ControlRecord({
+      children: List.of(sectionRecord2),
+    });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, section2FormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      section2FormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/2-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/2-1/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/2-1/3-0',
+    );
   });
 
-  it('should increment path for section 1 with add more when section 1 has child as section 2 which is also add more and has child obs control, where root is section 1', () => {
+  it('should increment path for section 1 with add more when section 1 has child as section 2 ' +
+     'which is also add more and has child obs control, where root is section 1', () => {
     const section1FormFieldPath = 'FormName.V/1-0';
     const section2FormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
@@ -245,7 +272,7 @@ describe('ControlRecordTreeMgr', () => {
       formFieldPath: obsFormFieldPath,
     });
     const sectionControl2 = sectionControl;
-    const sectionControl1 = sectionControl = {
+    const sectionControl1 = (sectionControl = {
       type: 'section',
       label: {
         translationKey: 'SECTION_2',
@@ -262,10 +289,8 @@ describe('ControlRecordTreeMgr', () => {
       },
       id: '2',
       unsupportedProperties: [],
-      controls: [
-        sectionControl2,
-      ],
-    };
+      controls: [sectionControl2],
+    });
     const sectionRecord2 = new ControlRecord({
       control: sectionControl2,
       value: {},
@@ -291,17 +316,26 @@ describe('ControlRecordTreeMgr', () => {
       children: List.of(sectionRecord2),
       formFieldPath: section1FormFieldPath,
     });
-    const recordsTree = new ControlRecord({ children: List.of(sectionRecord1) });
+    const recordsTree = new ControlRecord({
+      children: List.of(sectionRecord1),
+    });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, section1FormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      section1FormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/1-1/2-0');
-    expect(nextObsTree.children.get(0).children.get(0).formFieldPath)
-        .toBe('FormName.V/1-1/2-0/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0',
+    );
+    expect(nextObsTree.children.get(0).children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0/3-0',
+    );
   });
 
-  it('should increment path for section 2 with add more when section 1 has child as section 2 which is also add more and has child obs control, where root tree is section 2', () => {
+  it('should increment path for section 2 with add more when section 1 has child as section 2 ' +
+     'which is also add more and has child obs control, where root tree is section 2', () => {
     const section2FormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
     const observationRecord = new ControlRecord({
@@ -330,15 +364,23 @@ describe('ControlRecordTreeMgr', () => {
       formFieldPath: section2FormFieldPath,
     });
 
-    const recordsTree = new ControlRecord({ children: List.of(sectionRecord2) });
+    const recordsTree = new ControlRecord({
+      children: List.of(sectionRecord2),
+    });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, section2FormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      section2FormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-0/2-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/1-0/2-1/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/1-0/2-1/3-0',
+    );
   });
 
-  it('should increment path for section with add more which has child as obsGroup which is also add more and has child obs control, where root tree is section', () => {
+  it('should increment path for section with add more which has child as obsGroup which is ' +
+     'also add more and has child obs control, where root tree is section', () => {
     const sectionFormFieldPath = 'FormName.V/1-0';
     const obsGroupFormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
@@ -371,9 +413,7 @@ describe('ControlRecordTreeMgr', () => {
       },
       id: '2',
       unsupportedProperties: [],
-      controls: [
-        obsControl,
-      ],
+      controls: [obsControl],
     };
 
     const obGrpRecord = new ControlRecord({
@@ -404,15 +444,22 @@ describe('ControlRecordTreeMgr', () => {
 
     const recordsTree = new ControlRecord({ children: List.of(sectionRecord) });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, sectionFormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      sectionFormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/1-1/2-0');
-    expect(nextObsTree.children.get(0).children.get(0).formFieldPath)
-        .toBe('FormName.V/1-1/2-0/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0',
+    );
+    expect(nextObsTree.children.get(0).children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0/3-0',
+    );
   });
 
-  it('should increment path for obs group with add more which has child as obs and parent as section, where root tree is obsgroup', () => {
+  it('should increment path for obs group with add more which has child as obs and parent as ' +
+     'section, where root tree is obsgroup', () => {
     const obsGroupFormFieldPath = 'FormName.V/1-0/2-0';
     const obsFormFieldPath = 'FormName.V/1-0/2-0/3-0';
     const observationRecord = new ControlRecord({
@@ -444,9 +491,7 @@ describe('ControlRecordTreeMgr', () => {
       },
       id: '2',
       unsupportedProperties: [],
-      controls: [
-        obsControl,
-      ],
+      controls: [obsControl],
     };
 
     const obsGrpRecord = new ControlRecord({
@@ -464,10 +509,15 @@ describe('ControlRecordTreeMgr', () => {
 
     const recordsTree = new ControlRecord({ children: List.of(obsGrpRecord) });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, obsGroupFormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      obsGroupFormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-0/2-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/1-0/2-1/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/1-0/2-1/3-0',
+    );
   });
 
   it('should increment obsgroup and obs control path when root tree is obsgroup', () => {
@@ -503,9 +553,7 @@ describe('ControlRecordTreeMgr', () => {
       },
       id: '2',
       unsupportedProperties: [],
-      controls: [
-        obsControl,
-      ],
+      controls: [obsControl],
     };
 
     const obGrpRecord = new ControlRecord({
@@ -536,12 +584,18 @@ describe('ControlRecordTreeMgr', () => {
 
     const recordsTree = new ControlRecord({ children: List.of(sectionRecord) });
 
-    const nextObsTree = new ControlRecordTreeMgr()
-            .generateNextTree(recordsTree, sectionFormFieldPath, undefined);
+    const nextObsTree = new ControlRecordTreeMgr().generateNextTree(
+      recordsTree,
+      sectionFormFieldPath,
+      undefined,
+    );
     expect(nextObsTree.formFieldPath).toBe('FormName.V/1-1');
-    expect(nextObsTree.children.get(0).formFieldPath).toBe('FormName.V/1-1/2-0');
-    expect(nextObsTree.children.get(0).children.get(0).formFieldPath)
-        .toBe('FormName.V/1-1/2-0/3-0');
+    expect(nextObsTree.children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0',
+    );
+    expect(nextObsTree.children.get(0).children.get(0).formFieldPath).toBe(
+      'FormName.V/1-1/2-0/3-0',
+    );
   });
 
   describe('findParentTree', () => {
@@ -553,13 +607,16 @@ describe('ControlRecordTreeMgr', () => {
         dataSource: { concept, formFieldPath: childFormFieldPath },
         formFieldPath: childFormFieldPath,
       });
-      const parentRecord = new ControlRecord({ 
+      const parentRecord = new ControlRecord({
         children: List.of(childRecord),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const treeMgr = new ControlRecordTreeMgr();
-      const foundParent = treeMgr.findParentTree(parentRecord, childFormFieldPath);
+      const foundParent = treeMgr.findParentTree(
+        parentRecord,
+        childFormFieldPath,
+      );
 
       expect(foundParent.formFieldPath).toBe('FormName.V');
     });
@@ -581,7 +638,7 @@ describe('ControlRecordTreeMgr', () => {
       });
       const rootRecord = new ControlRecord({
         children: List.of(parentChild),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const treeMgr = new ControlRecordTreeMgr();
@@ -595,13 +652,16 @@ describe('ControlRecordTreeMgr', () => {
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
       });
-      const parentRecord = new ControlRecord({ 
+      const parentRecord = new ControlRecord({
         children: List.of(childRecord),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const treeMgr = new ControlRecordTreeMgr();
-      const foundParent = treeMgr.findParentTree(parentRecord, 'NonExistent.Path/1-0');
+      const foundParent = treeMgr.findParentTree(
+        parentRecord,
+        'NonExistent.Path/1-0',
+      );
 
       expect(foundParent).toBeUndefined();
     });
@@ -628,7 +688,7 @@ describe('ControlRecordTreeMgr', () => {
       });
       const rootTree = new ControlRecord({
         children: List.of(existingChild),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
       const newChild = new ControlRecord({
         control: obsControl,
@@ -653,14 +713,20 @@ describe('ControlRecordTreeMgr', () => {
       });
       const rootTree = new ControlRecord({
         children: List.of(parentChild),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const treeMgr = new ControlRecordTreeMgr();
-      const updatedTree = treeMgr.addToRootTree(rootTree, parentChild, newChild);
+      const updatedTree = treeMgr.addToRootTree(
+        rootTree,
+        parentChild,
+        newChild,
+      );
 
       expect(updatedTree.children.get(0).children.size).toBe(1);
-      expect(updatedTree.children.get(0).children.get(0).formFieldPath).toBe('FormName.V/1-0/2-1');
+      expect(updatedTree.children.get(0).children.get(0).formFieldPath).toBe(
+        'FormName.V/1-0/2-1',
+      );
     });
 
     it('should handle trees without children in traversal', () => {
@@ -674,7 +740,7 @@ describe('ControlRecordTreeMgr', () => {
       });
       const rootTree = new ControlRecord({
         children: List.of(leafChild, anotherLeaf),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
       const newChild = new ControlRecord({
         control: obsControl,
@@ -696,16 +762,17 @@ describe('ControlRecordTreeMgr', () => {
         value: {},
         dataSource: { concept, formFieldPath: 'FormName.V/1-0' },
         formFieldPath: 'FormName.V/1-0',
-        removeObsUuidsInDataSource: () => new ControlRecord({
-          control: obsControl,
-          value: {},
-          active: true,
-          formFieldPath: 'FormName.V/1-1',
-        })
+        removeObsUuidsInDataSource: () =>
+          new ControlRecord({
+            control: obsControl,
+            value: {},
+            active: true,
+            formFieldPath: 'FormName.V/1-1',
+          }),
       });
       const rootTree = new ControlRecord({
         children: List.of(existingChild),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const updatedTree = ControlRecordTreeMgr.add(rootTree, 'FormName.V/1-0');
@@ -719,12 +786,12 @@ describe('ControlRecordTreeMgr', () => {
       const originalTree = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { original: true }
+        value: { original: true },
       });
       const updatedNode = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { updated: true }
+        value: { updated: true },
       });
 
       const result = ControlRecordTreeMgr.update(originalTree, updatedNode);
@@ -737,17 +804,17 @@ describe('ControlRecordTreeMgr', () => {
       const childToUpdate = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { original: true }
+        value: { original: true },
       });
       const rootTree = new ControlRecord({
         children: List.of(childToUpdate),
         formFieldPath: 'FormName.V',
-        value: { root: true }
+        value: { root: true },
       });
       const updatedNode = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { updated: true }
+        value: { updated: true },
       });
 
       const result = ControlRecordTreeMgr.update(rootTree, updatedNode);
@@ -760,12 +827,12 @@ describe('ControlRecordTreeMgr', () => {
       const leafNode = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { original: true }
+        value: { original: true },
       });
       const updatedNode = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/2-0',
-        value: { updated: true }
+        value: { updated: true },
       });
 
       const result = ControlRecordTreeMgr.update(leafNode, updatedNode);
@@ -779,15 +846,15 @@ describe('ControlRecordTreeMgr', () => {
       const targetChild = new ControlRecord({
         control: obsControl,
         formFieldPath: 'FormName.V/1-0',
-        value: { target: true }
+        value: { target: true },
       });
       const parentTree = new ControlRecord({
         children: List.of(targetChild),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
       const rootTree = new ControlRecord({
         children: List.of(parentTree),
-        formFieldPath: 'Root'
+        formFieldPath: 'Root',
       });
 
       const foundNode = ControlRecordTreeMgr.find(rootTree, 'FormName.V/1-0');
@@ -799,11 +866,11 @@ describe('ControlRecordTreeMgr', () => {
     it('should return null when node does not exist', () => {
       const existingChild = new ControlRecord({
         control: obsControl,
-        formFieldPath: 'FormName.V/1-0'
+        formFieldPath: 'FormName.V/1-0',
       });
       const rootTree = new ControlRecord({
         children: List.of(existingChild),
-        formFieldPath: 'Root'
+        formFieldPath: 'Root',
       });
 
       const foundNode = ControlRecordTreeMgr.find(rootTree, 'FormName.V/2-0');
@@ -814,10 +881,13 @@ describe('ControlRecordTreeMgr', () => {
     it('should return null when parent tree is not found', () => {
       const rootTree = new ControlRecord({
         children: List.of(),
-        formFieldPath: 'Root'
+        formFieldPath: 'Root',
       });
 
-      const foundNode = ControlRecordTreeMgr.find(rootTree, 'NonExistent.Path/1-0');
+      const foundNode = ControlRecordTreeMgr.find(
+        rootTree,
+        'NonExistent.Path/1-0',
+      );
 
       expect(foundNode).toBeNull();
     });
@@ -827,27 +897,29 @@ describe('ControlRecordTreeMgr', () => {
     it('should return brother trees when target tree is provided', () => {
       const targetTree = new ControlRecord({
         control: obsControl,
-        formFieldPath: 'FormName.V/1-0'
+        formFieldPath: 'FormName.V/1-0',
       });
       const brotherTree = new ControlRecord({
         control: obsControl,
-        formFieldPath: 'FormName.V/1-1'
+        formFieldPath: 'FormName.V/1-1',
       });
       const rootTree = new ControlRecord({
         children: List.of(targetTree, brotherTree),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const brothers = ControlRecordTreeMgr.getBrothers(rootTree, targetTree);
 
       expect(brothers.length).toBeGreaterThan(0);
-      expect(brothers.some(b => b.formFieldPath === 'FormName.V/1-0')).toBe(true);
+      expect(brothers.some((b) => b.formFieldPath === 'FormName.V/1-0')).toBe(
+        true,
+      );
     });
 
     it('should return empty array when target tree is null', () => {
       const rootTree = new ControlRecord({
         children: List.of(),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const brothers = ControlRecordTreeMgr.getBrothers(rootTree, null);
@@ -858,7 +930,7 @@ describe('ControlRecordTreeMgr', () => {
     it('should return empty array when target tree is undefined', () => {
       const rootTree = new ControlRecord({
         children: List.of(),
-        formFieldPath: 'FormName.V'
+        formFieldPath: 'FormName.V',
       });
 
       const brothers = ControlRecordTreeMgr.getBrothers(rootTree, undefined);
@@ -938,10 +1010,7 @@ describe('ControlRecordTreeMgr', () => {
         },
         id: '2',
         unsupportedProperties: [],
-        controls: [
-          voidedObsControl,
-          obsControl,
-        ],
+        controls: [voidedObsControl, obsControl],
       };
       const voidedObservationRecord = new ControlRecord({
         control: voidedObsControl,
@@ -964,7 +1033,11 @@ describe('ControlRecordTreeMgr', () => {
           formNamespace: 'Bahmni',
           voided: true,
         },
-        children: List.of(voidedObservationRecord, observationRecord, observationRecord2),
+        children: List.of(
+          voidedObservationRecord,
+          observationRecord,
+          observationRecord2,
+        ),
         formFieldPath: obsGroupFormFieldPath,
       });
 
@@ -981,9 +1054,11 @@ describe('ControlRecordTreeMgr', () => {
         formFieldPath: sectionFormFieldPath,
       });
 
-      const brotherObsTree = new ControlRecordTreeMgr()
-              .getBrotherTrees(sectionRecord, obsFormFieldPath);
-      expect(brotherObsTree.length).toBe(2);
+      const brotherObsTree = new ControlRecordTreeMgr().getBrotherTrees(
+        sectionRecord,
+        obsFormFieldPath,
+      );
+      expect(brotherObsTree).toHaveLength(2);
       expect(brotherObsTree[0].formFieldPath).toBe(obsFormFieldPath);
       expect(brotherObsTree[1].formFieldPath).toBe(obsFormFieldPath);
     });

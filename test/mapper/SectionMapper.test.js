@@ -81,7 +81,8 @@ describe('SectionMapper', () => {
       expect(initObject.obsList).toHaveLength(2);
     });
 
-    it('should return two initial objects if observations come from add more sections and obs are segregated by section control ids', () => {
+    it('should return two initial objects if observations come from add more sections and obs ' +
+       'are segregated by section control ids', () => {
       const observationControl = {
         type: 'obsControl',
         id: '2',
@@ -136,7 +137,8 @@ describe('SectionMapper', () => {
       expect(sectionObj.obsList[0].formFieldPath).toBe(obsFormFieldPathInAddMoreSection);
     });
 
-    it('should return two initial objects if observations come from add more sections whose parent is also section with add more property and obs are segregated by current section control ids', () => {
+    it('should return two initial objects if observations come from add more sections whose parent ' +
+       'is also section with add more property and obs are segregated by current section control ids', () => {
       const observationCtrl = {
         type: 'obsControl',
         id: '3',
@@ -726,14 +728,14 @@ describe('SectionMapper', () => {
           addMore: true,
         },
       };
-      
+
       const observations = [{
         formFieldPath: 'different.path/2-0',
         concept,
       }];
 
       const initObjects = mapper.getInitialObject(formName, formVersion, sectionCtrl, null, observations);
-      
+
       expect(initObjects).toHaveLength(1);
       expect(initObjects[0].formFieldPath).toBe(sectionControlFormFieldPath);
     });
@@ -746,7 +748,7 @@ describe('SectionMapper', () => {
       }];
 
       const result = mapper.segregateObsByAddMoreSections(prefix, observations);
-      
+
       expect(result).toHaveLength(0);
     });
   });

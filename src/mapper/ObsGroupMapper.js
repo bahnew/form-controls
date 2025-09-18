@@ -1,9 +1,9 @@
 import { createObsFromControl } from 'src/helpers/Obs';
 import isEmpty from 'lodash/isEmpty';
 import { cloneDeep } from 'lodash';
-import ObservationMapper from '../helpers/ObservationMapper';
 import { getUpdatedFormFieldPath } from 'src/helpers/formNamespace';
 import { isAnyAncestorOrControlHasAddMore } from 'src/helpers/ControlUtil';
+import ObservationMapper from '../helpers/ObservationMapper';
 
 export class ObsGroupMapper {
 

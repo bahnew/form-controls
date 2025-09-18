@@ -77,7 +77,7 @@ describe('ValueMapperStore', () => {
 
   it('should return coded mapper when coded control has no properties', () => {
     const codedControlWithoutProperties = {
-      concept: { datatype: 'Coded' }
+      concept: { datatype: 'Coded' },
     };
 
     const datatypeMapper = ValueMapperStore.getMapper(codedControlWithoutProperties);
@@ -87,21 +87,21 @@ describe('ValueMapperStore', () => {
 
   it('should register and retrieve value mapper', () => {
     const mockMapper = { test: 'mapper' };
-    
+
     ValueMapperStore.registerValueMapper('TestType', mockMapper);
-    
+
     const testControl = {
-      concept: { datatype: 'TestType' }
+      concept: { datatype: 'TestType' },
     };
-    
+
     const retrievedMapper = ValueMapperStore.getMapper(testControl);
-    
+
     expect(retrievedMapper).toBe(mockMapper);
   });
 
   it('should return undefined for registered type when mapper is not found', () => {
     const controlWithUnregisteredType = {
-      concept: { datatype: 'UnregisteredType' }
+      concept: { datatype: 'UnregisteredType' },
     };
 
     const datatypeMapper = ValueMapperStore.getMapper(controlWithUnregisteredType);

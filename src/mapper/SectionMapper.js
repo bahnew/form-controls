@@ -3,8 +3,8 @@ import { List } from 'immutable';
 import _ from 'lodash';
 import { createFormNamespaceAndPath, getKeyPrefixForControl } from 'src/helpers/formNamespace';
 import flattenDeep from 'lodash/flattenDeep';
-import ObservationMapper from '../helpers/ObservationMapper';
 import { isAnyAncestorOrControlHasAddMore } from 'src/helpers/ControlUtil';
+import ObservationMapper from '../helpers/ObservationMapper';
 
 export class SectionMapper {
 

@@ -20,7 +20,7 @@ describe('ImageDesigner', () => {
 
   it('should render the Image designer component', () => {
     const { container } = render(<ImageDesigner metadata={metadata} />);
-    
+
     const fileInput = container.querySelector('input[type="file"]');
     expect(fileInput).toBeInTheDocument();
     expect(fileInput).toBeDisabled();

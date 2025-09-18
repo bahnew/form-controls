@@ -27,10 +27,16 @@ describe('TableMapper', () => {
     properties: {},
   };
 
-  const tableControlFormFieldPath =
-    createFormNamespaceAndPath(formName, formVersion, tableControl.id).formFieldPath;
-  const obsControlFormFieldPath =
-    createFormNamespaceAndPath(formName, formVersion, obsControl.id).formFieldPath;
+  const tableControlFormFieldPath = createFormNamespaceAndPath(
+    formName,
+    formVersion,
+    tableControl.id,
+  ).formFieldPath;
+  const obsControlFormFieldPath = createFormNamespaceAndPath(
+    formName,
+    formVersion,
+    obsControl.id,
+  ).formFieldPath;
 
   beforeEach(() => {
     mapper = new TableMapper();
@@ -39,24 +45,36 @@ describe('TableMapper', () => {
   describe('getInitialObject', () => {
     it('should return initial object with empty obs list and table form field path when obs has no value', () => {
       const initObjectArray = mapper.getInitialObject(
-        formName, formVersion, tableControl, null, []);
+        formName,
+        formVersion,
+        tableControl,
+        null,
+        [],
+      );
 
-      expect(initObjectArray.length).toBe(1);
-      expect(initObjectArray[0].getObsList().length).toBe(0);
+      expect(initObjectArray).toHaveLength(1);
+      expect(initObjectArray[0].getObsList()).toHaveLength(0);
       expect(initObjectArray[0].formFieldPath).toBe(tableControlFormFieldPath);
     });
 
     it('should return initial object with obs list, form field path when an obs with concept is passed', () => {
-      const observations = [{
-        formFieldPath: obsControlFormFieldPath,
-        concept,
-      }];
+      const observations = [
+        {
+          formFieldPath: obsControlFormFieldPath,
+          concept,
+        },
+      ];
 
-      const initObjectArray =
-        mapper.getInitialObject(formName, formVersion, tableControl, null, observations);
+      const initObjectArray = mapper.getInitialObject(
+        formName,
+        formVersion,
+        tableControl,
+        null,
+        observations,
+      );
 
-      expect(initObjectArray.length).toBe(1);
-      expect(initObjectArray[0].getObsList().length).toBe(1);
+      expect(initObjectArray).toHaveLength(1);
+      expect(initObjectArray[0].getObsList()).toHaveLength(1);
       expect(initObjectArray[0].formFieldPath).toBe(tableControlFormFieldPath);
     });
 
@@ -76,48 +94,77 @@ describe('TableMapper', () => {
           addMore: true,
         },
       };
-      const parentFormFieldPath = createFormNamespaceAndPath(formName, formVersion, 1)
-          .formFieldPath;
+      const parentFormFieldPath = createFormNamespaceAndPath(
+        formName,
+        formVersion,
+        1,
+      ).formFieldPath;
 
-      const formFieldPathPrefix =
-              getKeyPrefixForControl(formName, formVersion, tableCtrl.id, parentFormFieldPath)
-                  .formFieldPath;
+      const formFieldPathPrefix = getKeyPrefixForControl(
+        formName,
+        formVersion,
+        tableCtrl.id,
+        parentFormFieldPath,
+      ).formFieldPath;
       const firstObsFormFieldPathInSection = `${formFieldPathPrefix}-0/3-0`;
       const secondObsFormFieldPathInSection = `${formFieldPathPrefix}-0/3-1`;
       const obsFormFieldPathInAddMoreSection = `${formFieldPathPrefix}-1/3-0`;
 
-      const observations = [{
-        formFieldPath: firstObsFormFieldPathInSection,
-        concept,
-      },
-      {
-        formFieldPath: secondObsFormFieldPathInSection,
-        concept,
-      },
-      {
-        formFieldPath: obsFormFieldPathInAddMoreSection,
-        concept,
-      }];
+      const observations = [
+        {
+          formFieldPath: firstObsFormFieldPathInSection,
+          concept,
+        },
+        {
+          formFieldPath: secondObsFormFieldPathInSection,
+          concept,
+        },
+        {
+          formFieldPath: obsFormFieldPathInAddMoreSection,
+          concept,
+        },
+      ];
 
-      const initObjects = mapper.getInitialObject(formName, formVersion, tableCtrl, null,
-              observations, parentFormFieldPath);
-      expect(initObjects.length).toBe(2);
+      const initObjects = mapper.getInitialObject(
+        formName,
+        formVersion,
+        tableCtrl,
+        null,
+        observations,
+        parentFormFieldPath,
+      );
+      expect(initObjects).toHaveLength(2);
 
       const initObjectArray = [initObjects[0].toJS(), initObjects[1].toJS()];
-      expect([initObjectArray[0].formFieldPath, initObjectArray[1].formFieldPath])
-              .toEqual(expect.arrayContaining([`${formFieldPathPrefix}-0`, `${formFieldPathPrefix}-1`]));
+      expect([
+        initObjectArray[0].formFieldPath,
+        initObjectArray[1].formFieldPath,
+      ]).toEqual(
+        expect.arrayContaining([
+          `${formFieldPathPrefix}-0`,
+          `${formFieldPathPrefix}-1`,
+        ]),
+      );
 
-      let sectionObj = initObjectArray.find(obj =>
-          (obj.formFieldPath === `${formFieldPathPrefix}-0` ? obj : undefined));
-      expect(sectionObj.obsList.length).toBe(2);
-      expect(sectionObj.obsList.map(obs => obs.formFieldPath))
-              .toEqual(expect.arrayContaining([firstObsFormFieldPathInSection, secondObsFormFieldPathInSection]));
+      let sectionObj = initObjectArray.find((obj) =>
+        obj.formFieldPath === `${formFieldPathPrefix}-0` ? obj : undefined,
+      );
+      expect(sectionObj.obsList).toHaveLength(2);
+      expect(sectionObj.obsList.map((obs) => obs.formFieldPath)).toEqual(
+        expect.arrayContaining([
+          firstObsFormFieldPathInSection,
+          secondObsFormFieldPathInSection,
+        ]),
+      );
 
-      sectionObj = initObjectArray.find(obj =>
-          (obj.formFieldPath === `${formFieldPathPrefix}-1` ? obj : undefined));
+      sectionObj = initObjectArray.find((obj) =>
+        obj.formFieldPath === `${formFieldPathPrefix}-1` ? obj : undefined,
+      );
 
-      expect(sectionObj.obsList.length).toBe(1);
-      expect(sectionObj.obsList[0].formFieldPath).toBe(obsFormFieldPathInAddMoreSection);
+      expect(sectionObj.obsList).toHaveLength(1);
+      expect(sectionObj.obsList[0].formFieldPath).toBe(
+        obsFormFieldPathInAddMoreSection,
+      );
     });
 
     it('should get flatten data from records', () => {
@@ -141,7 +188,8 @@ describe('TableMapper', () => {
           concept: {
             name: 'HEIGHT',
             uuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-          }, formNamespace: 'Bahmni',
+          },
+          formNamespace: 'Bahmni',
           formFieldPath: 'section.1/3-0',
         }),
       });
@@ -150,15 +198,17 @@ describe('TableMapper', () => {
         control: {
           type: 'table',
           id: '1',
-          controls: [{
-            type: 'obsControl',
-            label: { type: 'label', value: 'HEIGHT' },
-            id: '3',
-            concept: {
-              name: 'HEIGHT',
-              uuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+          controls: [
+            {
+              type: 'obsControl',
+              label: { type: 'label', value: 'HEIGHT' },
+              id: '3',
+              concept: {
+                name: 'HEIGHT',
+                uuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+              },
             },
-          }],
+          ],
         },
         formFieldPath: 'table.1/1-0',
         children: List.of(child),
@@ -168,7 +218,7 @@ describe('TableMapper', () => {
 
       const data = mapper.getData(records);
 
-      expect(data.length).toBe(1);
+      expect(data).toHaveLength(1);
       expect(data[0].value).toBe('2');
     });
 
@@ -179,46 +229,52 @@ describe('TableMapper', () => {
     it('should get observations for children records', () => {
       const data = new ObsList({
         formFieldPath: 'table.1/1-0',
-        obsList: [{
-          groupMembers: [],
-          formFieldPath: 'table.1/3-0',
-          concept: {
-            uuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-            name: 'HEIGHT',
-            dataType: 'Numeric',
-            shortName: 'HEIGHT',
-            conceptClass: 'Misc',
+        obsList: [
+          {
+            groupMembers: [],
+            formFieldPath: 'table.1/3-0',
+            concept: {
+              uuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+              name: 'HEIGHT',
+              dataType: 'Numeric',
+              shortName: 'HEIGHT',
+              conceptClass: 'Misc',
+            },
+            valueAsString: '2.0',
+            voided: false,
+            voidReason: null,
+            conceptUuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+            unknown: false,
+            uuid: '22a41779-e637-44b6-a827-34d6b8df7159',
+            value: 2,
           },
-          valueAsString: '2.0',
-          voided: false,
-          voidReason: null,
-          conceptUuid: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-          unknown: false,
-          uuid: '22a41779-e637-44b6-a827-34d6b8df7159',
-          value: 2,
-        }],
+        ],
       });
 
-      expect(mapper.getChildren(data).length).toBe(1);
+      expect(mapper.getChildren(data)).toHaveLength(1);
       expect(mapper.getChildren(data)[0].value).toBe(2);
     });
 
     it('should segregate correct obs based on parent form field path prefix', () => {
       const parentFormFieldPathPrefix = { formFieldPath: 'formName.1/1' };
-      const observations = [{
-        formFieldPath: 'formName.1/1-0/2-0',
-        concept,
-      },
-      {
-        formFieldPath: 'formName.1/11-0',
-        concept,
-      }];
+      const observations = [
+        {
+          formFieldPath: 'formName.1/1-0/2-0',
+          concept,
+        },
+        {
+          formFieldPath: 'formName.1/11-0',
+          concept,
+        },
+      ];
 
-      const initObjectArray =
-        mapper.segregateObsByAddMoreSections(parentFormFieldPathPrefix, observations);
+      const initObjectArray = mapper.segregateObsByAddMoreSections(
+        parentFormFieldPathPrefix,
+        observations,
+      );
 
-      expect(initObjectArray.length).toBe(1);
-      expect(initObjectArray[0].length).toBe(1);
+      expect(initObjectArray).toHaveLength(1);
+      expect(initObjectArray[0]).toHaveLength(1);
       expect(initObjectArray[0][0].formFieldPath).toBe('formName.1/1-0/2-0');
     });
   });

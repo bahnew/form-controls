@@ -17,10 +17,17 @@ module.exports = {
       babelrc: false,
       configFile: false,
       presets: [
-        ['@babel/preset-env', { targets: { node: '14' } }],
-        '@babel/preset-react'
+        ['@babel/preset-env', {
+          targets: { node: '14' },
+          useBuiltIns: 'usage',
+          corejs: 3
+        }],
+        ['@babel/preset-react', {
+          runtime: 'automatic',
+          development: true
+        }]
       ],
-      plugins: ['@babel/plugin-proposal-object-rest-spread']
+      plugins: []
     }],
   },
   testMatch: [

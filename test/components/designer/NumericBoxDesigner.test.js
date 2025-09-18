@@ -20,7 +20,7 @@ describe('NumericBoxDesigner', () => {
 
   it('should render the input', () => {
     render(<NumericBoxDesigner metadata={metadata} />);
-    
+
     const input = screen.getByRole('spinbutton');
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute('type', 'number');
@@ -41,7 +41,7 @@ describe('NumericBoxDesigner', () => {
   it('should render the range information when available', () => {
     const lowNormal = 5;
     const hiNormal = 10;
-    
+
     render(
       <NumericBoxDesigner
         hiNormal={hiNormal}
@@ -49,7 +49,7 @@ describe('NumericBoxDesigner', () => {
         metadata={metadata}
       />
     );
-    
+
     expect(screen.getByText(`(${lowNormal} - ${hiNormal})`)).toBeInTheDocument();
   });
 

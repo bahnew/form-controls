@@ -274,14 +274,18 @@ describe('ObsListMapper', () => {
       formFieldPath,
       formNamespace: 'Bahmni',
       voided: true,
-    }) });
-
+    }),
+  });
 
   it('should get obsList when getInitialObject with empty observation', () => {
     const emptyObservation = [];
 
-    const obsLists = new ObsListMapper()
-      .getInitialObject(formName, formVersion, multipleSelectControl, emptyObservation);
+    const obsLists = new ObsListMapper().getInitialObject(
+      formName,
+      formVersion,
+      multipleSelectControl,
+      emptyObservation,
+    );
 
     expect(obsLists[0].obsList.size).toBe(0);
     expect(obsLists[0].formFieldPath).toBe(formFieldPath);
@@ -293,8 +297,12 @@ describe('ObsListMapper', () => {
   it('should get obsList when getInitialObject with observation', () => {
     const observations = [obs1, obs2];
 
-    const obsLists = new ObsListMapper()
-      .getInitialObject(formName, formVersion, multipleSelectControl, observations);
+    const obsLists = new ObsListMapper().getInitialObject(
+      formName,
+      formVersion,
+      multipleSelectControl,
+      observations,
+    );
 
     expect(obsLists[0].obsList.size).toBe(observations.length);
     expect(obsLists[0].formFieldPath).toBe(formFieldPath);
@@ -305,11 +313,15 @@ describe('ObsListMapper', () => {
 
   it('should get correct obs when getInitialObject with observation', () => {
     let obs = cloneDeep(obs1);
-    obs = obs.set('formFieldPath', 'multipleSelect.1/20-0');    // this form field path is part of multipleSelect.1/2
+    obs = obs.set('formFieldPath', 'multipleSelect.1/20-0'); // this form field path is part of multipleSelect.1/2
     const observations = [obs];
 
-    const obsLists = new ObsListMapper()
-      .getInitialObject(formName, formVersion, multipleSelectControl, observations);
+    const obsLists = new ObsListMapper().getInitialObject(
+      formName,
+      formVersion,
+      multipleSelectControl,
+      observations,
+    );
 
     expect(obsLists[0].obsList.size).toBe(0);
     expect(obsLists[0].formFieldPath).toBe(formFieldPath);
@@ -318,7 +330,7 @@ describe('ObsListMapper', () => {
   it('should get value from record with obsList type when getValue be triggered', () => {
     const value = new ObsListMapper().getValue(obsListData);
 
-    expect(value.value.length).toBe(obsListData.obsList.size);
+    expect(value.value).toHaveLength(obsListData.obsList.size);
   });
 
   it('should get obs from record when getData be triggered', () => {
@@ -349,13 +361,14 @@ describe('ObsListMapper', () => {
             shortName: 'Condoms',
             uuid: '1fe0597e-470d-49bd-9d82-9c7b7342dab0',
           },
-        ] },
+        ],
+      },
       dataSource: obsListData,
     });
 
     const obsArray = new ObsListMapper().getData(record);
 
-    expect(obsArray.length).toBe(record.value.value.length);
+    expect(obsArray).toHaveLength(record.value.value.length);
   });
 
   it('should get obs with voided when given record without value but saved before', () => {
@@ -368,7 +381,7 @@ describe('ObsListMapper', () => {
 
     const obsArray = new ObsListMapper().getData(record);
 
-    expect(obsArray.length).toBe(record.dataSource.obsList.size);
+    expect(obsArray).toHaveLength(record.dataSource.obsList.size);
     expect(obsArray[0].voided).toBe(true);
     expect(obsArray[1].voided).toBe(true);
   });
@@ -424,8 +437,8 @@ describe('ObsListMapper', () => {
         formFieldPath,
         formNamespace: 'Bahmni',
         voided: true,
-      } });
-
+      },
+    });
 
     const value = new ObsListMapper().getValue(obsListDataWithComment);
 
@@ -464,8 +477,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -476,8 +488,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -487,8 +498,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -505,9 +515,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -518,9 +526,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -530,9 +536,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -549,9 +553,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -562,9 +564,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -574,9 +574,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -615,9 +613,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -628,9 +624,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -640,9 +634,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -659,9 +651,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -672,9 +662,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -684,9 +672,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -703,9 +689,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -716,9 +700,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -728,9 +710,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -876,7 +856,7 @@ describe('ObsListMapper', () => {
       },
     });
     const obsArray = new ObsListMapper().getData(multiSelectCtrlRecord);
-    expect(obsArray.length).toBe(2);
+    expect(obsArray).toHaveLength(2);
     expect(obsArray[0].uuid).toBe('e4bb9974-e3e6-4a35-a985-741f6a267e7b');
     expect(obsArray[1].uuid).toBe('9e469b18-2859-484a-b8f5-2f12037a0ab2');
   });
@@ -914,8 +894,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -926,8 +905,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -937,8 +915,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -955,9 +932,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -968,9 +943,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -980,9 +953,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -999,9 +970,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               names: [
@@ -1012,9 +981,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: false,
                   conceptNameType: 'SHORT',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 {
@@ -1024,9 +991,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
               ],
@@ -1057,9 +1022,7 @@ describe('ObsListMapper', () => {
               locale: 'en',
               localePreferred: true,
               conceptNameType: 'FULLY_SPECIFIED',
-              links: [
-
-              ],
+              links: [],
               resourceVersion: '1.9',
             },
             names: [
@@ -1070,9 +1033,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               {
@@ -1082,9 +1043,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: false,
                 conceptNameType: 'SHORT',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
             ],
@@ -1101,9 +1060,7 @@ describe('ObsListMapper', () => {
               locale: 'en',
               localePreferred: true,
               conceptNameType: 'FULLY_SPECIFIED',
-              links: [
-
-              ],
+              links: [],
               resourceVersion: '1.9',
             },
             names: [
@@ -1114,9 +1071,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: true,
                 conceptNameType: 'FULLY_SPECIFIED',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
               {
@@ -1126,9 +1081,7 @@ describe('ObsListMapper', () => {
                 locale: 'en',
                 localePreferred: false,
                 conceptNameType: 'SHORT',
-                links: [
-
-                ],
+                links: [],
                 resourceVersion: '1.9',
               },
             ],
@@ -1165,9 +1118,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -1178,9 +1129,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -1190,9 +1139,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -1209,9 +1156,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -1222,9 +1167,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -1234,9 +1177,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -1253,9 +1194,7 @@ describe('ObsListMapper', () => {
                   locale: 'en',
                   localePreferred: true,
                   conceptNameType: 'FULLY_SPECIFIED',
-                  links: [
-
-                  ],
+                  links: [],
                   resourceVersion: '1.9',
                 },
                 names: [
@@ -1266,9 +1205,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: false,
                     conceptNameType: 'SHORT',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                   {
@@ -1278,9 +1215,7 @@ describe('ObsListMapper', () => {
                     locale: 'en',
                     localePreferred: true,
                     conceptNameType: 'FULLY_SPECIFIED',
-                    links: [
-
-                    ],
+                    links: [],
                     resourceVersion: '1.9',
                   },
                 ],
@@ -1303,7 +1238,7 @@ describe('ObsListMapper', () => {
 
     const obsArray = new ObsListMapper().getData(multiSelectCtrlRecord);
 
-    expect(obsArray.length).toBe(2);
+    expect(obsArray).toHaveLength(2);
     expect(obsArray[0].uuid).toBeUndefined();
     expect(obsArray[1].uuid).toBeUndefined();
   });
@@ -1358,67 +1293,83 @@ describe('ObsListMapper', () => {
     expect(obs.observationDateTime).toBeUndefined();
   });
 
-  it('should clone obs from dataSource when observation uuid in ' +
-    'obsList does not match with value uuid', () => {
-    const value = {
-      uuid: '33958c18-702d-4a44-a4bf-f22b6b563012',
-    };
-    const observation = new Obs({
-      encounterDateTime: 1545031955000,
-      formFieldPath: 'something.1/1-0',
-      observationDateTime: '2018-12-17T07:32:35.000+0000',
-      value: { uuid: '33958c18-702d-4a44-a4bf-f22b6b563033' },
-    });
-    const record = {
-      formFieldPath: 'something.1/1-0',
-      dataSource: {
+  it(
+    'should clone obs from dataSource when observation uuid in ' +
+      'obsList does not match with value uuid',
+    () => {
+      const value = {
+        uuid: '33958c18-702d-4a44-a4bf-f22b6b563012',
+      };
+      const observation = new Obs({
+        encounterDateTime: 1545031955000,
         formFieldPath: 'something.1/1-0',
-        active: true,
-        obs: new Obs({
-          formFieldPath: 'something.1/1-0',
-        }),
-        obsList: List.of(observation),
-      },
-    };
-
-    const obs = new ObsListMapper().buildObs(record, value, 'uuid', 'comment');
-
-    expect(obs.value).toBe(value);
-    expect(obs.uuid).toBe('uuid');
-    expect(obs.comment).toBe('comment');
-    expect(obs.observationDateTime).toBeUndefined();
-  });
-
-  it('should clone obs when observation formFieldPath in obsList and record ' +
-    'formFieldPath are different', () => {
-    const value = {
-      uuid: '33958c18-702d-4a44-a4bf-f22b6b563012',
-    };
-    const observation = new Obs({
-      encounterDateTime: 1545031955000,
-      formFieldPath: 'something.1/1-1',
-      observationDateTime: '2018-12-17T07:32:35.000+0000',
-      value,
-    });
-    const record = {
-      formFieldPath: 'something.1/2-0',
-      dataSource: {
+        observationDateTime: '2018-12-17T07:32:35.000+0000',
+        value: { uuid: '33958c18-702d-4a44-a4bf-f22b6b563033' },
+      });
+      const record = {
         formFieldPath: 'something.1/1-0',
-        active: true,
-        obs: new Obs({
+        dataSource: {
           formFieldPath: 'something.1/1-0',
-        }),
-        obsList: List.of(observation),
-      },
-    };
+          active: true,
+          obs: new Obs({
+            formFieldPath: 'something.1/1-0',
+          }),
+          obsList: List.of(observation),
+        },
+      };
 
-    const obs = new ObsListMapper().buildObs(record, value, 'uuid', 'comment');
+      const obs = new ObsListMapper().buildObs(
+        record,
+        value,
+        'uuid',
+        'comment',
+      );
 
-    expect(obs.value).toBe(value);
-    expect(obs.uuid).toBe('uuid');
-    expect(obs.comment).toBe('comment');
-    expect(obs.observationDateTime).toBeUndefined();
-  });
+      expect(obs.value).toBe(value);
+      expect(obs.uuid).toBe('uuid');
+      expect(obs.comment).toBe('comment');
+      expect(obs.observationDateTime).toBeUndefined();
+    },
+  );
+
+  it(
+    'should clone obs when observation formFieldPath in obsList and record ' +
+      'formFieldPath are different',
+    () => {
+      const value = {
+        uuid: '33958c18-702d-4a44-a4bf-f22b6b563012',
+      };
+      const observation = new Obs({
+        encounterDateTime: 1545031955000,
+        formFieldPath: 'something.1/1-1',
+        observationDateTime: '2018-12-17T07:32:35.000+0000',
+        value,
+      });
+      const record = {
+        formFieldPath: 'something.1/2-0',
+        dataSource: {
+          formFieldPath: 'something.1/1-0',
+          active: true,
+          obs: new Obs({
+            formFieldPath: 'something.1/1-0',
+          }),
+          obsList: List.of(observation),
+        },
+      };
+
+      const obs = new ObsListMapper().buildObs(
+        record,
+        value,
+        'uuid',
+        'comment',
+      );
+
+      expect(obs.value).toBe(value);
+      expect(obs.uuid).toBe('uuid');
+      expect(obs.comment).toBe('comment');
+      expect(obs.observationDateTime).toBeUndefined();
+    },
+  );
 
   it('should handle observations with inactive property in getInitialObject', () => {
     const inactiveObs = new Obs({
@@ -1440,8 +1391,12 @@ describe('ObsListMapper', () => {
       inactive: true,
     });
 
-    const obsLists = new ObsListMapper()
-      .getInitialObject(formName, formVersion, multipleSelectControl, [inactiveObs]);
+    const obsLists = new ObsListMapper().getInitialObject(
+      formName,
+      formVersion,
+      multipleSelectControl,
+      [inactiveObs],
+    );
 
     expect(obsLists[0].inactive).toBe(true);
   });
@@ -1481,11 +1436,12 @@ describe('ObsListMapper', () => {
         formFieldPath,
         formNamespace: 'Bahmni',
         voided: true,
-      }) });
+      }),
+    });
 
     const value = new ObsListMapper().getValue(obsListDataMixed);
 
-    expect(value.value.length).toBe(1);
+    expect(value.value).toHaveLength(1);
   });
 
   it('should return empty value when all obs have no value in getValue', () => {
@@ -1513,7 +1469,8 @@ describe('ObsListMapper', () => {
         formFieldPath,
         formNamespace: 'Bahmni',
         voided: true,
-      }) });
+      }),
+    });
 
     const value = new ObsListMapper().getValue(obsListDataEmpty);
 
@@ -1546,7 +1503,7 @@ describe('ObsListMapper', () => {
     const obsArray = [];
     new ObsListMapper().fillEmptyData(record, obsArray);
 
-    expect(obsArray.length).toBe(0);
+    expect(obsArray).toHaveLength(0);
   });
 
   it('should handle getData with voided record', () => {
@@ -1566,7 +1523,8 @@ describe('ObsListMapper', () => {
             shortName: 'Pills',
             uuid: 'ffa2244a-8729-47fc-9185-d62a7033b511',
           },
-        ] },
+        ],
+      },
       dataSource: obsListData,
       voided: true,
     });

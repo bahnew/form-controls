@@ -18,7 +18,7 @@ describe('AddMore', () => {
     const buttons = screen.getAllByRole('button');
     const addButton = buttons.find(btn => btn.classList.contains('form-builder-add-more'));
     const removeButton = buttons.find(btn => btn.classList.contains('form-builder-remove'));
-    
+
     expect(addButton).toBeInTheDocument();
     expect(removeButton).toBeInTheDocument();
     expect(addButton.querySelector('.fa-plus')).toBeInTheDocument();

@@ -18,7 +18,7 @@ class DummyControl extends Component {
 
   render() {
     return (
-      <div 
+      <div
         data-testid="dummy-control"
         data-validate={this.props.validate}
         data-enabled={this.props.enabled}
@@ -33,13 +33,11 @@ DummyControl.propTypes = {
   formUuid: PropTypes.string,
 };
 
-const renderWithIntl = (component) => {
-  return render(
+const renderWithIntl = (component) => render(
     <IntlProvider locale="en" messages={{}}>
       {component}
     </IntlProvider>
   );
-};
 
 describe('Row', () => {
   const controls = [
@@ -94,7 +92,7 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const dummyControls = screen.getAllByTestId('dummy-control');
       expect(dummyControls).toHaveLength(3);
       expect(dummyControls[0]).toHaveAttribute('data-validate', 'false');
@@ -147,7 +145,7 @@ describe('Row', () => {
           type: 'randomType',
           value: 'Pulse',
           properties: { location: { row: 0, column: 1 } },
-        }
+        },
       ];
       const tableRecords = tableControls.map((control) => ({
         control,
@@ -168,7 +166,7 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const emptyLeft = container.querySelector('.form-builder-column-empty-left');
       expect(emptyLeft).toBeInTheDocument();
     });
@@ -180,7 +178,7 @@ describe('Row', () => {
           type: 'randomType',
           value: 'Pulse',
           properties: { location: { row: 0, column: 0 } },
-        }
+        },
       ];
       const tableRecords = tableControls.map((control) => ({
         control,
@@ -201,25 +199,26 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const emptyRight = container.querySelector('.form-builder-column-empty-right');
       expect(emptyRight).toBeInTheDocument();
     });
 
-    it('should show the cell skeleton and hide its content when one of the two cells is hidden and other is visible', () => {
+    it('should show the cell skeleton and hide its content ' +
+       'when one of the two cells is hidden and other is visible', () => {
       const tableControls = [
         {
           id: '100',
           type: 'randomType',
           value: 'Pulse',
           properties: { location: { row: 0, column: 0 } },
-        }, 
+        },
         {
           id: '101',
           type: 'randomType',
           value: 'Node',
           properties: { location: { row: 0, column: 1 } },
-        }
+        },
       ];
       const tableRecords = tableControls.map((control) => ({
         control,
@@ -241,11 +240,11 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const columnWrappers = container.querySelectorAll('.form-builder-row .form-builder-column-wrapper');
       const columns = container.querySelectorAll('.form-builder-row .form-builder-column');
       const hiddenColumns = container.querySelectorAll('.form-builder-row .form-builder-column.hidden');
-      
+
       expect(columnWrappers).toHaveLength(2);
       expect(columns).toHaveLength(2);
       expect(hiddenColumns).toHaveLength(1);
@@ -258,13 +257,13 @@ describe('Row', () => {
           type: 'randomType',
           value: 'Pulse',
           properties: { location: { row: 0, column: 0 } },
-        }, 
+        },
         {
           id: '101',
           type: 'randomType',
           value: 'Node',
           properties: { location: { row: 0, column: 1 } },
-        }
+        },
       ];
       const tableRecords = tableControls.map((control) => ({
         control,
@@ -286,10 +285,10 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const columnWrappers = container.querySelectorAll('.form-builder-row .form-builder-column-wrapper');
       const columns = container.querySelectorAll('.form-builder-row .form-builder-column');
-      
+
       expect(columnWrappers).toHaveLength(0);
       expect(columns).toHaveLength(0);
     });
@@ -301,7 +300,7 @@ describe('Row', () => {
           type: 'randomType',
           value: 'Pulse',
           properties: { location: { row: 0, column: 0 } },
-        }
+        },
       ];
       const tableRecords = tableControls.map((control) => ({
         control,
@@ -323,7 +322,7 @@ describe('Row', () => {
           validateForm={false}
         />
       );
-      
+
       const rowElement = container.querySelector('.form-builder-row');
       expect(rowElement).toBeInTheDocument();
       expect(rowElement).toBeEmptyDOMElement();
@@ -344,7 +343,7 @@ describe('Row', () => {
         validateForm={false}
       />
     );
-    
+
     const hiddenColumn = container.querySelector('.form-builder-column.hidden');
     expect(hiddenColumn).toBeInTheDocument();
   });
@@ -362,7 +361,7 @@ describe('Row', () => {
         validateForm={false}
       />
     );
-    
+
     const sameLineColumn = container.querySelector('.form-builder-column.same-line');
     expect(sameLineColumn).toBeInTheDocument();
   });

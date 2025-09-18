@@ -17,10 +17,10 @@ describe('Provider', () => {
   const providerData = {
     results: [
       { name: 'Dr. Smith', id: 1 },
-      { name: 'Dr. Johnson', id: 2 }
+      { name: 'Dr. Johnson', id: 2 },
     ],
   };
-  
+
   const defaultProps = {
     formFieldPath: 'test1.1/1-0',
     onChange: jest.fn(),
@@ -45,7 +45,7 @@ describe('Provider', () => {
 
     const combobox = screen.getByRole('combobox');
     expect(combobox).not.toHaveAttribute('aria-expanded', 'true');
-    
+
     await userEvent.type(combobox, 'Dr');
     expect(combobox).toHaveValue('Dr');
   });
@@ -54,7 +54,7 @@ describe('Provider', () => {
     const dropdownProps = {
       ...defaultProps,
       properties: { ...defaultProps.properties, style: 'dropdown' },
-      value: '1'
+      value: '1',
     };
 
     render(<Provider {...dropdownProps} />);
@@ -120,7 +120,7 @@ describe('Provider', () => {
 
     const control = screen.getByRole('combobox');
     await userEvent.click(control);
-    
+
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
@@ -149,7 +149,7 @@ describe('Provider', () => {
 
   it('should show spinner when value is provided but data is still loading', () => {
     mockHttpInterceptor.get.mockImplementation(() => new Promise(() => {}));
-    
+
     const { container } = render(<Provider {...defaultProps} value="1" />);
 
     expect(container.querySelector('.overlay')).toBeInTheDocument();
@@ -158,7 +158,7 @@ describe('Provider', () => {
   it('should use default URL when no URL is provided in properties', async () => {
     const propsWithoutURL = {
       ...defaultProps,
-      properties: { style: 'autocomplete' }
+      properties: { style: 'autocomplete' },
     };
 
     render(<Provider {...propsWithoutURL} />);
@@ -173,7 +173,7 @@ describe('Provider', () => {
   it('should call onChange with undefined when provider value is cleared', async () => {
     const onChangeSpy = jest.fn();
     const testProps = { ...defaultProps, onChange: onChangeSpy, value: '1' };
-    
+
     render(<Provider {...testProps} />);
 
     await waitFor(() => {
@@ -185,7 +185,7 @@ describe('Provider', () => {
 
     expect(onChangeSpy).toHaveBeenCalledWith({
       value: undefined,
-      errors: []
+      errors: [],
     });
   });
 });

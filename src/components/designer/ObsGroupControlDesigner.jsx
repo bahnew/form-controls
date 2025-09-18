@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
-import { ObsGroupMapper } from '../../mapper/ObsGroupMapper';
 import { GridDesigner as Grid } from 'components/designer/Grid.jsx';
-import { Concept } from '../../helpers/Concept';
-import { Metadata } from '../../helpers/Metadata';
 import { LabelDesigner } from 'components/designer/Label.jsx';
 import { AddMoreDesigner } from 'components/designer/AddMore.jsx';
 import find from 'lodash/find';
 import { CellDesigner } from 'components/designer/Cell.jsx';
+import { Metadata } from '../../helpers/Metadata';
+import { Concept } from '../../helpers/Concept';
+import { ObsGroupMapper } from '../../mapper/ObsGroupMapper';
 
 export class ObsGroupControlDesigner extends Component {
 
@@ -145,6 +145,7 @@ ObsGroupControlDesigner.propTypes = {
   loadFormJson: PropTypes.func,
   metadata: PropTypes.shape({
     concept: PropTypes.object,
+    controls: PropTypes.array,
     displayType: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.object,

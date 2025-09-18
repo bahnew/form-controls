@@ -82,11 +82,12 @@ describe('Obs', () => {
   });
 
   it('should return true when the obs belongs to a numeric concept', () => {
-    const obs = new Obs({ concept: {
-      name: 'Pulse',
-      uuid: 'pulseUuid',
-      datatype: 'Numeric',
-    },
+    const obs = new Obs({
+      concept: {
+        name: 'Pulse',
+        uuid: 'pulseUuid',
+        datatype: 'Numeric',
+      },
       formNamespace,
       value,
     });
@@ -95,12 +96,16 @@ describe('Obs', () => {
   });
 
   it('should add a new obs to the groupMembers when addGroupMembers method is invoked', () => {
-    const obs = new Obs({ concept: {
-      name: 'Pulse',
-      uuid: 'pulseUuid',
-      datatype: 'Numeric',
-    },
-      formNamespace, uuid, value });
+    const obs = new Obs({
+      concept: {
+        name: 'Pulse',
+        uuid: 'pulseUuid',
+        datatype: 'Numeric',
+      },
+      formNamespace,
+      uuid,
+      value,
+    });
 
     expect(obs.getGroupMembers()).toBeUndefined();
 
@@ -114,13 +119,17 @@ describe('Obs', () => {
 
   it('should ignore adding a childObs when it already exists', () => {
     const childObs = new Obs({ formNamespace: 'formUuid/5', uuid: 'test' });
-    const obs = new Obs({ concept: {
-      name: 'Pulse',
-      uuid: 'pulseUuid',
-      datatype: 'Numeric',
-    },
+    const obs = new Obs({
+      concept: {
+        name: 'Pulse',
+        uuid: 'pulseUuid',
+        datatype: 'Numeric',
+      },
       groupMembers: List.of(childObs),
-      formNamespace, uuid, value });
+      formNamespace,
+      uuid,
+      value,
+    });
 
     expect(obs.getGroupMembers().size).toBe(1);
     const obsUpdated = obs.addGroupMember(childObs);
@@ -128,19 +137,27 @@ describe('Obs', () => {
   });
 
   it('should replace child obs with the same concept in the groupMember', () => {
-    const childObs = new Obs({ concept: {
-      name: 'Pulse',
-      uuid: 'pulseUuid',
-      datatype: 'Numeric',
-    }, formNamespace: 'formUuid/5', uuid: 'test' });
+    const childObs = new Obs({
+      concept: {
+        name: 'Pulse',
+        uuid: 'pulseUuid',
+        datatype: 'Numeric',
+      },
+      formNamespace: 'formUuid/5',
+      uuid: 'test',
+    });
 
-    const parentObs = new Obs({ concept: {
-      name: 'Pulse Data',
-      uuid: 'pulseDataUuid',
-      datatype: 'Misc',
-    },
+    const parentObs = new Obs({
+      concept: {
+        name: 'Pulse Data',
+        uuid: 'pulseDataUuid',
+        datatype: 'Misc',
+      },
       groupMembers: List.of(childObs),
-      formNamespace, uuid, value });
+      formNamespace,
+      uuid,
+      value,
+    });
 
     const childObsUpdated = childObs.setValue('72');
     const parentObsUpdated = parentObs.addGroupMember(childObsUpdated);
@@ -149,27 +166,39 @@ describe('Obs', () => {
   });
 
   it('should return a child obs which has Abnormal class', () => {
-    const pulseAbnormalObs = new Obs({ concept: {
-      name: 'PulseAbnormal',
-      uuid: 'pulseAbnormalUuid',
-      datatype: 'Boolean',
-      conceptClass: 'Abnormal',
-    }, formNamespace: 'formUuid/5', uuid: 'childObs2Uuid' });
+    const pulseAbnormalObs = new Obs({
+      concept: {
+        name: 'PulseAbnormal',
+        uuid: 'pulseAbnormalUuid',
+        datatype: 'Boolean',
+        conceptClass: 'Abnormal',
+      },
+      formNamespace: 'formUuid/5',
+      uuid: 'childObs2Uuid',
+    });
 
-    const pulseNumericObs = new Obs({ concept: {
-      name: 'Pulse',
-      uuid: 'pulseUuid',
-      datatype: 'Numeric',
-      conceptClass: 'Misc',
-    }, formNamespace: 'formUuid/6', uuid: 'childObs1Uuid' });
+    const pulseNumericObs = new Obs({
+      concept: {
+        name: 'Pulse',
+        uuid: 'pulseUuid',
+        datatype: 'Numeric',
+        conceptClass: 'Misc',
+      },
+      formNamespace: 'formUuid/6',
+      uuid: 'childObs1Uuid',
+    });
 
-    const pulseDataObs = new Obs({ concept: {
-      name: 'Pulse Data',
-      uuid: 'pulseDataUuid',
-      datatype: 'Misc',
-    },
+    const pulseDataObs = new Obs({
+      concept: {
+        name: 'Pulse Data',
+        uuid: 'pulseDataUuid',
+        datatype: 'Misc',
+      },
       groupMembers: List.of(pulseNumericObs, pulseAbnormalObs),
-      formNamespace, uuid, value });
+      formNamespace,
+      uuid,
+      value,
+    });
 
     const abnormalChildObs = pulseDataObs.getAbnormalChildObs();
     expect(pulseAbnormalObs).toBe(abnormalChildObs);
@@ -203,7 +232,12 @@ describe('Obs', () => {
       uuid: 'booleanUuid',
     });
     const spy = jest.spyOn(booleanObs, 'getObject');
-    const obs = new Obs({ concept, formNamespace, value, groupMembers: List.of(booleanObs) });
+    const obs = new Obs({
+      concept,
+      formNamespace,
+      value,
+      groupMembers: List.of(booleanObs),
+    });
 
     obs.getObject(obs);
 
@@ -221,10 +255,14 @@ describe('Obs', () => {
         { formFieldPath: '3116_2.1/1-0' },
       ];
 
-      const result = createObsFromControl(formName,
-        formVersion, controlExistInObservations, bahmniObservations);
+      const result = createObsFromControl(
+        formName,
+        formVersion,
+        controlExistInObservations,
+        bahmniObservations,
+      );
 
-      expect(result.length).toBe(1);
+      expect(result).toHaveLength(1);
       const existingObs = result[0];
       expect(existingObs.formFieldPath).toBe('3116_2.1/1-0');
     });
@@ -236,46 +274,62 @@ describe('Obs', () => {
         { formFieldPath: '3116_2.1/1-0' },
       ];
 
-      const result = createObsFromControl(formName,
-        formVersion, controlNotExistInObservations, bahmniObservations);
+      const result = createObsFromControl(
+        formName,
+        formVersion,
+        controlNotExistInObservations,
+        bahmniObservations,
+      );
 
-      expect(result.length).toBe(1);
+      expect(result).toHaveLength(1);
       const newCreatedObs = result[0];
       expect(newCreatedObs.formFieldPath).toBe('3116_2.1/2-0');
     });
 
-    it('should filter out obs from given observations whose form field path matches with parent form field path', () => {
+    it('should filter out obs from given observations whose form field path matches with ' +
+       'parent form field path', () => {
       const controlExistInObservations = { id: '18' };
       const bahmniObservations = [
-              { formFieldPath: 'FormName.1/1-0/2-0/18-0' },
-              { formFieldPath: 'FormName.1/1-0/2-0/18-1' },
-              { formFieldPath: 'FormName.1/1-1/2-0/18-0' },
+        { formFieldPath: 'FormName.1/1-0/2-0/18-0' },
+        { formFieldPath: 'FormName.1/1-0/2-0/18-1' },
+        { formFieldPath: 'FormName.1/1-1/2-0/18-0' },
       ];
 
       const parentFormFieldPath = 'FormName.1/1-0/2-0';
 
-      const result = createObsFromControl(formName,
-              formVersion, controlExistInObservations, bahmniObservations, parentFormFieldPath);
+      const result = createObsFromControl(
+        formName,
+        formVersion,
+        controlExistInObservations,
+        bahmniObservations,
+        parentFormFieldPath,
+      );
 
-      expect(result.length).toBe(2);
+      expect(result).toHaveLength(2);
 
       expect(result.indexOf(bahmniObservations[0])).not.toBe(-1);
       expect(result.indexOf(bahmniObservations[1])).not.toBe(-1);
       expect(result.indexOf(bahmniObservations[2])).toBe(-1);
     });
 
-    it('should create an observation along with parent form field path, when given observations have form field path that does not matches with parent form field path', () => {
+    it('should create an observation along with parent form field path, when given observations ' +
+       'have form field path that does not matches with parent form field path', () => {
       const controlNotExistInObservations = { id: '2' };
       const bahmniObservations = [
-              { formFieldPath: 'FormName.1/28-0' },
-              { formFieldPath: 'FormName.1/1-0' },
+        { formFieldPath: 'FormName.1/28-0' },
+        { formFieldPath: 'FormName.1/1-0' },
       ];
 
       const parentFormFieldPath = 'FormName.1/1-0';
-      const result = createObsFromControl(formName,
-              formVersion, controlNotExistInObservations, bahmniObservations, parentFormFieldPath);
+      const result = createObsFromControl(
+        formName,
+        formVersion,
+        controlNotExistInObservations,
+        bahmniObservations,
+        parentFormFieldPath,
+      );
 
-      expect(result.length).toBe(1);
+      expect(result).toHaveLength(1);
       const newCreatedObs = result[0];
       expect(newCreatedObs.formFieldPath).toBe('FormName.1/1-0/2-0');
     });

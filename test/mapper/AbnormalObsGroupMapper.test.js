@@ -13,7 +13,7 @@ describe('AbnormalObsGroupMapper', () => {
     },
     value: false,
     formNamespace: 'formUuid/5',
-    uuid: 'childObs2Uuid'
+    uuid: 'childObs2Uuid',
   });
 
   const pulseNumericObs = new Obs.Obs({
@@ -26,7 +26,7 @@ describe('AbnormalObsGroupMapper', () => {
     value: 10,
     formNamespace: 'formUuid/6',
     uuid: 'childObs1Uuid',
-    formFieldPath: 'SomePath_A'
+    formFieldPath: 'SomePath_A',
   });
 
   const pulseDataObs = new Obs.Obs({
@@ -38,7 +38,7 @@ describe('AbnormalObsGroupMapper', () => {
     groupMembers: List.of(pulseNumericObs, pulseAbnormalObs),
     formNamespace: 'formUuid/4',
     uuid: 'pulseDataObsUuid',
-    formFieldPath: 'SomePath'
+    formFieldPath: 'SomePath',
   });
 
   const mapper = new AbnormalObsGroupMapper();
@@ -73,7 +73,7 @@ describe('AbnormalObsGroupMapper', () => {
       },
       groupMembers: List.of(pulseNumericUpdated, pulseAbnormalUpdated),
       formNamespace: 'formUuid/4',
-      uuid: 'pulseDataObsUuid'
+      uuid: 'pulseDataObsUuid',
     });
     const voidedObs = mapper.setValue(pulseDataObsUpdated, pulseAbnormalUpdated, []);
     const voidedNumericObs = voidedObs.getGroupMembers().filter((o) => o.isNumeric()).get(0);
@@ -114,9 +114,9 @@ describe('AbnormalObsGroupMapper', () => {
   it('should return initial object', () => {
     const obs = { name: 'someName', uuid: 'someUuid', groupMembers: [] };
     jest.spyOn(Obs, 'createObsFromControl').mockReturnValue(obs);
-    
+
     expect(mapper.getInitialObject('someUuid', { id: 1 }, [])).toEqual(obs);
-    
+
     jest.restoreAllMocks();
   });
 });

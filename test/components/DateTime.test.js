@@ -21,7 +21,7 @@ describe('DateTime', () => {
         validations={[]}
       />
     );
-    
+
     const inputs = container.querySelectorAll('input');
     expect(inputs).toHaveLength(2);
     expect(inputs[0]).toHaveAttribute('type', 'date');
@@ -39,7 +39,7 @@ describe('DateTime', () => {
         value={'2016-12-29 22:30'}
       />
     );
-    
+
     expect(screen.getByDisplayValue('2016-12-29')).toBeInTheDocument();
     expect(screen.getByDisplayValue('22:30')).toBeInTheDocument();
   });
@@ -54,11 +54,11 @@ describe('DateTime', () => {
         validations={[]}
       />
     );
-    
+
     const dateInput = container.querySelector('input[type="date"]');
     const timeInput = container.querySelector('input[type="time"]');
     const error = new Error({ message: 'Incorrect Date Time' });
-    
+
     fireEvent.change(dateInput, { target: { value: '2016-12-31' } });
     fireEvent.change(timeInput, { target: { value: '22:10' } });
 
@@ -80,17 +80,17 @@ describe('DateTime', () => {
         value={'2016-12-29 22:10'}
       />
     );
-    
+
     const mandatoryError = new Error({ message: validations[0] });
     const dateTimeError = new Error({ message: 'Incorrect Date Time' });
     const dateInput = container.querySelector('input[type="date"]');
     const timeInput = container.querySelector('input[type="time"]');
-    
+
     fireEvent.change(dateInput, { target: { value: '' } });
 
-    expect(mockOnChange).toHaveBeenCalledWith({ 
+    expect(mockOnChange).toHaveBeenCalledWith({
       value: ' 22:10',
-      errors: [mandatoryError, dateTimeError] 
+      errors: [mandatoryError, dateTimeError],
     });
     expect(dateInput).toHaveClass('form-builder-error');
     expect(timeInput).toHaveClass('form-builder-error');
@@ -109,20 +109,20 @@ describe('DateTime', () => {
         value={'2016-12-29 22:10'}
       />
     );
-    
+
     const mandatoryError = new Error({ message: validations[0] });
-    
+
     rerender(
       <DateTime
         formFieldPath="test1.1/1-0"
         onChange={mockOnChange}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value={undefined}
       />
     );
-    
+
     expect(mockOnChange).toHaveBeenCalledWith({ value: undefined, errors: [mandatoryError] });
     expect(container.querySelector('input[type="date"]')).toHaveClass('form-builder-error');
     expect(container.querySelector('input[type="time"]')).toHaveClass('form-builder-error');
@@ -139,25 +139,25 @@ describe('DateTime', () => {
         value={'2016-12-29 22:10'}
       />
     );
-    
+
     rerender(
       <DateTime
         formFieldPath="test1.1/1-0"
         onChange={mockOnChange}
-        validate={true}
+        validate
         validateForm={false}
         validations={[]}
         value={'2016-12-31 10:10'}
       />
     );
-    
+
     expect(screen.getByDisplayValue('2016-12-31')).toBeInTheDocument();
     expect(screen.getByDisplayValue('10:10')).toBeInTheDocument();
   });
 
   it('should check errors after mount if the formFieldPath suffix is not 0', () => {
     const validations = [constants.validations.mandatory];
-    
+
     const { container } = render(
       <DateTime
         formFieldPath="test1.1/1-1"
@@ -173,7 +173,7 @@ describe('DateTime', () => {
 
   it('should not check errors after mount if the formFieldPath suffix is 0', () => {
     const validations = [constants.validations.mandatory];
-    
+
     const { container } = render(
       <DateTime
         formFieldPath="test1.1/1-0"
@@ -231,7 +231,7 @@ describe('DateTime', () => {
         value={'2016-12-29 22:10'}
       />
     );
-    
+
     expect(mockOnChange).toHaveBeenCalledTimes(1);
   });
 
@@ -256,7 +256,7 @@ describe('DateTime', () => {
         value={'2016-12-29 22:10'}
       />
     );
-    
+
     expect(mockOnChange).toHaveBeenCalledWith({ value: '2016-12-29 22:10', errors: [] });
   });
 
@@ -277,7 +277,7 @@ describe('DateTime', () => {
       <DateTime
         formFieldPath="test1.1/1-0"
         onChange={mockOnChange}
-        validate={true}
+        validate
         validateForm={false}
         validations={validations}
         value={''}
@@ -295,7 +295,7 @@ describe('DateTime', () => {
         validate={false}
         validateForm={false}
         validations={[]}
-        enabled={true}
+        enabled
         value={'2016-12-29 22:10'}
       />
     );
@@ -309,7 +309,7 @@ describe('DateTime', () => {
         validate={false}
         validateForm={false}
         validations={[]}
-        enabled={true}
+        enabled
         value={'2016-12-29 22:10'}
       />
     );

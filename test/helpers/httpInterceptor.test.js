@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import fetchMock from 'fetch-mock';
 
@@ -8,24 +7,18 @@ describe('httpInterceptor', () => {
       fetchMock.restore();
     });
 
-    it('should return response when status is 200', (done) => {
+    it('should return response when status is 200', async () => {
       fetchMock.mock('/someUrl', { data: { id: 1 } });
-      httpInterceptor.get('/someUrl')
-        .then(res => {
-          expect(fetchMock.calls().matched.length).to.eql(1);
-          expect(res.data.id).to.eql(1);
-          done();
-        });
+      const res = await httpInterceptor.get('/someUrl');
+      expect(fetchMock.calls().matched).toHaveLength(1);
+      expect(res.data.id).toBe(1);
     });
 
-    it('should throw an error when status is not 2xx', (done) => {
+    it('should throw an error when status is not 2xx', async () => {
       fetchMock.mock('/someUrl', 404);
-      httpInterceptor.get('/someUrl')
-        .then(() => {})
-        .catch(err => {
-          expect(err.response.status).to.eql(404);
-          done();
-        });
+      await expect(httpInterceptor.get('/someUrl')).rejects.toMatchObject({
+        response: { status: 404 }
+      });
     });
   });
 });

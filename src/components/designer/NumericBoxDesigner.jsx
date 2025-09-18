@@ -38,6 +38,9 @@ NumericBoxDesigner.propTypes = {
   lowAbsolute: PropTypes.number,
   lowNormal: PropTypes.number,
   metadata: PropTypes.shape({
+    concept: PropTypes.shape({
+      conceptClass: PropTypes.string,
+    }),
     displayType: PropTypes.string,
     id: PropTypes.string.isRequired,
     properties: PropTypes.object.isRequired,

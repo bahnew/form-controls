@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
-import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 import classNames from 'classnames';
-import addMoreDecorator from './AddMoreDecorator';
 import { List } from 'immutable';
 import { IntlProvider, injectIntl } from 'react-intl';
+import addMoreDecorator from './AddMoreDecorator';
+import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 
 export class ObsGroupControl extends addMoreDecorator(Component) {
 

@@ -10,7 +10,7 @@ describe('Button Designer', () => {
 
   it('should render designer button', () => {
     render(<ButtonDesigner options={options} />);
-    
+
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('Yes');
@@ -20,7 +20,7 @@ describe('Button Designer', () => {
   it('should return json definition', () => {
     const ref = React.createRef();
     render(<ButtonDesigner ref={ref} options={options} />);
-    
+
     expect(ref.current.getJsonDefinition()).toEqual(options);
   });
 });

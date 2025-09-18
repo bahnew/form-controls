@@ -80,7 +80,10 @@ describe('Concept', () => {
   });
 
   it('should return undefined if abnormal set member is not present', () => {
-    const concept = new Concept({ uuid: 'someUuid', name: { name: 'someName' } });
+    const concept = new Concept({
+      uuid: 'someUuid',
+      name: { name: 'someName' },
+    });
     const abnormalSetMember = concept.getAbnormalSetMember();
     expect(abnormalSetMember).toBeUndefined();
   });
@@ -108,7 +111,10 @@ describe('Concept', () => {
   });
 
   it('should return undefined if numeric set member is not present', () => {
-    const concept = new Concept({ uuid: 'someUuid', name: { name: 'someName' } });
+    const concept = new Concept({
+      uuid: 'someUuid',
+      name: { name: 'someName' },
+    });
     const numericSetMember = concept.findFirstNumericSetMember();
     expect(numericSetMember).toBeUndefined();
   });
@@ -116,7 +122,7 @@ describe('Concept', () => {
   it('should retrieve the setMembers of a concept', () => {
     const concept = new Concept(abnormalConcept);
     const _concept = concept.getConcept();
-    expect(_concept.setMembers.length).toBe(2);
+    expect(_concept.setMembers).toHaveLength(2);
     expect(_concept.setMembers[0]).toEqual({
       name: 'Pulse',
       uuid: 'c36bc411-3f10-11e4-adec-0800271c1b75',

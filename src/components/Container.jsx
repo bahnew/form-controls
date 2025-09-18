@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { displayRowControls, getGroupedControls } from '../helpers/controlsParser';
 import isEmpty from 'lodash/isEmpty';
 import ControlRecordTreeBuilder from 'src/helpers/ControlRecordTreeBuilder';
 import ControlRecordTreeMgr from 'src/helpers/ControlRecordTreeMgr';
 import ScriptRunner from 'src/helpers/scriptRunner';
+import { IntlProvider } from 'react-intl';
+import { displayRowControls, getGroupedControls } from '../helpers/controlsParser';
 import addMoreDecorator from './AddMoreDecorator';
 import ObservationMapper from '../helpers/ObservationMapper';
 import NotificationContainer from '../helpers/Notification';
 import Constants from '../constants';
-import { IntlProvider } from 'react-intl';
 import { executeEventsFromCurrentRecord } from '../helpers/ExecuteEvents';
 
 export class Container extends addMoreDecorator(Component) {

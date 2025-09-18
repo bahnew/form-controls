@@ -37,7 +37,7 @@ describe('Boolean Control Designer', () => {
 
     const dummyControl = screen.getByTestId('dummy-control');
     expect(dummyControl).toBeInTheDocument();
-    
+
     const actualOptions = JSON.parse(dummyControl.getAttribute('data-options'));
     expect(actualOptions).toEqual(defaultOptions);
   });
@@ -53,15 +53,15 @@ describe('Boolean Control Designer', () => {
 
   it('should return the JSON Definition', () => {
     const expectedMetadata = Object.assign({}, metadata, { options: defaultOptions });
-    
+
     let componentRef;
     const TestWrapper = () => (
-      <BooleanControlDesigner 
-        ref={ref => { componentRef = ref; }} 
-        metadata={metadata} 
+      <BooleanControlDesigner
+        ref={ref => { componentRef = ref; }}
+        metadata={metadata}
       />
     );
-    
+
     render(<TestWrapper />);
     expect(componentRef.getJsonDefinition()).toEqual(expectedMetadata);
   });
@@ -71,7 +71,7 @@ describe('Boolean Control Designer', () => {
       { name: 'Ha', value: 'Yes' },
       { name: 'Na', value: 'No' },
     ];
-    
+
     render(<BooleanControlDesigner metadata={metadata} />);
 
     const dummyControl = screen.getByTestId('dummy-control');

@@ -1,6 +1,5 @@
 import { Util } from 'src/helpers/Util';
 import fetchMock from 'fetch-mock';
-import sinon from 'sinon';
 
 describe('Util', () => {
   it('should convert string to number', () => {
@@ -91,12 +90,17 @@ describe('Util', () => {
       const patientUuid = 'patient-123';
       const fileType = 'image';
 
-      fetchMock.mock('/openmrs/ws/rest/v1/bahmnicore/visitDocument/uploadDocument', 200);
+      fetchMock.mock(
+        '/openmrs/ws/rest/v1/bahmnicore/visitDocument/uploadDocument',
+        200,
+      );
 
       const response = await Util.uploadFile(base64File, patientUuid, fileType);
 
-      expect(fetchMock.calls().matched.length).toBe(1);
-      expect(fetchMock.calls().matched[0][0]).toBe('/openmrs/ws/rest/v1/bahmnicore/visitDocument/uploadDocument');
+      expect(fetchMock.calls().matched).toHaveLength(1);
+      expect(fetchMock.calls().matched[0][0]).toBe(
+        '/openmrs/ws/rest/v1/bahmnicore/visitDocument/uploadDocument',
+      );
       expect(response).toBeDefined();
     });
 
@@ -106,7 +110,7 @@ describe('Util', () => {
 
       await Util.uploadFile(base64File, 'patient-123');
 
-      expect(fetchMock.calls().matched.length).toBe(1);
+      expect(fetchMock.calls().matched).toHaveLength(1);
     });
   });
 
@@ -114,15 +118,15 @@ describe('Util', () => {
     it('should return true for Complex datatype with ImageUrlHandler', () => {
       const concept = {
         datatype: 'Complex',
-        conceptHandler: 'ImageUrlHandler'
+        conceptHandler: 'ImageUrlHandler',
       };
       expect(Util.isComplexMediaConcept(concept)).toBe(true);
     });
 
     it('should return true for Complex datatype with VideoUrlHandler', () => {
       const concept = {
-        datatype: 'Complex', 
-        conceptHandler: 'VideoUrlHandler'
+        datatype: 'Complex',
+        conceptHandler: 'VideoUrlHandler',
       };
       expect(Util.isComplexMediaConcept(concept)).toBe(true);
     });
@@ -130,7 +134,7 @@ describe('Util', () => {
     it('should return false for non-Complex datatype', () => {
       const concept = {
         datatype: 'Text',
-        conceptHandler: 'ImageUrlHandler'
+        conceptHandler: 'ImageUrlHandler',
       };
       expect(Util.isComplexMediaConcept(concept)).toBe(false);
     });
@@ -138,7 +142,7 @@ describe('Util', () => {
     it('should return false for Complex datatype with other handlers', () => {
       const concept = {
         datatype: 'Complex',
-        conceptHandler: 'SomeOtherHandler'
+        conceptHandler: 'SomeOtherHandler',
       };
       expect(Util.isComplexMediaConcept(concept)).toBe(false);
     });
@@ -146,7 +150,9 @@ describe('Util', () => {
     it('should return false for missing properties', () => {
       expect(Util.isComplexMediaConcept({})).toBe(false);
       expect(Util.isComplexMediaConcept({ datatype: 'Complex' })).toBe(false);
-      expect(Util.isComplexMediaConcept({ conceptHandler: 'ImageUrlHandler' })).toBe(false);
+      expect(
+        Util.isComplexMediaConcept({ conceptHandler: 'ImageUrlHandler' }),
+      ).toBe(false);
     });
   });
 
@@ -167,7 +173,7 @@ describe('Util', () => {
       });
 
       const res = await Util.getConfig('/someUrl');
-      expect(fetchMock.calls().matched.length).toBe(1);
+      expect(fetchMock.calls().matched).toHaveLength(1);
       expect(res.config.terminologyService.system).toBe('SOME_SYSTEM');
     });
 
@@ -175,7 +181,7 @@ describe('Util', () => {
       fetchMock.mock('*', 404);
 
       await expect(Util.getConfig('/someUrl')).rejects.toMatchObject({
-        response: { status: 404 }
+        response: { status: 404 },
       });
     });
   });
@@ -197,7 +203,7 @@ describe('Util', () => {
       ]);
 
       const res = await Util.getAnswers('/someUrl');
-      expect(fetchMock.calls().matched.length).toBe(1);
+      expect(fetchMock.calls().matched).toHaveLength(1);
       expect(res[0].conceptName).toBe('someName');
     });
 
@@ -205,38 +211,38 @@ describe('Util', () => {
       fetchMock.mock('*', 404);
 
       await expect(Util.getAnswers('/someUrl')).rejects.toMatchObject({
-        response: { status: 404 }
+        response: { status: 404 },
       });
     });
   });
 
   describe('debounce', () => {
-    let clock;
-
     beforeEach(() => {
-      clock = sinon.useFakeTimers();
+      jest.useFakeTimers();
+      jest.spyOn(global, 'setTimeout');
+      jest.spyOn(global, 'clearTimeout');
     });
 
     afterEach(() => {
-      clock.restore();
+      jest.useRealTimers();
     });
 
     it('should delay the function execution', () => {
-      const func = sinon.spy();
+      const func = jest.fn();
       const delay = 500;
       const debouncedFunc = Util.debounce(func, delay);
 
       debouncedFunc();
 
-      expect(func.called).toBe(false);
+      expect(func).not.toHaveBeenCalled();
 
-      clock.tick(delay);
+      jest.advanceTimersByTime(delay);
 
-      expect(func.calledOnce).toBe(true);
+      expect(func).toHaveBeenCalledTimes(1);
     });
 
     it('should debounce multiple function calls', () => {
-      const func = sinon.spy();
+      const func = jest.fn();
       const delay = 500;
       const debouncedFunc = Util.debounce(func, delay);
 
@@ -244,15 +250,15 @@ describe('Util', () => {
       debouncedFunc();
       debouncedFunc();
 
-      expect(func.called).toBe(false);
+      expect(func).not.toHaveBeenCalled();
 
-      clock.tick(delay);
+      jest.advanceTimersByTime(delay);
 
-      expect(func.calledOnce).toBe(true);
+      expect(func).toHaveBeenCalledTimes(1);
     });
 
     it('should execute the function with the latest arguments', () => {
-      const func = sinon.spy();
+      const func = jest.fn();
       const delay = 500;
       const debouncedFunc = Util.debounce(func, delay);
 
@@ -260,12 +266,12 @@ describe('Util', () => {
       debouncedFunc(2);
       debouncedFunc(3);
 
-      expect(func.called).toBe(false);
+      expect(func).not.toHaveBeenCalled();
 
-      clock.tick(delay);
+      jest.advanceTimersByTime(delay);
 
-      expect(func.calledOnce).toBe(true);
-      expect(func.calledWith(3)).toBe(true);
+      expect(func).toHaveBeenCalledTimes(1);
+      expect(func).toHaveBeenLastCalledWith(3);
     });
   });
 });

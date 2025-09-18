@@ -48,7 +48,7 @@ describe('FormNamespace Helper', () => {
   describe('getUpdatedFormFieldPath', () => {
     it('should return source formFieldPath when parentFormFieldPath is empty', () => {
       const sourceNode = { formFieldPath: 'form.1/control-0' };
-      
+
       expect(getUpdatedFormFieldPath(sourceNode, '')).toEqual('form.1/control-0');
       expect(getUpdatedFormFieldPath(sourceNode, null)).toEqual('form.1/control-0');
       expect(getUpdatedFormFieldPath(sourceNode, undefined)).toEqual('form.1/control-0');
@@ -57,7 +57,7 @@ describe('FormNamespace Helper', () => {
     it('should return updated formFieldPath with parentFormFieldPath prefix', () => {
       const sourceNode = { formFieldPath: 'originalForm.1/originalControl-0' };
       const parentFormFieldPath = 'newParent.2/section-1';
-      
+
       expect(getUpdatedFormFieldPath(sourceNode, parentFormFieldPath))
         .toEqual('newParent.2/section-1/originalControl-0');
     });

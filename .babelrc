@@ -1,4 +1,31 @@
 {
-  "plugins": ["transform-object-rest-spread"],
-  "presets": [ "es2015", "react"]
+  "presets": [
+    ["@babel/preset-env", {
+      "modules": false,
+      "useBuiltIns": "usage",
+      "corejs": 3,
+      "targets": "> 0.25%, not dead"
+    }],
+    ["@babel/preset-react", {
+      "runtime": "automatic",
+      "development": false
+    }]
+  ],
+  "plugins": [],
+  "env": {
+    "test": {
+      "presets": [
+        ["@babel/preset-env", {
+          "modules": "commonjs",
+          "useBuiltIns": "usage",
+          "corejs": 3,
+          "targets": "node 14"
+        }],
+        ["@babel/preset-react", {
+          "runtime": "automatic",
+          "development": true
+        }]
+      ]
+    }
+  }
 }

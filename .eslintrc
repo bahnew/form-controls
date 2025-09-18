@@ -1,23 +1,47 @@
 {
-  "extends": "airbnb",
-  "globals": {
-    "describe": true,
-    "before": true,
-    "after": true,
-    "beforeEach": true,
-    "afterEach": true,
-    "context": true,
-    "it": true
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true,
+    "node": true
   },
-  "rules": {
-    "react/prop-types": [1, { "ignore": ["children"] }],
-    "react/sort-prop-types": 2,
-    "react/jsx-sort-props": 2,
-    "max-len": [2, 100, 2, {"ignoreComments": true }]
-  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:jest/recommended"
+  ],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
+      "jsx": true
+    },
+    "requireConfigFile": true
+  },
+  "plugins": ["react", "jest", "import"],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": ["warn", { "ignore": ["children"] }],
+    "react/sort-prop-types": "error",
+    "react/jsx-sort-props": "off",
+    "react/jsx-uses-vars": "error",
+    "react/no-unused-prop-types": "warn",
+    "max-len": ["error", { "code": 120, "ignoreComments": true }],
+    "no-unused-vars": "off",
+    "import/order": "off",
+    "react/no-deprecated": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "17.0"
+    },
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.js"
+      }
     }
   }
 }

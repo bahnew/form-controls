@@ -74,7 +74,7 @@ describe('ControlRecordWrapper', () => {
       type: 'obsGroupControl',
       concept: {
         name: 'Temperature Data',
-      }
+      },
     },
     children: List.of(clonedControlledTree, controlledTree),
     formFieldPath: '3406.1/3-0',
@@ -160,7 +160,7 @@ describe('ControlRecordWrapper', () => {
         type: 'table',
         concept: {
           name: 'Temperature Data',
-        }
+        },
       },
       children: List.of(clonedControlledTree, controlledTree),
       formFieldPath: '3406.1/3-0',
@@ -189,7 +189,7 @@ describe('ControlRecordWrapper', () => {
         type: 'section',
         concept: {
           name: 'Temperature Data',
-        }
+        },
       },
       children: List.of(clonedControlledTree, controlledTree),
       formFieldPath: '3406.1/3-0',
@@ -218,7 +218,7 @@ describe('ControlRecordWrapper', () => {
         type: 'section',
         concept: {
           name: 'Temperature Data',
-        }
+        },
       },
       children: null,
       formFieldPath: '3406.1/3-0',

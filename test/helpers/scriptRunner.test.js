@@ -16,13 +16,13 @@ describe('ScriptRunner', () => {
     mockRootRecord = { id: 'root' };
     mockPatient = { id: 'patient1' };
     mockParentRecord = { id: 'parent' };
-    
+
     mockFormContext = {
-      getRecords: jest.fn()
+      getRecords: jest.fn(),
     };
-    
+
     FormContext.mockImplementation(() => mockFormContext);
-    
+
     scriptRunner = new ScriptRunner(mockRootRecord, mockPatient, mockParentRecord);
   });
 
@@ -53,9 +53,9 @@ describe('ScriptRunner', () => {
 
     it('should return formContext.getRecords() when eventJs is provided', () => {
       const eventJs = 'function(formContext, interceptor) { return true; }';
-      
+
       const result = scriptRunner.execute(eventJs);
-      
+
       expect(result).toEqual(['record1', 'record2']);
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
@@ -63,29 +63,29 @@ describe('ScriptRunner', () => {
     it('should execute eventJs using eval when eventJs and interceptor are present', () => {
       const eventJs = 'function(formContext, interceptor) { return true; }';
       const expectedExecutiveJs = `(${eventJs})(formContext,interceptor)`;
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalledWith(expectedExecutiveJs);
     });
 
     it('should not execute eval when eventJs is null', () => {
       scriptRunner.execute(null);
-      
+
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
 
     it('should not execute eval when eventJs is undefined', () => {
       scriptRunner.execute(undefined);
-      
+
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
 
     it('should not execute eval when eventJs is empty string', () => {
       scriptRunner.execute('');
-      
+
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
@@ -93,9 +93,9 @@ describe('ScriptRunner', () => {
     it('should not execute eval when interceptor is null', () => {
       scriptRunner.interceptor = null;
       const eventJs = 'function(formContext, interceptor) { return true; }';
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
@@ -103,9 +103,9 @@ describe('ScriptRunner', () => {
     it('should not execute eval when interceptor is undefined', () => {
       scriptRunner.interceptor = undefined;
       const eventJs = 'function(formContext, interceptor) { return true; }';
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
@@ -116,9 +116,9 @@ describe('ScriptRunner', () => {
         return records.length > 0;
       }`;
       const expectedExecutiveJs = `(${eventJs})(formContext,interceptor)`;
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalledWith(expectedExecutiveJs);
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
@@ -126,11 +126,11 @@ describe('ScriptRunner', () => {
     it('should always return result from formContext.getRecords regardless of eventJs execution', () => {
       const mockRecords = [{ id: 'test' }];
       mockFormContext.getRecords.mockReturnValue(mockRecords);
-      
+
       const result1 = scriptRunner.execute('function() { return true; }');
       const result2 = scriptRunner.execute(null);
       const result3 = scriptRunner.execute(undefined);
-      
+
       expect(result1).toBe(mockRecords);
       expect(result2).toBe(mockRecords);
       expect(result3).toBe(mockRecords);
@@ -138,9 +138,9 @@ describe('ScriptRunner', () => {
 
     it('should create local references to formContext and interceptor before eval', () => {
       const eventJs = 'function(formContext, interceptor) { return true; }';
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalledWith(
         expect.stringContaining('(formContext,interceptor)')
       );
@@ -166,9 +166,9 @@ describe('ScriptRunner', () => {
       }`;
       const mockModifiedRecords = [{ id: 'modified' }];
       mockFormContext.getRecords.mockReturnValue(mockModifiedRecords);
-      
+
       const result = scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalled();
       expect(result).toEqual(mockModifiedRecords);
     });
@@ -177,9 +177,9 @@ describe('ScriptRunner', () => {
       const eventJs = `function(formContext, interceptor) {
         interceptor.get('/api/data');
       }`;
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalledWith(
         expect.stringContaining('interceptor.get')
       );
@@ -187,9 +187,9 @@ describe('ScriptRunner', () => {
 
     it('should work with arrow function eventJs', () => {
       const eventJs = '(formContext, interceptor) => formContext.getRecords()';
-      
+
       scriptRunner.execute(eventJs);
-      
+
       expect(global.eval).toHaveBeenCalledWith(`(${eventJs})(formContext,interceptor)`);
     });
   });

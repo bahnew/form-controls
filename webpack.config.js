@@ -1,11 +1,12 @@
 'use strict';
 
-let path = require('path');
-let webpack = require('webpack');
-let srcPath = path.join(__dirname, './src');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const srcPath = path.join(__dirname, './src');
 
 module.exports = {
-  devtool: 'eval',
+  mode: 'production',
+  devtool: 'source-map',
   entry: {
     helpers: ['./src/helpers/componentStore.js', './src/helpers/formRenderer.js'],
     bundle: ['./src/index.jsx']
@@ -17,8 +18,6 @@ module.exports = {
     library: 'FormControls'
   },
   externals: {
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true,
     react: {
       root: 'React',
       commonjs2: 'react',
@@ -33,30 +32,36 @@ module.exports = {
     }
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,
-        loaders: ['babel'],
+        use: ['babel-loader'],
         include: path.join(__dirname, 'src')
       },
       {
-        test: /\.json$/,
-        loader: 'json'
-      },
-      {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loader: 'base64-inline-loader?name=/styles/images/[name].[ext]',
-      },
-    ],
+        type: 'asset/inline'
+      }
+    ]
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    })
+  ],
   resolve: {
     alias: {
       components: srcPath + '/components/',
       src: srcPath
-    }
+    },
+    extensions: ['.js', '.jsx', '.json']
   }
 };

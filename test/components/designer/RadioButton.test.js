@@ -39,7 +39,7 @@ describe('Radio Button Designer', () => {
   it('should return json definition', () => {
     const ref = React.createRef();
     render(<RadioButtonDesigner ref={ref} metadata={metadata} />);
-    
+
     expect(ref.current.getJsonDefinition()).toEqual(metadata);
   });
 });
