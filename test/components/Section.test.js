@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { SectionWithIntl, Section } from 'components/Section.jsx';
@@ -286,7 +286,9 @@ describe('Section', () => {
       let legend = screen.getByText('Section').closest('legend');
       expect(legend).toHaveClass('active');
 
-      sectionRef.current.setState({ collapse: true });
+      act(() => {
+        sectionRef.current.setState({ collapse: true });
+      });
 
       rerender(
         <Section

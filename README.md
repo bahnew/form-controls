@@ -2,6 +2,11 @@
 
 This library provides a range of form controls that can be used to create customized forms within the Bahmni platform.
 
+### Requirements
+
+- React 18.2.0 or higher
+- React DOM 18.2.0 or higher
+
 ### File naming conventions
 
 1. All components should be in Pascal Case (camel case starting with uppercase letter)

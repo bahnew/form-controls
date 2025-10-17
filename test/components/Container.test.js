@@ -438,7 +438,9 @@ describe('Container', () => {
         containerRef.current.showNotification('Test notification', 'info');
       }
 
-      expect(screen.getByText('Test notification')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Test notification')).toBeInTheDocument();
+      });
 
       jest.runAllTimers();
       await waitFor(() => {
@@ -458,10 +460,12 @@ describe('Container', () => {
         containerRef.current.showNotification('Error message', 'error');
       }
 
-      const notification = screen.getByText('Error message');
-      expect(
-        notification.closest('.error-message-container'),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        const notification = screen.getByText('Error message');
+        expect(
+          notification.closest('.error-message-container'),
+        ).toBeInTheDocument();
+      });
     });
   });
 

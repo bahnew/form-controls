@@ -1,9 +1,4 @@
-import '@testing-library/jest-dom';
-
-import { cleanup } from '@testing-library/react';
-afterEach(() => {
-  cleanup();
-});
+import "@testing-library/jest-dom";
 
 global.console = {
   ...console,

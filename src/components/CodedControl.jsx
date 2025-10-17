@@ -40,14 +40,16 @@ export class CodedControl extends Component {
     getConfig(properties.url)
     .then(response => {
       const { terminologyService } = response.config || {};
+      let updatedConfig = this.state.terminologyServiceConfig;
 
       if (terminologyService) {
-        this.setState(prevState => ({
-          terminologyServiceConfig: {
-            ...prevState.terminologyServiceConfig,
-            ...terminologyService,
-          },
-        }));
+        updatedConfig = {
+          ...this.state.terminologyServiceConfig,
+          ...terminologyService,
+        };
+        this.setState({
+          terminologyServiceConfig: updatedConfig,
+        });
       }
 
       if (properties.autoComplete) {
@@ -55,7 +57,7 @@ export class CodedControl extends Component {
         return Promise.resolve([]);
       }
 
-      return getAnswers(properties.url, '', this.state.terminologyServiceConfig.limit);
+      return getAnswers(properties.url, '', updatedConfig.limit);
     })
     .then(data => {
       if (!data) return;
