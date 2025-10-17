@@ -1,5 +1,4 @@
-
-export default class TranslationKeyGenerator {
+export class TranslationKeyGenerator {
   constructor(value, id = 0) {
     this.value = value;
     this.id = id;

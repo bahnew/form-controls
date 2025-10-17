@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
-import TranslationKeyGenerator from 'src/services/TranslationKeyService';
+import { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 import classNames from 'classnames';
 
 export class LabelDesigner extends Component {

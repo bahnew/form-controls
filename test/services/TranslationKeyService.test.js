@@ -1,4 +1,4 @@
-import TranslationKeyGenerator from 'src/services/TranslationKeyService';
+import { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 
 describe('TranslationKeyService', () => {
   it('should generate a translation key', () => {
