@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
 import find from 'lodash/find';
 import each from 'lodash/each';
-import { IntlShape } from 'react-intl';
 import constants from 'src/constants';
 import { Util } from '../helpers/Util';
 export class CodedControl extends Component {
@@ -199,7 +198,7 @@ CodedControl.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
-  intl: IntlShape,
+  intl: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   properties: PropTypes.object.isRequired,

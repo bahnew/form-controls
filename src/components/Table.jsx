@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import classNames from 'classnames';
 import ComponentStore from 'src/helpers/componentStore';
-import { injectIntl, IntlProvider, IntlShape } from 'react-intl';
+import { injectIntl, IntlProvider } from 'react-intl';
 import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 
 export class Table extends Component {
@@ -90,7 +90,7 @@ Table.propTypes = {
   enabled: PropTypes.bool,
   formName: PropTypes.string.isRequired,
   formVersion: PropTypes.string.isRequired,
-  intl: IntlShape,
+  intl: PropTypes.object,
   metadata: PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.shape({
