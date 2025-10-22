@@ -260,7 +260,7 @@ describe('DateTime', () => {
     expect(mockOnChange).toHaveBeenCalledWith({ value: '2016-12-29 22:10', errors: [] });
   });
 
-  it('should handle componentWillReceiveProps with validate flag', () => {
+  it('should handle prop changes with validate flag', () => {
     const validations = [constants.validations.mandatory];
     const { rerender, container } = render(
       <DateTime

@@ -358,7 +358,7 @@ describe('Container', () => {
       ).toBeInTheDocument();
     });
 
-    it('should return detailed validation errors through getValue', () => {
+    it('should return detailed validation errors through getValue', async () => {
       const metadata = createNumericControlMetadata({
         controls: [
           {
@@ -377,17 +377,33 @@ describe('Container', () => {
           ref={containerRef}
           {...defaultProps}
           metadata={metadata}
+          validate
           validateForm
         />,
       );
 
       expect(containerRef.current).toBeTruthy();
-      const result = containerRef.current.getValue();
+      
+      // Wait for the input to show error state
+      await waitFor(() => {
+        const input = screen.getByRole('spinbutton');
+        expect(input).toHaveClass('form-builder-error');
+      });
 
-      expect(result).toHaveProperty('errors');
+      // Trigger a change to ensure error callbacks complete
+      const input = screen.getByRole('spinbutton');
+      fireEvent.change(input, { target: { value: '' } });
+
+      // Wait for errors to be available in getValue
+      await waitFor(() => {
+        const result = containerRef.current.getValue();
+        expect(result).toHaveProperty('errors');
+        expect(Array.isArray(result.errors)).toBe(true);
+        expect(result.errors.length).toBeGreaterThan(0);
+      }, { timeout: 3000 });
+
+      const result = containerRef.current.getValue();
       expect(result).toHaveProperty('observations');
-      expect(Array.isArray(result.errors)).toBe(true);
-      expect(result.errors.length).toBeGreaterThan(0);
       expect(result.errors[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
