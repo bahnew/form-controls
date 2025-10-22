@@ -851,93 +851,63 @@ describe('AutoComplete', () => {
   });
 
   describe('Coverage improvements - getValue', () => {
-    it('should return array with uuid for single value', async () => {
-      const TestComponent = () => {
-        const ref = React.useRef();
-        
-        React.useEffect(() => {
-          setTimeout(() => {
-            if (ref.current) {
-              const value = ref.current.getValue();
-              expect(Array.isArray(value)).toBe(true);
-              expect(value.length).toBeGreaterThan(0);
-              expect(value[0]).toHaveProperty('uuid');
-            }
-          }, 100);
-        }, []);
+    it('should return array with uuid for single value', () => {
+      const ref = React.createRef();
+      
+      render(
+        <AutoComplete
+          ref={ref}
+          asynchronous={false}
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          value={options[0]}
+        />
+      );
 
-        return (
-          <AutoComplete
-            ref={ref}
-            asynchronous={false}
-            formFieldPath="test1.1/1-0"
-            onValueChange={mockOnValueChange}
-            options={options}
-            value={options[0]}
-          />
-        );
-      };
-
-      render(<TestComponent />);
-      await new Promise(resolve => setTimeout(resolve, 150));
+      expect(ref.current).toBeTruthy();
+      const value = ref.current.getValue();
+      expect(Array.isArray(value)).toBe(true);
+      expect(value.length).toBeGreaterThan(0);
+      expect(value[0]).toHaveProperty('uuid');
     });
 
-    it('should return array with uuids for multi-select', async () => {
-      const TestComponent = () => {
-        const ref = React.useRef();
-        
-        React.useEffect(() => {
-          setTimeout(() => {
-            if (ref.current) {
-              const value = ref.current.getValue();
-              expect(Array.isArray(value)).toBe(true);
-            }
-          }, 100);
-        }, []);
+    it('should return array with uuids for multi-select', () => {
+      const ref = React.createRef();
+      
+      render(
+        <AutoComplete
+          ref={ref}
+          asynchronous={false}
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          value={[options[0], options[1]]}
+          multiSelect
+        />
+      );
 
-        return (
-          <AutoComplete
-            ref={ref}
-            asynchronous={false}
-            formFieldPath="test1.1/1-0"
-            onValueChange={mockOnValueChange}
-            options={options}
-            value={[options[0], options[1]]}
-            multiSelect
-          />
-        );
-      };
-
-      render(<TestComponent />);
-      await new Promise(resolve => setTimeout(resolve, 150));
+      expect(ref.current).toBeTruthy();
+      const value = ref.current.getValue();
+      expect(Array.isArray(value)).toBe(true);
     });
 
-    it('should return empty array when no value', async () => {
-      const TestComponent = () => {
-        const ref = React.useRef();
-        
-        React.useEffect(() => {
-          setTimeout(() => {
-            if (ref.current) {
-              const value = ref.current.getValue();
-              expect(value).toEqual([]);
-            }
-          }, 100);
-        }, []);
+    it('should return empty array when no value', () => {
+      const ref = React.createRef();
+      
+      render(
+        <AutoComplete
+          ref={ref}
+          asynchronous={false}
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+        />
+      );
 
-        return (
-          <AutoComplete
-            ref={ref}
-            asynchronous={false}
-            formFieldPath="test1.1/1-0"
-            onValueChange={mockOnValueChange}
-            options={options}
-          />
-        );
-      };
-
-      render(<TestComponent />);
-      await new Promise(resolve => setTimeout(resolve, 150));
+      expect(ref.current).toBeTruthy();
+      const value = ref.current.getValue();
+      expect(value).toEqual([]);
     });
   });
 });
