@@ -12,13 +12,6 @@ export class RadioButton extends Component {
     this.state = { value: props.value, hasErrors: false };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.validate) {
-      const errors = this._getErrors(nextProps.value);
-      this.setState({ hasErrors: this._hasErrors(errors) });
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.value !== nextProps.value ||
       this.state.value !== nextState.value ||
@@ -26,6 +19,21 @@ export class RadioButton extends Component {
       return true;
     }
     return false;
+  }
+
+  componentDidUpdate(prevProps) {
+    // Update state when props change (moved from componentWillReceiveProps)
+    if (this.props.validate !== prevProps.validate ||
+        this.props.value !== prevProps.value) {
+      if (this.props.validate) {
+        const errors = this._getErrors(this.props.value);
+        const hasErrors = this._hasErrors(errors);
+        
+        if (this.state.hasErrors !== hasErrors) {
+          this.setState({ hasErrors });
+        }
+      }
+    }
   }
 
   changeValue(value) {
