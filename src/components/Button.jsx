@@ -25,13 +25,6 @@ export class Button extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.validate || !isEqual(this.props.value, nextProps.value)) {
-      const errors = this._getErrors(nextProps.value);
-      this.setState({ hasErrors: this._hasErrors(errors) });
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = !isEqual(this.props.value, nextProps.value);
     if (this.isValueChanged ||
@@ -42,7 +35,19 @@ export class Button extends Component {
     return false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    // Update hasErrors state when validate prop changes or value changes
+    if (this.props.validate !== prevProps.validate ||
+        !isEqual(this.props.value, prevProps.value)) {
+      const errors = this._getErrors(this.props.value);
+      const hasErrors = this._hasErrors(errors);
+
+      if (this.state.hasErrors !== hasErrors) {
+        this.setState({ hasErrors });
+      }
+    }
+
+    // Handle value change callbacks
     const errors = this._getErrors(this.props.value);
     if (this._hasErrors(errors)) {
       this.props.onValueChange(this.props.value, errors);
