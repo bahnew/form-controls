@@ -5,6 +5,7 @@ import { Validator } from 'src/helpers/Validator';
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import Textarea from 'react-textarea-autosize';
+import isEqual from 'lodash/isEqual';
 
 export class TextBox extends Component {
   constructor(props) {
@@ -21,13 +22,6 @@ export class TextBox extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.validate) {
-      const errors = this._getErrors(nextProps.value);
-      this.setState({ hasErrors: this._hasErrors(errors) });
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
@@ -38,7 +32,19 @@ export class TextBox extends Component {
     return false;
   }
 
-  componentDidUpdate() {
+   componentDidUpdate(prevProps) {
+    // Update hasErrors state when validate prop changes or value changes
+    if (this.props.validate !== prevProps.validate ||
+        !isEqual(this.props.value, prevProps.value)) {
+      const errors = this._getErrors(this.props.value);
+      const hasErrors = this._hasErrors(errors);
+
+      if (this.state.hasErrors !== hasErrors) {
+        this.setState({ hasErrors });
+      }
+    }
+
+    // Handle value change callbacks
     const errors = this._getErrors(this.props.value);
     if (this._hasErrors(errors)) {
       this.props.onChange({ value: this.props.value, errors });
