@@ -1,6 +1,5 @@
 import 'src/helpers/formRenderer';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ControlRecordTreeBuilder from 'src/helpers/ControlRecordTreeBuilder';
 import ObservationMapper from 'src/helpers/ObservationMapper';
 import ScriptRunner from 'src/helpers/scriptRunner';
@@ -10,9 +9,13 @@ jest.mock('react', () => ({
   createElement: jest.fn(),
 }));
 
-jest.mock('react-dom', () => ({
+const mockRoot = {
   render: jest.fn(),
-  unmountComponentAtNode: jest.fn(),
+  unmount: jest.fn(),
+};
+
+jest.mock('react-dom/client', () => ({
+  createRoot: jest.fn(() => mockRoot),
 }));
 
 jest.mock('src/helpers/ControlRecordTreeBuilder');
@@ -48,8 +51,8 @@ describe('FormRenderer', () => {
     jest.clearAllMocks();
 
     React.createElement.mockReturnValue('mock-react-element');
-    ReactDOM.render.mockReturnValue('mock-component-instance');
-    ReactDOM.unmountComponentAtNode.mockReturnValue(true);
+    mockRoot.render.mockClear();
+    mockRoot.unmount.mockClear();
   });
 
   afterEach(() => {
@@ -69,10 +72,7 @@ describe('FormRenderer', () => {
           collapse: false,
         })
       );
-      expect(ReactDOM.render).toHaveBeenCalledWith(
-        'mock-react-element',
-        document.getElementById('test-container')
-      );
+      expect(mockRoot.render).toHaveBeenCalledWith('mock-react-element');
       expect(result).toBe(document.getElementById('test-container'));
     });
 
@@ -149,6 +149,7 @@ describe('FormRenderer', () => {
 
       const result = window.unMountForm(container);
 
+      expect(mockRoot.unmount).toHaveBeenCalled();
       expect(result).toBe(true);
     });
 
