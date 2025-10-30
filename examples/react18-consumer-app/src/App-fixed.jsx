@@ -8,6 +8,7 @@ import {
   translationData
 } from './formData-simple';
 import './App.css';
+import formData from './form.json'
 
 /**
  * React 18 Demo Application - Clinical Assessment Form (Fixed Version)
@@ -263,7 +264,7 @@ function App() {
               <ErrorBoundary>
                 <Container
                   ref={formRef}
-                  metadata={clinicalFormMetadata}
+                  metadata={formData}
                   observations={observations}
                   patient={patientData}
                   translations={translationData}
