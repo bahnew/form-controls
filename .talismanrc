@@ -1,4 +1,6 @@
 fileignoreconfig:
 - filename: examples/react18-consumer-app/src/form.json
   checksum: d1806da1ad8a8a4732278fe7dd2458fcade534455b1d96161caba276cef2d91f
+- filename: examples/react18-consumer-app/yarn.lock
+  checksum: 93f56b30309df725e51c525a7d15e198da0bb9356033206a2fc00a9efea20c0b
 version: "1.0"
