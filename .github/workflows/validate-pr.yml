@@ -22,6 +22,6 @@ jobs:
       - name: Install dependencies
         run: brew install automake autoconf libtool dpkg pkgconfig nasm libpng
       - name: npm install
-        run: npm install
+        run: npm install --legacy-peer-deps
       - name: npm test
         run: npm test
