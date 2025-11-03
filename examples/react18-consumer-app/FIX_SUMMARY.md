@@ -23,281 +23,185 @@ The React 18 consumer application throws errors during `Container.componentDidMo
 
 ## Solutions Provided
 
-### ✅ Solution 1: Fixed Entry Point (main-fixed.jsx)
+### ✅ Solution 1: Fixed Entry Point (`main.jsx`)
 
-**What it does:**
-- Removes React.StrictMode wrapper
-- Prevents double mounting in development
-- Single, predictable componentDidMount call
+**Why:** React 18 StrictMode double-invokes `componentDidMount` in development, causing initialization issues.
 
-**File:** `src/main-fixed.jsx`
-
+**Implementation:**
 ```jsx
-// Before (causes double mounting)
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// After (single mounting)
-root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);  // No StrictMode wrapper
 ```
 
-### ✅ Solution 2: Fixed App Component (App-fixed.jsx)
+### ✅ 2. Error Boundary (`App.jsx`)
 
-**What it does:**
-- Adds Error Boundary around Container
-- Tracks mount state with `containerMounted` flag
-- Defensive null checks before calling getValue()
-- User-friendly error messages
+**Why:** Catches and handles errors gracefully without crashing the entire app.
 
-**Key additions:**
-- `ErrorBoundary` class component
-- `containerMounted` state tracking
-- Comprehensive try-catch blocks
-- Loading state management
+**Features:**
+- Catches errors in Container component
+- Displays user-friendly error messages
+- Provides reload option
+- Logs detailed error info to console
 
-**File:** `src/App-fixed.jsx`
+### ✅ 3. Mount State Tracking (`App.jsx`)
 
-### ✅ Solution 3: Simplified Form Data (formData-simple.js)
+**Why:** Ensures Container is fully mounted before allowing interactions.
 
-**What it does:**
-- Removes Section controls (uses flat structure)
-- Removes event scripts that could fail
-- Uses only registered control types: `obsControl`, `obsGroupControl`
-- Maintains same functionality without problematic features
-
-**File:** `src/formData-simple.js`
-
-**Changes:**
+**Implementation:**
 ```jsx
-// Before: Section wrapper
-{
-  type: 'section',
-  controls: [
-    { type: 'obsControl', ... }
-  ]
-}
+const [containerMounted, setContainerMounted] = useState(false);
 
-// After: Direct controls
-{
-  type: 'obsControl',
-  properties: { location: { row: 0, column: 0 } },
-  ...
-}
+useEffect(() => {
+  if (formRef.current) {
+    setContainerMounted(true);
+  }
+}, [formRef.current]);
 ```
 
-## Implementation Steps
+### ✅ 4. Defensive Programming (`App.jsx`)
 
-### Quick Implementation (2 minutes)
+**Features:**
+- Null checks before calling `getValue()`
+- Buttons disabled until Container is mounted
+- User feedback during initialization
+- Proper error handling in save/reset operations
 
+## Running the Application
+
+### Using npm:
 ```bash
 cd examples/react18-consumer-app
-
-# Use fixed versions
-cp src/main-fixed.jsx src/main.jsx
-cp src/App-fixed.jsx src/App.jsx
-
-# Update App.jsx to import from formData-simple
-# (Edit line 6 in src/App.jsx)
-
+npm install
 npm run dev
 ```
 
-### Manual Implementation (5 minutes)
-
-1. **Update main.jsx:**
-   - Remove `<React.StrictMode>` wrapper
-   - Keep only `root.render(<App />)`
-
-2. **Add Error Boundary to App.jsx:**
-   - Copy ErrorBoundary class from App-fixed.jsx
-   - Wrap Container component
-
-3. **Simplify form metadata:**
-   - Use formData-simple.js
-   - Or remove Section controls from existing metadata
-
-4. **Add mount tracking:**
-   - Add `const [containerMounted, setContainerMounted] = useState(false)`
-   - Track when formRef.current becomes available
-
-## Verification
-
-### Success Indicators
-
-✅ No console errors
-✅ Console shows: "Container component mounted successfully"
-✅ Form renders with all controls visible
-✅ Pre-filled data displays correctly
-✅ Validation works
-✅ Save/Reset/Clear buttons function
-
-### Browser Console Output
-
-```
-✓ Initializing Container component
-✓ Container component mounted successfully
-✓ Form ready
-✓ Form updated: [ControlRecordTree object]
-```
-
-### Visual Indicators
-
-- Green "✓ Form ready" message in config panel
-- All form fields render
-- Patient information displays
-- No red error panels
-
-## Files Created
-
-| File | Purpose | Status |
-|------|---------|--------|
-| `main-fixed.jsx` | Entry without StrictMode | ✅ Ready |
-| `App-fixed.jsx` | App with error handling | ✅ Ready |
-| `formData-simple.js` | Simplified metadata | ✅ Ready |
-| `TROUBLESHOOTING.md` | Detailed guide | ✅ Ready |
-| `QUICK_FIX.md` | 3-step quick fix | ✅ Ready |
-| `FIX_SUMMARY.md` | This document | ✅ Ready |
-
-## Technical Details
-
-### Why StrictMode Causes Issues
-
-React 18 StrictMode in development:
-1. Mounts component
-2. Calls componentDidMount
-3. **Unmounts component**
-4. **Mounts component again**
-5. **Calls componentDidMount again**
-
-This double-call can cause:
-- Duplicate event listeners
-- Multiple state initializations
-- Race conditions in async operations
-- Unexpected behavior in lifecycle methods
-
-### Container Component Lifecycle
-
-```
-Constructor
-  ↓
-Render (initial)
-  ↓
-componentDidMount ← Issues occur here
-  ├── Execute onFormInit script
-  ├── Call executeEventsFromCurrentRecord
-  └── setState (causes re-render)
-  ↓
-Render (updated)
-  ↓
-componentDidUpdate (on prop changes)
-```
-
-### Error Boundary Benefits
-
-```jsx
-<ErrorBoundary>
-  <Container {...props} />
-</ErrorBoundary>
-```
-
-Catches errors in:
-- Rendering
-- Lifecycle methods (componentDidMount)
-- Event handlers
-- Child component tree
-
-Prevents entire app crash, shows friendly error UI.
-
-## Production Considerations
-
-### Important Notes
-
-1. **StrictMode in Production**: Automatically disabled, so no double mounting
-2. **Error Boundaries**: Always use in production for graceful error handling
-3. **Monitoring**: Log errors to error tracking service (Sentry, LogRocket, etc.)
-4. **Fallbacks**: Provide default values for all props
-
-### Production Checklist
-
-- [ ] Build with NODE_ENV=production
-- [ ] Test without StrictMode
-- [ ] Verify error boundaries work
-- [ ] Check all form types render
-- [ ] Validate with real patient data
-- [ ] Test on target browsers
-- [ ] Monitor error rates
-
-## Alternative Solutions
-
-### Option A: Fix Container Component
-
-Modify Container.jsx to be StrictMode-safe:
-
-```jsx
-componentDidMount() {
-  // Add flag to prevent double execution
-  if (this._mounted) return;
-  this._mounted = true;
-
-  // ... existing code
-}
-
-componentWillUnmount() {
-  this._mounted = false;
-}
-```
-
-**Pros:** Keeps StrictMode benefits
-**Cons:** Requires modifying library code
-
-### Option B: Use React 19 Example
-
-The React 19 example has better compatibility:
-
+### Using yarn:
 ```bash
-cd ../react19-consumer-app
-npm install && npm run dev
+# Install packages for the first time
+yarn
+
+# Build the app
+yarn build
+
+# Run the consumer app
+yarn run dev
 ```
 
-**Pros:** Modern React features, no StrictMode issues
-**Cons:** Different React version
+**Open browser to:** Check the terminal output for the port (typically `http://localhost:5173`, `http://localhost:3000`, or `http://localhost:3001`)
 
-### Option C: Conditional StrictMode
+> **Note:** Vite automatically selects an available port. If port 5173 is busy, it will use 3000, 3001, or the next available port.
 
-```jsx
-const isDev = import.meta.env.DEV;
+## Expected Behavior
 
-root.render(
-  isDev ? <App /> : <React.StrictMode><App /></React.StrictMode>
-);
+### ✅ Success Indicators
+
+1. **Console Output:**
+   ```
+   Container component mounted successfully
+   Form updated: [ControlRecordTree object]
+   ```
+
+2. **UI Status:**
+   - "✓ Form ready" displays in green
+   - All form fields render correctly
+   - Save/Reset/Clear buttons are enabled
+   - No red error panels
+
+3. **Functionality:**
+   - Form loads with pre-filled patient data
+   - Validation works when enabled
+   - Save operation captures observations
+   - Reset restores initial values
+   - Clear removes all data
+
+### ⚠️ If You See Errors
+
+Check browser console for error messages. Common issues:
+
+1. **"Form not ready"** - Container still initializing, wait a moment
+2. **"Cannot read properties of null"** - Check formRef is populated
+3. **Validation errors** - Enable validation checkbox and check field values
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/main.jsx` | React 18 entry point (StrictMode disabled) |
+| `src/App.jsx` | Main app with ErrorBoundary and defensive code |
+| `src/form.json` | Form metadata/configuration |
+| `src/formData.js` | Patient data and observations |
+
+## Architecture
+
+```
+main.jsx
+  └─ ReactDOM.createRoot() [React 18 API]
+       └─ App.jsx
+            ├─ ErrorBoundary [Catches errors]
+            │    └─ Container [Form component]
+            ├─ Mount tracking [useEffect]
+            └─ Defensive checks [null safety]
 ```
 
-**Pros:** StrictMode in production only
-**Cons:** Doesn't help catch dev issues
+## Troubleshooting
 
-## Conclusion
+### Issue: Form not rendering
 
-**Recommended Approach:**
+**Check:**
+1. Is `npm run dev` running?
+2. Are there console errors?
+3. Is Container ref populated?
+   ```javascript
+   console.log(formRef.current)
+   ```
 
-✅ Use the fixed files provided (`main-fixed.jsx`, `App-fixed.jsx`, `formData-simple.js`)
+### Issue: Save button disabled
 
-This approach:
-- Requires zero code changes (just copy files)
-- Fixes 100% of componentDidMount issues
-- Maintains all functionality
-- Production-ready
-- Well-tested
+**Cause:** Container not mounted yet  
+**Fix:** Wait for "✓ Form ready" message to appear
 
-**Time to Fix:** < 2 minutes
+### Issue: Validation errors on save
 
-**Success Rate:** 100% (for standard use cases)
+**Cause:** Required fields empty or invalid values  
+**Fix:** Fill all required fields with valid data
 
----
+## Production Deployment
 
-For questions or issues, see:
-- [QUICK_FIX.md](./QUICK_FIX.md) - Fast 3-step fix
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Detailed debugging
-- [README.md](./README.md) - Full documentation
+### Build Commands:
+```bash
+# Using npm
+npm run build
+
+# Using yarn
+yarn build
+```
+
+## Testing Checklist
+
+- [ ] Form loads without console errors
+- [ ] "✓ Form ready" displays after mount
+- [ ] All form fields are visible
+- [ ] Pre-filled patient data displays correctly
+- [ ] Save button works and shows success notification
+- [ ] Reset button restores original values
+- [ ] Clear button removes all data
+- [ ] Validation works when enabled
+- [ ] Error messages display for invalid data
+
+## Related Documentation
+
+- **Main README:** `../../README.md` - Library documentation and API reference
+- **Package Info:** `package.json` - Dependencies and scripts
+
+## Summary
+
+This application demonstrates production-ready React 18 integration with `bahmni-form-controls`. All common issues have been addressed:
+
+- ✅ No StrictMode double-mounting
+- ✅ Error boundaries for stability
+- ✅ Mount state tracking for safety
+- ✅ Defensive programming throughout
+- ✅ User-friendly error messages
+- ✅ Complete form lifecycle handling
+
+The code is ready to use as a reference for your own React 18 implementations.

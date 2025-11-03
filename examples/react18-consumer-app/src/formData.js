@@ -1,6 +1,6 @@
 /**
- * Comprehensive form metadata for Clinical Assessment Form
- * Demonstrates all major control types and features
+ * Simplified Clinical Form Metadata (React 18 Compatible)
+ * This version avoids potential issues with Section controls and componentDidMount
  */
 
 export const clinicalFormMetadata = {
@@ -9,110 +9,99 @@ export const clinicalFormMetadata = {
   name: 'Clinical Assessment Form',
   version: '1.0',
   controls: [
-    // Section 1: Vital Signs
+    // Row 0: Temperature and Heart Rate
     {
-      type: 'section',
+      type: 'obsControl',
       label: {
         type: 'label',
-        value: 'Vital Signs'
+        value: 'Body Temperature (°C)'
       },
       properties: {
+        mandatory: true,
         location: { row: 0, column: 0 }
       },
-      id: 'vitals-section',
-      controls: [
-        {
-          type: 'obsControl',
-          label: {
-            type: 'label',
-            value: 'Body Temperature (°C)'
-          },
-          properties: {
-            mandatory: true,
-            location: { row: 0, column: 0 }
-          },
-          id: 'temperature',
-          concept: {
-            uuid: 'c36af094-3f10-11e4-adec-0800271c1b75',
-            name: 'Temperature',
-            datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 36.0,
-            hiNormal: 37.5,
-            lowAbsolute: 35.0,
-            hiAbsolute: 43.0
-          }
-        },
-        {
-          type: 'obsControl',
-          label: {
-            type: 'label',
-            value: 'Heart Rate (bpm)'
-          },
-          properties: {
-            mandatory: true,
-            location: { row: 0, column: 1 }
-          },
-          id: 'heart-rate',
-          concept: {
-            uuid: 'c36bc1a4-3f10-11e4-adec-0800271c1b75',
-            name: 'Pulse',
-            datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 60,
-            hiNormal: 100,
-            lowAbsolute: 40,
-            hiAbsolute: 200
-          }
-        },
-        {
-          type: 'obsControl',
-          label: {
-            type: 'label',
-            value: 'Respiratory Rate (/min)'
-          },
-          properties: {
-            mandatory: false,
-            location: { row: 1, column: 0 }
-          },
-          id: 'respiratory-rate',
-          concept: {
-            uuid: 'c36c7b28-3f10-11e4-adec-0800271c1b75',
-            name: 'Respiratory Rate',
-            datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 12,
-            hiNormal: 20,
-            lowAbsolute: 8,
-            hiAbsolute: 40
-          }
-        },
-        {
-          type: 'obsControl',
-          label: {
-            type: 'label',
-            value: 'SpO2 (%)'
-          },
-          properties: {
-            mandatory: false,
-            location: { row: 1, column: 1 }
-          },
-          id: 'spo2',
-          concept: {
-            uuid: 'c36c7ce4-3f10-11e4-adec-0800271c1b75',
-            name: 'Oxygen Saturation',
-            datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 95,
-            hiNormal: 100,
-            lowAbsolute: 70,
-            hiAbsolute: 100
-          }
-        }
-      ]
+      id: 'temperature',
+      concept: {
+        uuid: 'c36af094-3f10-11e4-adec-0800271c1b75',
+        name: 'Temperature',
+        datatype: 'Numeric',
+        conceptClass: 'Misc',
+        lowNormal: 36.0,
+        hiNormal: 37.5,
+        lowAbsolute: 35.0,
+        hiAbsolute: 43.0
+      }
+    },
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'Heart Rate (bpm)'
+      },
+      properties: {
+        mandatory: true,
+        location: { row: 0, column: 1 }
+      },
+      id: 'heart-rate',
+      concept: {
+        uuid: 'c36bc1a4-3f10-11e4-adec-0800271c1b75',
+        name: 'Pulse',
+        datatype: 'Numeric',
+        conceptClass: 'Misc',
+        lowNormal: 60,
+        hiNormal: 100,
+        lowAbsolute: 40,
+        hiAbsolute: 200
+      }
     },
 
-    // Blood Pressure Obs Group
+    // Row 1: Respiratory Rate and SpO2
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'Respiratory Rate (/min)'
+      },
+      properties: {
+        mandatory: false,
+        location: { row: 1, column: 0 }
+      },
+      id: 'respiratory-rate',
+      concept: {
+        uuid: 'c36c7b28-3f10-11e4-adec-0800271c1b75',
+        name: 'Respiratory Rate',
+        datatype: 'Numeric',
+        conceptClass: 'Misc',
+        lowNormal: 12,
+        hiNormal: 20,
+        lowAbsolute: 8,
+        hiAbsolute: 40
+      }
+    },
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'SpO2 (%)'
+      },
+      properties: {
+        mandatory: false,
+        location: { row: 1, column: 1 }
+      },
+      id: 'spo2',
+      concept: {
+        uuid: 'c36c7ce4-3f10-11e4-adec-0800271c1b75',
+        name: 'Oxygen Saturation',
+        datatype: 'Numeric',
+        conceptClass: 'Misc',
+        lowNormal: 95,
+        hiNormal: 100,
+        lowAbsolute: 70,
+        hiAbsolute: 100
+      }
+    },
+
+    // Row 2: Blood Pressure Obs Group
     {
       type: 'obsGroupControl',
       label: {
@@ -120,7 +109,7 @@ export const clinicalFormMetadata = {
         value: 'Blood Pressure Measurement'
       },
       properties: {
-        location: { row: 1, column: 0 },
+        location: { row: 2, column: 0 },
         abnormal: false
       },
       id: 'blood-pressure-group',
@@ -177,29 +166,11 @@ export const clinicalFormMetadata = {
             lowAbsolute: 40,
             hiAbsolute: 150
           }
-        },
-        {
-          type: 'obsControl',
-          label: {
-            type: 'label',
-            value: 'Position During Measurement'
-          },
-          properties: {
-            mandatory: false,
-            location: { row: 1, column: 0 }
-          },
-          id: 'bp-position',
-          concept: {
-            uuid: 'c36e9f7a-3f10-11e4-adec-0800271c1b75',
-            name: 'Patient Position',
-            datatype: 'Text',
-            conceptClass: 'Misc'
-          }
         }
       ]
     },
 
-    // Anthropometric Measurements
+    // Row 3: Weight and Height
     {
       type: 'obsControl',
       label: {
@@ -208,7 +179,7 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: false,
-        location: { row: 2, column: 0 }
+        location: { row: 3, column: 0 }
       },
       id: 'weight',
       concept: {
@@ -228,7 +199,7 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: false,
-        location: { row: 2, column: 1 }
+        location: { row: 3, column: 1 }
       },
       id: 'height',
       concept: {
@@ -241,29 +212,7 @@ export const clinicalFormMetadata = {
       }
     },
 
-    // BMI (Computed)
-    {
-      type: 'obsControl',
-      label: {
-        type: 'label',
-        value: 'BMI (kg/m²)'
-      },
-      properties: {
-        mandatory: false,
-        location: { row: 3, column: 0 }
-      },
-      id: 'bmi',
-      concept: {
-        uuid: 'c36c7e52-3f10-11e4-adec-0800271c1b75',
-        name: 'Body Mass Index',
-        datatype: 'Numeric',
-        conceptClass: 'Computed',
-        lowNormal: 18.5,
-        hiNormal: 24.9
-      }
-    },
-
-    // Chief Complaint
+    // Row 4: Chief Complaint
     {
       type: 'obsControl',
       label: {
@@ -283,27 +232,7 @@ export const clinicalFormMetadata = {
       }
     },
 
-    // History of Present Illness
-    {
-      type: 'obsControl',
-      label: {
-        type: 'label',
-        value: 'History of Present Illness'
-      },
-      properties: {
-        mandatory: false,
-        location: { row: 5, column: 0 }
-      },
-      id: 'history-present-illness',
-      concept: {
-        uuid: 'c36c8110-3f10-11e4-adec-0800271c1b75',
-        name: 'History of Present Illness',
-        datatype: 'Text',
-        conceptClass: 'Misc'
-      }
-    },
-
-    // Clinical Notes
+    // Row 5: Clinical Notes
     {
       type: 'obsControl',
       label: {
@@ -312,7 +241,7 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: false,
-        location: { row: 6, column: 0 }
+        location: { row: 5, column: 0 }
       },
       id: 'clinical-notes',
       concept: {
@@ -322,16 +251,12 @@ export const clinicalFormMetadata = {
         conceptClass: 'Misc'
       }
     }
-  ],
-  events: {
-    onFormInit: `
-      console.log('Clinical Assessment Form initialized');
-    `
-  }
+  ]
+  // Note: No events.onFormInit to avoid script execution issues
 };
 
 /**
- * Sample existing observations - demonstrates editing mode
+ * Sample existing observations
  */
 export const existingObservations = [
   {
@@ -341,7 +266,7 @@ export const existingObservations = [
       name: 'Temperature'
     },
     value: 36.8,
-    formFieldPath: 'clinical-assessment-form-v1.2/vitals-section-0/temperature-0',
+    formFieldPath: 'clinical-assessment-form-v1.2/temperature-0',
     encounterUuid: 'encounter-001',
     obsDateTime: '2024-10-24T09:15:00.000Z',
     voided: false
@@ -353,7 +278,7 @@ export const existingObservations = [
       name: 'Pulse'
     },
     value: 72,
-    formFieldPath: 'clinical-assessment-form-v1.2/vitals-section-0/heart-rate-0',
+    formFieldPath: 'clinical-assessment-form-v1.2/heart-rate-0',
     encounterUuid: 'encounter-001',
     obsDateTime: '2024-10-24T09:15:00.000Z',
     voided: false
@@ -365,7 +290,7 @@ export const existingObservations = [
       name: 'Respiratory Rate'
     },
     value: 16,
-    formFieldPath: 'clinical-assessment-form-v1.2/vitals-section-0/respiratory-rate-0',
+    formFieldPath: 'clinical-assessment-form-v1.2/respiratory-rate-0',
     encounterUuid: 'encounter-001',
     obsDateTime: '2024-10-24T09:15:00.000Z',
     voided: false
@@ -377,7 +302,7 @@ export const existingObservations = [
       name: 'Oxygen Saturation'
     },
     value: 98,
-    formFieldPath: 'clinical-assessment-form-v1.2/vitals-section-0/spo2-0',
+    formFieldPath: 'clinical-assessment-form-v1.2/spo2-0',
     encounterUuid: 'encounter-001',
     obsDateTime: '2024-10-24T09:15:00.000Z',
     voided: false
@@ -449,19 +374,6 @@ export const patientData = {
  * Internationalization translations
  */
 export const translationData = {
-  labels: {
-    'VITALS_SECTION': 'Vital Signs',
-    'TEMPERATURE': 'Body Temperature',
-    'HEART_RATE': 'Heart Rate',
-    'BP_MEASUREMENT': 'Blood Pressure Measurement'
-  },
-  concepts: {
-    'Temperature': 'Body Temperature',
-    'Pulse': 'Heart Rate',
-    'Blood Pressure': 'Blood Pressure',
-    'Systolic Blood Pressure': 'Systolic BP',
-    'Diastolic Blood Pressure': 'Diastolic BP',
-    'Weight': 'Body Weight',
-    'Height': 'Body Height'
-  }
+  labels: {},
+  concepts: {}
 };
