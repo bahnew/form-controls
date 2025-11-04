@@ -22,10 +22,11 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
     this.onRemoveControl = this.onRemoveControl.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.collapse !== undefined && (nextProps.collapse !== this.props.collapse ||
-      nextProps.collapse !== this.state.collapse)) {
-      this.setState({ collapse: nextProps.collapse });
+  componentDidUpdate(prevProps) {
+    // Update collapse state when props change (moved from componentWillReceiveProps)
+    if (this.props.collapse !== undefined && 
+        this.props.collapse !== prevProps.collapse) {
+      this.setState({ collapse: this.props.collapse });
     }
   }
 

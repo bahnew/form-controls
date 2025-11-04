@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
 import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
-import TranslationKeyGenerator from 'src/services/TranslationKeyService';
+import { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 import { Util } from '../../helpers/Util';
 
 export class CodedControlDesigner extends Component {

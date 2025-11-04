@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { IntlShape } from 'react-intl';
 import ComponentStore from 'src/helpers/componentStore';
 import find from 'lodash/find';
 import map from 'lodash/map';
@@ -65,7 +64,7 @@ export class BooleanControl extends Component {
 BooleanControl.propTypes = {
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
-  intl: IntlShape,
+  intl: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   validate: PropTypes.bool.isRequired,

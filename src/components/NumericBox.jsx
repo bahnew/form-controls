@@ -13,7 +13,8 @@ export class NumericBox extends Component {
     this.defaultValidations = [constants.validations.allowRange, constants.validations.minMaxRange];
     const errors = this._getErrors(props.value) || [];
     const hasWarnings = this._hasErrors(errors, constants.errorTypes.warning);
-    const hasErrors = this._isCreateByAddMore() ?
+    // Show errors on mount if validate is true or if created by add more
+    const hasErrors = (this._isCreateByAddMore() || props.validate) ?
       this._hasErrors(errors, constants.errorTypes.error) : false;
     this.state = { hasErrors, hasWarnings };
   }
@@ -27,15 +28,6 @@ export class NumericBox extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.validate) {
-      const errors = this._getErrors(nextProps.value);
-      const hasErrors = this._hasErrors(errors, constants.errorTypes.error);
-      const hasWarnings = this._hasErrors(errors, constants.errorTypes.warning);
-      this.setState({ hasErrors, hasWarnings });
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     let valueToString;
     if (this.props.value !== undefined) {
@@ -46,7 +38,22 @@ export class NumericBox extends Component {
       this.props.enabled !== nextProps.enabled;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    // Update state when props change (moved from componentWillReceiveProps)
+    if (this.props.validate !== prevProps.validate ||
+        this.props.value !== prevProps.value) {
+      if (this.props.validate) {
+        const errors = this._getErrors(this.props.value);
+        const hasErrors = this._hasErrors(errors, constants.errorTypes.error);
+        const hasWarnings = this._hasErrors(errors, constants.errorTypes.warning);
+        
+        if (this.state.hasErrors !== hasErrors || this.state.hasWarnings !== hasWarnings) {
+          this.setState({ hasErrors, hasWarnings });
+        }
+      }
+    }
+
+    // Handle error callbacks
     const errors = this._getErrors(this.props.value);
     if (this._hasErrors(errors, constants.errorTypes.error)) {
       this.props.onChange({ value: this.props.value, errors });

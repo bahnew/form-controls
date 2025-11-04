@@ -2,6 +2,11 @@
 
 This library provides a range of form controls that can be used to create customized forms within the Bahmni platform.
 
+### Requirements
+
+- React 18.3.1 or higher
+- React DOM 18.3.1 or higher
+
 ### File naming conventions
 
 1. All components should be in Pascal Case (camel case starting with uppercase letter)
@@ -25,6 +30,49 @@ This library provides a range of form controls that can be used to create custom
 form-controls also integrates with SNOMED for terminology lookup as part of form configuration and generation. More details can be found in [this](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/3132686337/SNOMED+FHIR+Terminology+Server+Integration+with+Bahmni) Wiki link
 
 ## Changelog
+
+### Version 1.1.0 (React 18 Upgrade)
+
+This release upgrades the library to React 18.3.1, bringing performance improvements and modern React APIs while maintaining backward compatibility.
+
+**Breaking Changes:**
+
+- **React 18 Upgrade**: Upgraded from React 17.0.2 to React 18.3.1
+  - Updated peer dependencies: `react` and `react-dom` to `^18.3.1`
+  - Container component API remains unchanged - no code changes needed for consumers
+
+- **ReactDOM API**: Migrated to React 18's createRoot API
+  - Updated `formRenderer.js` with proper root management and cleanup
+  - See [Migration Guide](./REACT_18_MIGRATION.md) for API details
+
+- **Component Updates**: Removed deprecated `UNSAFE_` lifecycle methods from 11 components
+  - See [Migration Guide](./REACT_18_MIGRATION.md) for complete list of updated components
+
+**New Features:**
+
+- React 18 example application in `examples/react18-consumer-app/`
+- Comprehensive troubleshooting and quick-fix documentation
+
+**Performance Improvements:**
+
+- Automatic batching reduces unnecessary re-renders
+- Better root management and memory cleanup
+- Foundation for future concurrent rendering features
+
+**Migration:**
+
+For detailed migration steps, see [REACT_18_MIGRATION.md](./REACT_18_MIGRATION.md)
+
+Quick steps:
+1. Update React dependencies to 18.3.1
+2. Update entry point to use `createRoot` (if using formRenderer directly)
+3. Update custom components (if extended any form-controls components)
+4. Run tests
+
+**Resources:**
+- [Migration Guide](./REACT_18_MIGRATION.md) - Detailed migration steps and API changes
+- [Example App](./examples/react18-consumer-app/) - Working React 18 integration example
+---
 
 ### Version 1.0.0 (Major Release)
 

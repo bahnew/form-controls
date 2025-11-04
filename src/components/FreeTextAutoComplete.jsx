@@ -11,9 +11,11 @@ export class FreeTextAutoComplete extends Component {
     this.handleOnChange = this.handleOnChange.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.options !== newProps.options) {
-      this.setState({ options: newProps.options, value: newProps.value });
+  componentDidUpdate(prevProps) {
+    // Update state when props change (moved from componentWillReceiveProps)
+    if (prevProps.options !== this.props.options ||
+        prevProps.value !== this.props.value) {
+      this.setState({ options: this.props.options, value: this.props.value });
     }
   }
 

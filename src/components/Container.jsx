@@ -29,22 +29,27 @@ export class Container extends addMoreDecorator(Component) {
     this.showNotification = this.showNotification.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    // Initialize form with scripts (moved from componentWillMount)
     const initScript = this.props.metadata.events && this.props.metadata.events.onFormInit;
-    let updatedTree;
+    let updatedTree = this.state.data;
+    
     if (initScript) {
-      updatedTree = new ScriptRunner(this.state.data, this.props.patient).execute(initScript);
-      this.setState({ data: updatedTree });
+      updatedTree = new ScriptRunner(updatedTree, this.props.patient).execute(initScript);
     }
-    updatedTree = updatedTree || this.state.data;
+    
     updatedTree = executeEventsFromCurrentRecord(updatedTree, updatedTree, this.props.patient);
+    
     this.setState({
       data: updatedTree,
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ collapse: nextProps.collapse });
+  componentDidUpdate(prevProps) {
+    // Update collapse state when props change (moved from componentWillReceiveProps)
+    if (prevProps.collapse !== this.props.collapse) {
+      this.setState({ collapse: this.props.collapse });
+    }
   }
 
   onEventTrigger(sender, eventName) {
@@ -222,4 +227,3 @@ Container.propTypes = {
   validate: PropTypes.bool.isRequired,
   validateForm: PropTypes.bool.isRequired,
 };
-

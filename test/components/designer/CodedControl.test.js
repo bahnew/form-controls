@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { CodedControlDesigner } from 'components/designer/CodedControl.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import { Util } from 'src/helpers/Util';
-import TranslationKeyGenerator from 'src/services/TranslationKeyService';
+import { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 
 jest.mock('src/helpers/Util');
 jest.mock('src/services/TranslationKeyService');

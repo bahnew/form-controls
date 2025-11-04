@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
-import { IntlShape } from 'react-intl';
 export class Label extends Component {
 
   _getUnits(units) {
@@ -30,7 +29,7 @@ export class Label extends Component {
 Label.propTypes = {
   enabled: PropTypes.bool,
   hidden: PropTypes.bool,
-  intl: IntlShape,
+  intl: PropTypes.object,
   metadata: PropTypes.shape({
     uuid: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,

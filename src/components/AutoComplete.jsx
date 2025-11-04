@@ -34,7 +34,8 @@ export class AutoComplete extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    // Initialize options if conditions are met (moved from componentWillMount)
     if (
       !this.props.asynchronous &&
       this.props.minimumInput === 0 &&
@@ -42,21 +43,10 @@ export class AutoComplete extends Component {
     ) {
       this.setState({ options: this.props.options });
     }
-  }
 
-  componentDidMount() {
     if (this.state.hasErrors || this.props.value !== undefined || this.props.validateForm) {
       this.props.onValueChange(this.props.value, this._getErrors(this.props.value));
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const value = get(nextProps, 'value');
-    const errors = this._getErrors(value);
-    const hasErrors = this._hasErrors(errors);
-    const options = (this.state.options !== nextProps.options && !this.props.searchable) ?
-      nextProps.options : this.state.options;
-    this.setState({ value, hasErrors, options });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -69,12 +59,26 @@ export class AutoComplete extends Component {
       this.props.enabled !== nextProps.enabled;
   }
 
-  componentWillUpdate(nextState) {
-    return !isEqual(this.state.options, nextState.options)
-      || this.state.hasErrors !== nextState.hasErrors;
-  }
+  componentDidUpdate(prevProps) {
+    // Update state when props change (moved from componentWillReceiveProps)
+    if (!isEqual(prevProps.value, this.props.value) ||
+        !isEqual(prevProps.validate, this.props.validate) ||
+        (!this.props.searchable && !isEqual(prevProps.options, this.props.options))) {
+      const value = get(this.props, 'value');
+      const errors = this._getErrors(value);
+      const hasErrors = this._hasErrors(errors);
+      const options = (!isEqual(this.state.options, this.props.options) && !this.props.searchable) ?
+        this.props.options : this.state.options;
+      
+      // Only update state if there are actual changes to prevent infinite loops
+      if (!isEqual(this.state.value, value) || 
+          this.state.hasErrors !== hasErrors || 
+          !isEqual(this.state.options, options)) {
+        this.setState({ value, hasErrors, options });
+      }
+    }
 
-  componentDidUpdate() {
+    // Handle error callbacks (moved from original componentDidUpdate)
     const errors = this._getErrors(this.state.value);
     if (this._hasErrors(errors)) {
       this.props.onValueChange(this.state.value, errors);
@@ -251,6 +255,7 @@ AutoComplete.propTypes = {
   searchable: PropTypes.bool,
   terminologyServiceConfig: PropTypes.object,
   url: PropTypes.string,
+  validate: PropTypes.bool,
   validateForm: PropTypes.bool,
   validations: PropTypes.array,
   value: PropTypes.any,
@@ -293,4 +298,3 @@ const descriptor = {
 ComponentStore.registerDesignerComponent('autoComplete', descriptor);
 
 ComponentStore.registerComponent('autoComplete', AutoComplete);
-

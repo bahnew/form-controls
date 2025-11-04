@@ -6,6 +6,7 @@ import ComponentStore from 'src/helpers/componentStore';
 import { injectIntl, IntlProvider } from 'react-intl';
 import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
 import addMoreDecorator from './AddMoreDecorator';
+import isEqual from 'lodash/isEqual';
 
 export class Section extends addMoreDecorator(Component) {
 
@@ -21,10 +22,11 @@ export class Section extends addMoreDecorator(Component) {
     this.onRemoveControl = this.onRemoveControl.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.collapse !== undefined && (nextProps.collapse !== this.props.collapse ||
-      nextProps.collapse !== this.state.collapse)) {
-      this.setState({ collapse: nextProps.collapse });
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.collapse !== undefined &&
+        (this.props.collapse !== prevProps.collapse ||
+         (this.props.collapse !== prevState.collapse && prevProps.collapse === this.props.collapse))) {
+      this.setState({ collapse: this.props.collapse });
     }
   }
 

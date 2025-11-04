@@ -19,8 +19,11 @@ export class RowDesigner extends Component {
     this.cellData = groupBy(props.rowData, 'properties.location.column');
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.cellData = groupBy(nextProps.rowData, 'properties.location.column');
+  componentDidUpdate(prevProps) {
+    // Update cellData when props change (moved from componentWillReceiveProps)
+    if (prevProps.rowData !== this.props.rowData) {
+      this.cellData = groupBy(this.props.rowData, 'properties.location.column');
+    }
   }
 
   getRowDefinition() {

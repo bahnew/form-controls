@@ -23,15 +23,6 @@ export class DateTime extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.validate) {
-      this.dateValue = nextProps.value ? nextProps.value.split(' ')[0] : '';
-      this.timeValue = nextProps.value ? nextProps.value.split(' ')[1] : '';
-      const errors = this._getAllErrors();
-      this.setState({ hasErrors: this._hasErrors(errors) });
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
@@ -42,7 +33,34 @@ export class DateTime extends Component {
     return false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    // Update internal values and state when props change (moved from componentWillReceiveProps)
+    let needsUpdate = false;
+    
+    if (this.props.value !== prevProps.value) {
+      this.dateValue = this.props.value ? this.props.value.split(' ')[0] : '';
+      this.timeValue = this.props.value ? this.props.value.split(' ')[1] : '';
+      needsUpdate = true;
+    }
+    
+    if (this.props.validate !== prevProps.validate || needsUpdate) {
+      if (this.props.validate) {
+        const errors = this._getAllErrors();
+        const hasErrors = this._hasErrors(errors);
+        
+        if (this.state.hasErrors !== hasErrors) {
+          this.setState({ hasErrors });
+          return; // State update will trigger another render
+        }
+      }
+      
+      // Force re-render when value changes but hasErrors doesn't change
+      if (needsUpdate && this.props.validate) {
+        this.forceUpdate();
+      }
+    }
+
+    // Handle error callbacks
     const errors = this._getAllErrors();
     const dateTimeValue = !this.valueNotFilled() ?
       `${this.dateValue} ${this.timeValue}` : undefined;

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ComponentStore from 'src/helpers/componentStore';
 import find from 'lodash/find';
 import each from 'lodash/each';
-import { IntlShape } from 'react-intl';
 import constants from 'src/constants';
 import { Util } from '../helpers/Util';
 export class CodedControl extends Component {
@@ -40,14 +39,16 @@ export class CodedControl extends Component {
     getConfig(properties.url)
     .then(response => {
       const { terminologyService } = response.config || {};
+      let updatedConfig = this.state.terminologyServiceConfig;
 
       if (terminologyService) {
-        this.setState(prevState => ({
-          terminologyServiceConfig: {
-            ...prevState.terminologyServiceConfig,
-            ...terminologyService,
-          },
-        }));
+        updatedConfig = {
+          ...this.state.terminologyServiceConfig,
+          ...terminologyService,
+        };
+        this.setState({
+          terminologyServiceConfig: updatedConfig,
+        });
       }
 
       if (properties.autoComplete) {
@@ -55,7 +56,7 @@ export class CodedControl extends Component {
         return Promise.resolve([]);
       }
 
-      return getAnswers(properties.url, '', this.state.terminologyServiceConfig.limit);
+      return getAnswers(properties.url, '', updatedConfig.limit);
     })
     .then(data => {
       if (!data) return;
@@ -197,7 +198,7 @@ CodedControl.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
-  intl: IntlShape,
+  intl: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   properties: PropTypes.object.isRequired,

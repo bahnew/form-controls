@@ -19,8 +19,11 @@ export class GridDesigner extends Component {
     this.rowRef = {};
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.rowData = groupBy(nextProps.controls, 'properties.location.row');
+  componentDidUpdate(prevProps) {
+    // Update rowData when props change (moved from componentWillReceiveProps)
+    if (prevProps.controls !== this.props.controls) {
+      this.rowData = groupBy(this.props.controls, 'properties.location.row');
+    }
   }
 
   getControls() {
