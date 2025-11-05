@@ -3,4 +3,6 @@ fileignoreconfig:
   checksum: d1806da1ad8a8a4732278fe7dd2458fcade534455b1d96161caba276cef2d91f
 - filename: examples/react18-consumer-app/yarn.lock
   checksum: 93f56b30309df725e51c525a7d15e198da0bb9356033206a2fc00a9efea20c0b
+- filename: yarn.lock
+  checksum: 760ed50a126cefb69ce7901cc19bb735dfa7f212973f9443dc9d2e8c4d448d28
 version: "1.0"

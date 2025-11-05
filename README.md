@@ -4,8 +4,8 @@ This library provides a range of form controls that can be used to create custom
 
 ### Requirements
 
-- React 18.3.1 or higher
-- React DOM 18.3.1 or higher
+- React 19.0.0 or higher
+- React DOM 19.0.0 or higher
 
 ### File naming conventions
 
