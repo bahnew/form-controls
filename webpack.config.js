@@ -20,6 +20,7 @@ module.exports = {
   experiments: {
     outputModule: true,
   },
+  externals: ['react', 'react-dom'],
   module: {
     rules: [
       {
