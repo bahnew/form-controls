@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import ComponentStore from 'src/helpers/componentStore';
 import get from 'lodash/get';
@@ -22,7 +23,9 @@ export class AutoComplete extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleMenuClose = this.handleMenuClose.bind(this);
     this.storeChildRef = this.storeChildRef.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.debouncedOnInputChange = Util.debounce(this.onInputChange, 300);
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
@@ -166,8 +169,20 @@ export class AutoComplete extends Component {
   }
 
   handleFocus() {
-    if (this.childRef) {
-      this.childRef.loadOptions('');
+    // LoadOptions is no longer exposed via ref
+    // The component handles this internally when defaultOptions is set
+    // This method is kept for backward compatibility but doesn't need to do anything
+  }
+
+  handleMenuClose() {
+  }
+
+  handleKeyDown(event) {
+    // When backspace is pressed and there's a selected value, clear it completely
+    if (event.key === 'Backspace' && this.state.value && !this.props.multiSelect) {
+      // Simple approach: if there's a value selected, clear it on backspace
+      event.preventDefault();
+      this.handleChange(undefined);
     }
   }
 
@@ -190,32 +205,107 @@ export class AutoComplete extends Component {
       asynchronous, multiSelect, minimumInput, searchable, conceptUuid } = this.props;
     const props = {
       autofocus,
-      backspaceRemoves: true,
-      disabled: !enabled,
-      filterOptions,
-      labelKey,
+      backspaceRemovesValue: true,
+      isClearable: true,
+      isDisabled: !enabled,
+      filterOption: filterOptions,
+      getOptionLabel: (option) => option[labelKey],
+      getOptionValue: (option) => option[valueKey],
       minimumInput,
-      multi: multiSelect,
+      isMulti: multiSelect,
       onChange: this.handleChange,
       value: this.state.value,
-      valueKey,
-      searchable,
+      isSearchable: searchable,
       matchProp: 'label',
+      styles: {
+        container: (base) => ({
+          ...base,
+          width: '100%',
+          minWidth: '500px',
+        }),
+        control: (base, state) => ({
+          ...base,
+          minHeight: '36px',
+          maxHeight: '36px',
+          height: '36px',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
+        }),
+        valueContainer: (base) => ({
+          ...base,
+          height: '34px',
+          maxHeight: '34px',
+          padding: '0 8px',
+          display: 'flex',
+          flexWrap: 'nowrap',
+          overflow: 'hidden',
+        }),
+        singleValue: (base) => ({
+          ...base,
+          maxWidth: 'calc(100% - 8px)',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }),
+        input: (base) => ({
+          ...base,
+          margin: '0',
+          padding: '0',
+          height: '32px',
+        }),
+        indicatorsContainer: (base) => ({
+          ...base,
+          height: '34px',
+        }),
+        clearIndicator: (base, state) => ({
+          ...base,
+          padding: '8px',
+          cursor: 'pointer',
+          color: '#999',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          ':hover': {
+            color: '#D0021B',
+          },
+        }),
+        dropdownIndicator: (base) => ({
+          ...base,
+          padding: '8px',
+        }),
+        menu: (base) => ({
+          ...base,
+          position: 'fixed',
+          width: 'auto',
+          minWidth: '500px',
+          zIndex: 9999,
+        }),
+        menuList: (base) => ({
+          ...base,
+          maxHeight: '400px',
+          minHeight: '200px',
+        }),
+        multiValue: (base) => ({
+          ...base,
+          maxWidth: '100%',
+        }),
+      },
     };
     const className =
       classNames('obs-control-select-wrapper', { 'form-builder-error': this.state.hasErrors });
     if (asynchronous) {
       return (
         <div className={className}>
-          <Select.Async
+          <AsyncSelect
             id={conceptUuid}
             {...props}
-            autoload={autoload}
-            cache={cache}
-            loadOptions={this.getOptions}
-            onFocus={this.handleFocus}
-            optionClassName="needsclick"
-            ref={this.storeChildRef}
+          classNamePrefix="needsclick"
+          defaultOptions={autoload}
+          cacheOptions={cache}
+          loadOptions={this.getOptions}
+          onFocus={this.handleFocus}
+          onKeyDown={this.handleKeyDown}
+          ref={this.storeChildRef}
           />
         </div>
       );
@@ -225,10 +315,11 @@ export class AutoComplete extends Component {
         <Select
           id={conceptUuid}
           {...props}
-          filterOptions={null}
-          noResultsText={this.state.noResultsText}
+          classNamePrefix="needsclick"
+          filterOption={null}
+          noOptionsMessage={() => this.state.noResultsText}
           onInputChange={this.debouncedOnInputChange}
-          optionClassName="needsclick"
+          onKeyDown={this.handleKeyDown}
           options={this.state.options}
           ref={this.storeChildRef}
         />
