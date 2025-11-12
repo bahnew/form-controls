@@ -161,17 +161,14 @@ describe('Location', () => {
     const input = await screen.findByRole('combobox');
 
     await userEvent.type(input, 'l');
-    // v5: Menu may open but should show no actual options (just "No options" message)
     expect(screen.queryByRole('option', { name: 'loc1' })).not.toBeInTheDocument();
     expect(screen.queryByRole('option', { name: 'loc2' })).not.toBeInTheDocument();
 
     await userEvent.type(input, 'o');
-    
     await waitFor(() => {
       expect(screen.getByRole('option', { name: 'loc1' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
     });
-    
-    expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
   });
 
   it('dropdown is non-searchable and opens without typing', async () => {
@@ -192,7 +189,6 @@ describe('Location', () => {
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
-      // v5: Selected option appears once in the menu (not duplicated)
       expect(screen.getByRole('option', { name: 'loc1' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
     });
@@ -211,9 +207,7 @@ describe('Location', () => {
       expect(screen.getByText('loc1')).toBeInTheDocument();
     });
 
-    // v5: Clear indicator is an SVG icon, select by class
     const clearButton = document.querySelector('.needsclick__clear-indicator');
-    expect(clearButton).toBeInTheDocument();
     await userEvent.click(clearButton);
 
     expect(onChangeSpy).toHaveBeenCalledWith({

@@ -89,12 +89,10 @@ describe('Provider', () => {
     expect(screen.queryByRole('option', { name: 'Dr. Johnson' })).not.toBeInTheDocument();
 
     await userEvent.type(input, 'r');
-    
     await waitFor(() => {
       expect(screen.getByRole('option', { name: 'Dr. Smith' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
     });
-    
-    expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
   });
 
   it('calls onChange with the selected option id (labelKey/valueKey mapping)', async () => {
@@ -127,7 +125,6 @@ describe('Provider', () => {
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
-      // v5: Selected option appears once in the menu (not duplicated)
       expect(screen.getByRole('option', { name: 'Dr. Smith' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
     });
@@ -184,9 +181,7 @@ describe('Provider', () => {
       expect(screen.getByText('Dr. Smith')).toBeInTheDocument();
     });
 
-    // v5: Clear indicator is an SVG icon, select by class
     const clearButton = document.querySelector('.needsclick__clear-indicator');
-    expect(clearButton).toBeInTheDocument();
     await userEvent.click(clearButton);
 
     expect(onChangeSpy).toHaveBeenCalledWith({

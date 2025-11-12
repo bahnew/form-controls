@@ -23,9 +23,7 @@ export class AutoComplete extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
-    this.handleMenuClose = this.handleMenuClose.bind(this);
     this.storeChildRef = this.storeChildRef.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.debouncedOnInputChange = Util.debounce(this.onInputChange, 300);
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
@@ -88,7 +86,13 @@ export class AutoComplete extends Component {
     }
   }
 
-  onInputChange(input) {
+  onInputChange(input, actionMeta) {
+    // React-select v5 passes actionMeta as second parameter
+    // Only process input-change actions, ignore other actions like menu-close
+    if (actionMeta && actionMeta.action !== 'input-change') {
+      return;
+    }
+
     const { options, url } = this.props;
     const { getAnswers, formatConcepts } = Util;
 
@@ -169,21 +173,9 @@ export class AutoComplete extends Component {
   }
 
   handleFocus() {
-    // LoadOptions is no longer exposed via ref
+    // In react-select v5, loadOptions is no longer exposed via ref
     // The component handles this internally when defaultOptions is set
     // This method is kept for backward compatibility but doesn't need to do anything
-  }
-
-  handleMenuClose() {
-  }
-
-  handleKeyDown(event) {
-    // When backspace is pressed and there's a selected value, clear it completely
-    if (event.key === 'Backspace' && this.state.value && !this.props.multiSelect) {
-      // Simple approach: if there's a value selected, clear it on backspace
-      event.preventDefault();
-      this.handleChange(undefined);
-    }
   }
 
   _getErrors(value) {
@@ -217,79 +209,6 @@ export class AutoComplete extends Component {
       value: this.state.value,
       isSearchable: searchable,
       matchProp: 'label',
-      styles: {
-        container: (base) => ({
-          ...base,
-          width: '100%',
-          minWidth: '500px',
-        }),
-        control: (base, state) => ({
-          ...base,
-          minHeight: '36px',
-          maxHeight: '36px',
-          height: '36px',
-          boxSizing: 'border-box',
-          overflow: 'hidden',
-        }),
-        valueContainer: (base) => ({
-          ...base,
-          height: '34px',
-          maxHeight: '34px',
-          padding: '0 8px',
-          display: 'flex',
-          flexWrap: 'nowrap',
-          overflow: 'hidden',
-        }),
-        singleValue: (base) => ({
-          ...base,
-          maxWidth: 'calc(100% - 8px)',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }),
-        input: (base) => ({
-          ...base,
-          margin: '0',
-          padding: '0',
-          height: '32px',
-        }),
-        indicatorsContainer: (base) => ({
-          ...base,
-          height: '34px',
-        }),
-        clearIndicator: (base, state) => ({
-          ...base,
-          padding: '8px',
-          cursor: 'pointer',
-          color: '#999',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ':hover': {
-            color: '#D0021B',
-          },
-        }),
-        dropdownIndicator: (base) => ({
-          ...base,
-          padding: '8px',
-        }),
-        menu: (base) => ({
-          ...base,
-          position: 'fixed',
-          width: 'auto',
-          minWidth: '500px',
-          zIndex: 9999,
-        }),
-        menuList: (base) => ({
-          ...base,
-          maxHeight: '400px',
-          minHeight: '200px',
-        }),
-        multiValue: (base) => ({
-          ...base,
-          maxWidth: '100%',
-        }),
-      },
     };
     const className =
       classNames('obs-control-select-wrapper', { 'form-builder-error': this.state.hasErrors });
@@ -299,13 +218,12 @@ export class AutoComplete extends Component {
           <AsyncSelect
             id={conceptUuid}
             {...props}
-          classNamePrefix="needsclick"
-          defaultOptions={autoload}
-          cacheOptions={cache}
-          loadOptions={this.getOptions}
-          onFocus={this.handleFocus}
-          onKeyDown={this.handleKeyDown}
-          ref={this.storeChildRef}
+            classNamePrefix="needsclick"
+            defaultOptions={autoload}
+            cacheOptions={cache}
+            loadOptions={this.getOptions}
+            onFocus={this.handleFocus}
+            ref={this.storeChildRef}
           />
         </div>
       );
@@ -318,8 +236,9 @@ export class AutoComplete extends Component {
           classNamePrefix="needsclick"
           filterOption={null}
           noOptionsMessage={() => this.state.noResultsText}
-          onInputChange={this.debouncedOnInputChange}
-          onKeyDown={this.handleKeyDown}
+          onInputChange={(input, actionMeta) => {
+            this.debouncedOnInputChange(input, actionMeta);
+          }}
           options={this.state.options}
           ref={this.storeChildRef}
         />

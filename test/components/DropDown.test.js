@@ -58,9 +58,8 @@ describe('DropDown Component', () => {
         />
       );
 
-      // v5: Disabled inputs need to be queried with hidden: true
-      const dropdown = screen.getByRole('combobox', { hidden: true });
-      expect(dropdown).toBeDisabled();
+      const selectControl = document.querySelector('.needsclick__control--is-disabled');
+      expect(selectControl).toBeInTheDocument();
     });
 
     it('should show error state for validation errors', () => {

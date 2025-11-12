@@ -4,10 +4,13 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { FreeTextAutoComplete } from 'src/components/FreeTextAutoComplete.jsx';
 
-// Mock react-select v5 CreatableSelect to make testing predictable
+// Mock react-select/creatable to make testing predictable
 jest.mock('react-select/creatable', () => ({
   __esModule: true,
-  default: ({ onChange, value, options = [], id, isMulti, isClearable, backspaceRemovesValue, ...props }) => {
+  default: ({
+    onChange, value, options = [], id, isMulti, isClearable,
+    backspaceRemovesValue, classNamePrefix, ...props
+  }) => {
     const currentValue = value || '';
     
     const handleSelectChange = (e) => {
@@ -34,6 +37,7 @@ jest.mock('react-select/creatable', () => ({
           data-is-clearable={isClearable?.toString() || 'false'}
           data-backspace-removes-value={backspaceRemovesValue?.toString() || 'false'}
           data-current-value={currentValue}
+          data-classname-prefix={classNamePrefix || ''}
           {...props}
         >
           <option value="">Select option...</option>
@@ -135,7 +139,6 @@ describe('FreeTextAutoComplete', () => {
       );
 
       const selectElement = screen.getByTestId('react-select');
-      // v5 prop names: isMulti, isClearable, backspaceRemovesValue
       expect(selectElement).toHaveAttribute('data-is-multi', 'false');
       expect(selectElement).toHaveAttribute('data-is-clearable', 'false');
       expect(selectElement).toHaveAttribute('data-backspace-removes-value', 'false');
@@ -335,11 +338,12 @@ describe('FreeTextAutoComplete', () => {
       expect(screen.getByTestId('react-select')).toHaveAttribute('data-current-value', 'NonExistentValue');
     });
 
-    it('should pass through custom props to CreatableSelect', () => {
+    it('should pass through custom props to Select.Creatable', () => {
       render(
         <FreeTextAutoComplete
           backspaceRemoves={true}
           clearable={true}
+          deleteRemoves={true}
           multi={true}
           onChange={mockOnChange}
           options={options}
@@ -348,7 +352,6 @@ describe('FreeTextAutoComplete', () => {
       );
 
       const selectElement = screen.getByTestId('react-select');
-      // v5: Check the correct prop names that were converted
       expect(selectElement).toHaveAttribute('data-is-multi', 'true');
       expect(selectElement).toHaveAttribute('data-is-clearable', 'true');
       expect(selectElement).toHaveAttribute('data-backspace-removes-value', 'true');

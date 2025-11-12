@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-// Note: findDOMNode polyfill removed - no longer needed with react-select v5+
+// react-select v5+ no longer uses findDOMNode, so the polyfill has been removed
 
 global.console = {
   ...console,

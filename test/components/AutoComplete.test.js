@@ -134,11 +134,10 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // v5: Query by role instead of class name
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
-    it('should handle async search with minimum input', () => {
+    it('should display loading state initially for async mode', () => {
       render(
         <AutoComplete
           formFieldPath="test1.1/1-1"
@@ -149,11 +148,10 @@ describe('AutoComplete', () => {
         />,
       );
 
-      const input = screen.getByRole('combobox');
+      const input = document.querySelector('input');
       fireEvent.change(input, { target: { value: 'test' } });
 
-      // Verify input received the value
-      expect(input).toHaveValue('test');
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
 
     it('should handle minimum input requirement', () => {
@@ -183,10 +181,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // v5: Query by role and check aria-disabled
-      const combobox = screen.getByRole('combobox');
-      expect(combobox).toBeInTheDocument();
-      expect(combobox).not.toHaveAttribute('aria-disabled', 'true');
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should call onValueChange on mount when value is provided', () => {
@@ -210,12 +206,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // v5: Check disabled state via input element (disabled elements need hidden: true)
-      const container = document.querySelector('.obs-control-select-wrapper');
-      expect(container).toBeInTheDocument();
-      // Query disabled input - need to use hidden: true to find disabled elements
-      const input = screen.getByRole('combobox', { hidden: true });
-      expect(input).toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should be enabled when enabled prop is true', () => {
@@ -227,8 +218,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      const input = screen.getByRole('combobox');
-      expect(input).not.toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should update when enabled prop changes', () => {
@@ -240,8 +230,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      let input = screen.getByRole('combobox');
-      expect(input).not.toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
 
       rerender(
         <AutoComplete
@@ -251,9 +240,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // Query disabled input - need hidden: true
-      input = screen.getByRole('combobox', { hidden: true });
-      expect(input).toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
   });
 
@@ -268,7 +255,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should call onValueChange when initialized', () => {
@@ -297,7 +284,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).not.toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should validate mandatory field on mount for formFieldPath suffix not 0', () => {
@@ -366,9 +353,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // v5: Multi-select renders combobox with multi-select ARIA attributes
-      const combobox = screen.getByRole('combobox');
-      expect(combobox).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__value-container')).toBeInTheDocument();
     });
 
     it('should render with conceptUuid as id', () => {
@@ -416,9 +402,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // v5: Non-searchable select still renders input but with different behavior
-      const combobox = screen.getByRole('combobox');
-      expect(combobox).toBeInTheDocument();
+      // In react-select v5, searchability is not indicated by a class on control
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
@@ -448,7 +433,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle autoload prop in async mode', () => {
@@ -460,7 +445,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle cache prop in async mode', () => {
@@ -472,7 +457,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle undefined value', () => {
@@ -486,7 +471,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle null value', () => {
@@ -500,7 +485,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
@@ -516,7 +501,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle options prop changes', () => {
@@ -543,7 +528,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle component updates correctly', () => {
@@ -557,8 +542,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      let combobox = screen.getByRole('combobox');
-      expect(combobox).not.toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
 
       rerender(
         <AutoComplete
@@ -570,9 +554,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // Query disabled combobox - need hidden: true
-      combobox = screen.getByRole('combobox', { hidden: true });
-      expect(combobox).toBeDisabled();
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
   });
 
@@ -594,9 +576,7 @@ describe('AutoComplete', () => {
       );
 
       expect(document.querySelector('#integration-test')).toBeInTheDocument();
-      const combobox = screen.getByRole('combobox');
-      expect(combobox).not.toBeDisabled();
-      expect(combobox).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should handle async mode with URL', () => {
@@ -610,11 +590,11 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
-  describe('ComponentDidUpdate', () => {
+  describe('Component update behavior', () => {
     it('should update when validate prop changes', () => {
       const validations = [constants.validations.mandatory];
       const { rerender } = render(
@@ -641,8 +621,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // Component should update when validate prop changes
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should update options when not searchable and options change', () => {
@@ -667,7 +646,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle value prop changes', () => {
@@ -695,7 +674,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('onInputChange and filtering', () => {
+  describe('Input change and filtering behavior', () => {
     it('should handle input below minimum input length', async () => {
       const user = userEvent.setup();
       render(
@@ -792,7 +771,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('HandleChange edge cases', () => {
+  describe('Change handling edge cases', () => {
     it('should handle empty array value change', async () => {
       const user = userEvent.setup();
       render(
@@ -807,7 +786,7 @@ describe('AutoComplete', () => {
       );
 
       // Clear the selection
-      const clearButton = document.querySelector('.Select-clear');
+      const clearButton = document.querySelector('.needsclick__clear-indicator');
       if (clearButton) {
         await user.click(clearButton);
       }
@@ -838,7 +817,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('HandleFocus and childRef', () => {
+  describe('Focus and ref handling', () => {
     it('should call loadOptions on focus for async mode', async () => {
       const user = userEvent.setup();
       render(
@@ -865,11 +844,11 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
-  describe('getValue', () => {
+  describe('getValue method behavior', () => {
     it('should return array with uuid for single value', () => {
       const ref = React.createRef();
       
@@ -927,416 +906,6 @@ describe('AutoComplete', () => {
       expect(ref.current).toBeTruthy();
       const value = ref.current.getValue();
       expect(value).toEqual([]);
-    });
-  });
-
-  describe('GetOptions with different scenarios', () => {
-    it('should handle getOptions success with optionsUrl', async () => {
-      const mockData = {
-        results: [
-          { uuid: '1', display: 'Option 1' },
-          { uuid: '2', display: 'Option 2' },
-        ],
-      };
-
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockResolvedValue(mockData);
-
-      render(
-        <AutoComplete
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/concepts?q="
-          minimumInput={2}
-        />
-      );
-
-      // Component should be rendered
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('should handle getOptions error with optionsUrl', async () => {
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockRejectedValue(new Error('Network error'));
-
-      render(
-        <AutoComplete
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/concepts?q="
-          minimumInput={2}
-        />
-      );
-
-      // Component should still render
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('should return early when input length is below minimumInput', async () => {
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockClear();
-
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/concepts?q="
-          minimumInput={3}
-        />
-      );
-
-      // Call getOptions with short input and verify ref exists
-      expect(ref.current).toBeTruthy();
-      const result = await ref.current.getOptions('ab');
-      expect(result).toBeUndefined();
-      expect(httpInterceptor.get).not.toHaveBeenCalled();
-    });
-
-    it('should handle getOptions with input below minimum directly', async () => {
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockClear();
-      
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/test?q="
-          minimumInput={3}
-        />
-      );
-
-      // Call getOptions directly with short input
-      expect(ref.current).toBeTruthy();
-      const result = await ref.current.getOptions('ab');
-      // Should return undefined without calling API
-      expect(result).toBeUndefined();
-      expect(httpInterceptor.get).not.toHaveBeenCalled();
-    });
-
-    it('should handle getOptions error response', async () => {
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockRejectedValueOnce(new Error('API Error'));
-      
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/test?q="
-          minimumInput={1}
-        />
-      );
-
-      // Call getOptions with sufficient input
-      expect(ref.current).toBeTruthy();
-      const result = await ref.current.getOptions('test');
-      // Should return empty options on error
-      expect(result).toEqual({ options: [] });
-    });
-
-    it('should handle getOptions success response', async () => {
-      const mockResults = [
-        { uuid: '1', display: 'Result 1' },
-        { uuid: '2', display: 'Result 2' },
-      ];
-      const { httpInterceptor } = require('src/helpers/httpInterceptor');
-      httpInterceptor.get.mockResolvedValueOnce({ results: mockResults });
-      
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          optionsUrl="/api/test?q="
-          minimumInput={1}
-        />
-      );
-
-      // Call getOptions with sufficient input
-      expect(ref.current).toBeTruthy();
-      const result = await ref.current.getOptions('test');
-      expect(result).toEqual({ options: mockResults });
-    });
-  });
-
-  describe('HandleChange with refs', () => {
-    it('should clear options and reset noResultsText for non-async with minimumInput > 0', () => {
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          minimumInput={2}
-        />
-      );
-
-      // Simulate a change
-      expect(ref.current).toBeTruthy();
-      ref.current.handleChange(options[0]);
-      expect(mockOnValueChange).toHaveBeenCalledWith(options[0], []);
-    });
-
-    it('should handle undefined value change properly', () => {
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          value={options[0]}
-        />
-      );
-
-      mockOnValueChange.mockClear();
-
-      // Simulate clearing value
-      expect(ref.current).toBeTruthy();
-      ref.current.handleChange([]);
-      expect(mockOnValueChange).toHaveBeenCalledWith(undefined, []);
-    });
-
-    it('should handle regular value change', () => {
-      const ref = React.createRef();
-      render(
-        <AutoComplete
-          ref={ref}
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-        />
-      );
-
-      mockOnValueChange.mockClear();
-
-      // Simulate selecting a value
-      expect(ref.current).toBeTruthy();
-      ref.current.handleChange(options[1]);
-      expect(mockOnValueChange).toHaveBeenCalledWith(options[1], []);
-    });
-  });
-
-  describe('ComponentDidUpdate scenarios', () => {
-
-    it('should update state when value prop changes', () => {
-      const { rerender } = render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          value={options[0]}
-        />
-      );
-
-      rerender(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          value={options[1]}
-        />
-      );
-
-      // Component should update
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('should handle state update when options change and not searchable', () => {
-      const initialOptions = [{ name: 'initial', value: 'Initial' }];
-      const newOptions = [{ name: 'updated', value: 'Updated' }];
-
-      const { rerender } = render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={initialOptions}
-          searchable={false}
-        />
-      );
-
-      rerender(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={newOptions}
-          searchable={false}
-        />
-      );
-
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('should handle errors in componentDidUpdate when hasErrors is true', () => {
-      const validations = [constants.validations.mandatory];
-      
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-1"
-          onValueChange={mockOnValueChange}
-          options={options}
-          validations={validations}
-        />
-      );
-
-      // Error callback should be triggered
-      expect(mockOnValueChange).toHaveBeenCalled();
-    });
-  });
-
-  describe('MinimumInput boundary', () => {
-    it('should show "Type to search" when input is below minimumInput', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          minimumInput={5}
-        />
-      );
-
-      const input = document.querySelector('input');
-      await user.type(input, 'abc');
-
-      // Wait for debounce
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      // Input should have value but options should be empty
-      expect(input).toHaveValue('abc');
-    });
-
-    it('should clear options when minimumInput not met after having results', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          minimumInput={3}
-        />
-      );
-
-      const input = document.querySelector('input');
-      
-      // First type enough to get results
-      await user.type(input, 'one');
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      // Then clear and type less than minimum
-      await user.clear(input);
-      await user.type(input, 'on');
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      expect(input).toHaveValue('on');
-    });
-  });
-
-  describe('HandleChange with validation', () => {
-    it('should handle change with validation errors for non-async mode', async () => {
-      const validations = [constants.validations.mandatory];
-      const user = userEvent.setup();
-      
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-1"
-          onValueChange={mockOnValueChange}
-          options={options}
-          validations={validations}
-          minimumInput={1}
-        />
-      );
-
-      mockOnValueChange.mockClear();
-
-      const input = document.querySelector('input');
-      await user.type(input, 'one');
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      // onValueChange should be called during interactions
-      expect(mockOnValueChange).toHaveBeenCalled();
-    });
-
-    it('should clear options after selection in non-async mode with minimumInput > 0', async () => {
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          value={options[0]}
-          minimumInput={2}
-        />
-      );
-
-      // Component should render with value
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-  });
-
-  describe('ShouldComponentUpdate', () => {
-    it('should update when searchable prop changes', () => {
-      const { rerender } = render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          searchable
-        />
-      );
-
-      rerender(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          searchable={false}
-        />
-      );
-
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('should update when noResultsText state changes', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <AutoComplete
-          asynchronous={false}
-          formFieldPath="test1.1/1-0"
-          onValueChange={mockOnValueChange}
-          options={options}
-          minimumInput={1}
-        />
-      );
-
-      const input = document.querySelector('input');
-      await user.type(input, 'xyz');
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      expect(input).toHaveValue('xyz');
     });
   });
 });

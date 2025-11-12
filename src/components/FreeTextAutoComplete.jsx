@@ -37,6 +37,7 @@ export class FreeTextAutoComplete extends Component {
         onChange={this.handleOnChange}
         options={options}
         value={value}
+        classNamePrefix="needsclick"
       />
     );
   }
