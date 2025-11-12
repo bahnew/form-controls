@@ -58,8 +58,9 @@ describe('DropDown Component', () => {
         />
       );
 
-      const dropdown = screen.getByRole('combobox');
-      expect(dropdown).toHaveAttribute('aria-disabled', 'true');
+      // v5: Disabled inputs need to be queried with hidden: true
+      const dropdown = screen.getByRole('combobox', { hidden: true });
+      expect(dropdown).toBeDisabled();
     });
 
     it('should show error state for validation errors', () => {

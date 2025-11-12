@@ -134,7 +134,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-b      // v5: Query by role instead of class name
+      // v5: Query by role instead of class name
       expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
 
