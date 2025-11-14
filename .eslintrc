@@ -28,7 +28,6 @@
     "react/sort-prop-types": "error",
     "react/jsx-sort-props": "off",
     "react/jsx-uses-vars": "error",
-    "react/no-unused-prop-types": "warn",
     "max-len": ["error", { "code": 120, "ignoreComments": true }],
     "no-unused-vars": "off",
     "import/order": "off",
