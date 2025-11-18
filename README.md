@@ -31,6 +31,34 @@ form-controls also integrates with SNOMED for terminology lookup as part of form
 
 ## Changelog
 
+### Version 1.2.0 (React 19 Upgrade)
+
+**Breaking Changes:**
+
+- **React 19 Upgrade**: Upgraded from React 18.3.1 to React 19.0.0
+  - Peer dependencies: `react` and `react-dom` now require `^19.0.0`.
+  - Container component API unchanged - no code changes needed for basic usage
+
+- **react-select Upgrade**: Upgraded from v1.3.0 to v5.10.2
+  - Modern API with separate imports (`AsyncSelect`, `CreatableSelect`)
+  - No changes needed if using Container component only
+
+- **react-textarea-autosize**: Upgraded from v4.0.5 to v8.5.9
+
+- **Build Output**: Library now uses UMD format (Universal Module Definition)
+  - Prevents React version mismatch errors by using consumer's React instance
+  - React and ReactDOM are externalized and not bundled
+
+**Migration:**
+
+See [REACT_19_MIGRATION.md](./REACT_19_MIGRATION.md) for detailed steps.
+
+**Resources:**
+- [Migration Guide](./REACT_19_MIGRATION.md)
+- [Example App](./examples/react19-consumer-app/)
+
+---
+
 ### Version 1.1.0 (React 18 Upgrade)
 
 This release upgrades the library to React 18.3.1, bringing performance improvements and modern React APIs while maintaining backward compatibility.
