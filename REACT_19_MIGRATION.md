@@ -16,6 +16,8 @@ Version 1.2.0 upgrades `bahmni-form-controls` to React 19.0.0 with updated depen
 - **react-select**: 1.3.0 → 5.10.2
 - **react-textarea-autosize**: 4.0.5 → 8.5.9
 
+> **Note:** There is a known styling issue where the dropdown box keeps expanding with an increased number of text items and comes out of the form boundaries, breaking the UI. This issue will be addressed and fixed in a future card.
+
 ### Build Configuration
 - Library output changed to **UMD format** (Universal Module Definition)
 - React and ReactDOM are externalized (not bundled)
