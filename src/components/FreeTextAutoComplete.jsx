@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import ComponentStore from 'src/helpers/componentStore';
 
 export class FreeTextAutoComplete extends Component {
@@ -29,15 +29,15 @@ export class FreeTextAutoComplete extends Component {
     const { options, value } = this.state;
     const { multi, clearable, backspaceRemoves, deleteRemoves } = this.props;
     return (
-      <Select.Creatable
-        backspaceRemoves={backspaceRemoves}
-        clearable={clearable}
-        deleteRemoves={deleteRemoves}
+      <CreatableSelect
+        backspaceRemovesValue={backspaceRemoves}
+        isClearable={clearable}
         id={this.props.conceptUuid}
-        multi={multi}
+        isMulti={multi}
         onChange={this.handleOnChange}
         options={options}
         value={value}
+        classNamePrefix="needsclick"
       />
     );
   }

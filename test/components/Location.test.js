@@ -161,13 +161,14 @@ describe('Location', () => {
     const input = await screen.findByRole('combobox');
 
     await userEvent.type(input, 'l');
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'loc1' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'loc2' })).not.toBeInTheDocument();
 
     await userEvent.type(input, 'o');
-    const listbox = await screen.findByRole('listbox');
-    expect(listbox).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'loc1' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'loc1' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
+    });
   });
 
   it('dropdown is non-searchable and opens without typing', async () => {
@@ -188,7 +189,7 @@ describe('Location', () => {
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
-      expect(screen.getAllByRole('option', { name: 'loc1' })).toHaveLength(2);
+      expect(screen.getByRole('option', { name: 'loc1' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'loc2' })).toBeInTheDocument();
     });
 
@@ -206,7 +207,7 @@ describe('Location', () => {
       expect(screen.getByText('loc1')).toBeInTheDocument();
     });
 
-    const clearButton = screen.getByLabelText('Clear value');
+    const clearButton = document.querySelector('.needsclick__clear-indicator');
     await userEvent.click(clearButton);
 
     expect(onChangeSpy).toHaveBeenCalledWith({

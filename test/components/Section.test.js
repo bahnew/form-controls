@@ -189,10 +189,9 @@ describe('Section', () => {
       expect(controlsDiv).toHaveClass('obsGroup-controls');
       expect(controlsDiv).toHaveClass('disabled');
 
-      expect(Row).toHaveBeenCalledWith(
-        expect.objectContaining({ enabled: false }),
-        {}
-      );
+      expect(Row).toHaveBeenCalled();
+      const callArgs = Row.mock.calls[0];
+      expect(callArgs[0]).toMatchObject({ enabled: false });
     });
 
     it('should be enabled by default', () => {
@@ -359,10 +358,9 @@ describe('Section', () => {
         />
       );
 
-      expect(Row).toHaveBeenCalledWith(
-        expect.objectContaining({ onEventTrigger: onEventTriggerMock }),
-        {}
-      );
+      expect(Row).toHaveBeenCalled();
+      const callArgs = Row.mock.calls[0];
+      expect(callArgs[0]).toMatchObject({ onEventTrigger: onEventTriggerMock });
 
       const rowElement = screen.getByTestId('mock-row');
       expect(rowElement).toHaveAttribute('data-has-event-trigger', 'true');

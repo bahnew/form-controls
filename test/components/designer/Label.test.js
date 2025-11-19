@@ -201,6 +201,9 @@ describe('LabelDesigner', () => {
 
     const wrapper = container.querySelector('.control-wrapper-content');
     fireEvent.click(wrapper);
+    
+    // Should not throw an error and component should still be rendered
+    expect(screen.getByText('History Notes')).toBeInTheDocument();
   });
 
   it('should not show delete button when deleteControl is not provided', () => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import ComponentStore from 'src/helpers/componentStore';
 import get from 'lodash/get';
@@ -85,7 +86,13 @@ export class AutoComplete extends Component {
     }
   }
 
-  onInputChange(input) {
+  onInputChange(input, actionMeta) {
+    // React-select v5 passes actionMeta as second parameter
+    // Only process input-change actions, ignore other actions like menu-close
+    if (actionMeta && actionMeta.action !== 'input-change') {
+      return;
+    }
+
     const { options, url } = this.props;
     const { getAnswers, formatConcepts } = Util;
 
@@ -166,9 +173,9 @@ export class AutoComplete extends Component {
   }
 
   handleFocus() {
-    if (this.childRef) {
-      this.childRef.loadOptions('');
-    }
+    // In react-select v5, loadOptions is no longer exposed via ref
+    // The component handles this internally when defaultOptions is set
+    // This method is kept for backward compatibility but doesn't need to do anything
   }
 
   _getErrors(value) {
@@ -190,16 +197,17 @@ export class AutoComplete extends Component {
       asynchronous, multiSelect, minimumInput, searchable, conceptUuid } = this.props;
     const props = {
       autofocus,
-      backspaceRemoves: true,
-      disabled: !enabled,
-      filterOptions,
-      labelKey,
+      backspaceRemovesValue: true,
+      isClearable: true,
+      isDisabled: !enabled,
+      filterOption: filterOptions,
+      getOptionLabel: (option) => option[labelKey],
+      getOptionValue: (option) => option[valueKey],
       minimumInput,
-      multi: multiSelect,
+      isMulti: multiSelect,
       onChange: this.handleChange,
       value: this.state.value,
-      valueKey,
-      searchable,
+      isSearchable: searchable,
       matchProp: 'label',
     };
     const className =
@@ -207,14 +215,14 @@ export class AutoComplete extends Component {
     if (asynchronous) {
       return (
         <div className={className}>
-          <Select.Async
+          <AsyncSelect
             id={conceptUuid}
             {...props}
-            autoload={autoload}
-            cache={cache}
+            classNamePrefix="needsclick"
+            defaultOptions={autoload}
+            cacheOptions={cache}
             loadOptions={this.getOptions}
             onFocus={this.handleFocus}
-            optionClassName="needsclick"
             ref={this.storeChildRef}
           />
         </div>
@@ -225,10 +233,12 @@ export class AutoComplete extends Component {
         <Select
           id={conceptUuid}
           {...props}
-          filterOptions={null}
-          noResultsText={this.state.noResultsText}
-          onInputChange={this.debouncedOnInputChange}
-          optionClassName="needsclick"
+          classNamePrefix="needsclick"
+          filterOption={null}
+          noOptionsMessage={() => this.state.noResultsText}
+          onInputChange={(input, actionMeta) => {
+            this.debouncedOnInputChange(input, actionMeta);
+          }}
           options={this.state.options}
           ref={this.storeChildRef}
         />

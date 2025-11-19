@@ -85,13 +85,14 @@ describe('Provider', () => {
     const input = await screen.findByRole('combobox');
 
     await userEvent.type(input, 'D');
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Dr. Smith' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Dr. Johnson' })).not.toBeInTheDocument();
 
     await userEvent.type(input, 'r');
-    const listbox = await screen.findByRole('listbox');
-    expect(listbox).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Dr. Smith' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'Dr. Smith' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
+    });
   });
 
   it('calls onChange with the selected option id (labelKey/valueKey mapping)', async () => {
@@ -124,7 +125,7 @@ describe('Provider', () => {
     await waitFor(() => {
       const listbox = screen.getByRole('listbox');
       expect(listbox).toBeInTheDocument();
-      expect(screen.getAllByRole('option', { name: 'Dr. Smith' })).toHaveLength(2);
+      expect(screen.getByRole('option', { name: 'Dr. Smith' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'Dr. Johnson' })).toBeInTheDocument();
     });
 
@@ -180,7 +181,7 @@ describe('Provider', () => {
       expect(screen.getByText('Dr. Smith')).toBeInTheDocument();
     });
 
-    const clearButton = screen.getByLabelText('Clear value');
+    const clearButton = document.querySelector('.needsclick__clear-indicator');
     await userEvent.click(clearButton);
 
     expect(onChangeSpy).toHaveBeenCalledWith({
