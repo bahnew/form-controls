@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: npm cache clean --force
       - name: Install dependencies
-        run: brew install automake autoconf libtool dpkg pkgconfig nasm libpng
+        run: sudo apt-get update && sudo apt-get install -y automake autoconf libtool pkg-config nasm libpng-dev
       - name: npm install
         run: npm install --legacy-peer-deps
       - name: npm test
