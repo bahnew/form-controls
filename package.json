@@ -1,12 +1,14 @@
 {
-  "name": "bahmni-form-controls",
-  "version": "1.2.0",
+  "name": "bahmni-form-controls-new",
+  "version": "1.1.9",
   "description": "Repository for form controls",
   "license": "GPL-2.0",
   "main": "./dist/bundle.js",
+  "style": "./dist/bundle.css",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist/*",
-    "build": "webpack",
+    "build": "webpack && copyfiles index.d.ts dist",
     "build-dev": "webpack --config webpack.dev.config.js",
     "pretest": "rimraf coverage/*",
     "test": "jest",
@@ -93,5 +95,10 @@
     "**/**/growl": "^1.10.0",
     "**/**/handlebars": "^4.7.7"
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "yarn@1.22.19"
 }
