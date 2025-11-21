@@ -31,7 +31,7 @@
     background: -o-linear-gradient(top, rgba(216, 119, 119, 1) 1%, rgba(217, 87, 87, 1) 100%);
     background: -ms-linear-gradient(top, rgba(216, 119, 119, 1) 1%, rgba(217, 87, 87, 1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#d87777', endColorstr = '#d95757', GradientType = 0);
-    background: linear-gradient(top, rgba(216, 119, 119, 1) 1%, rgba(217, 87, 87, 1) 100%);
+    background: linear-gradient(to bottom, rgba(216, 119, 119, 1) 1%, rgba(217, 87, 87, 1) 100%);
     border: 1px solid #b72224;
     .types-for-errors{
       display: block;
@@ -55,7 +55,7 @@
     background: -o-linear-gradient(top, rgba(138, 211, 130, 1) 0%, rgba(106, 177, 101, 1) 100%);
     background: -ms-linear-gradient(top, rgba(138, 211, 130, 1) 0%, rgba(106, 177, 101, 1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#8ad382', endColorstr = '#6ab165', GradientType = 0);
-    background: linear-gradient(top, rgba(138, 211, 130, 1) 0%, rgba(106, 177, 101, 1) 100%);
+    background: linear-gradient(to bottom, rgba(138, 211, 130, 1) 0%, rgba(106, 177, 101, 1) 100%);
     border: 1px solid #4b8048;
     padding: 0px 10px;
     .fa{
