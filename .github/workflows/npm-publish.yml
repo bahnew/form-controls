@@ -32,7 +32,25 @@ jobs:
       # - name: Publish the package
       #   if: startsWith(github.ref, 'refs/tags/')
       #   run: yarn publish
+      - name: Publish dev build to npm
+        working-directory: ${{env.PACKAGE_PATH}}
+        run: |
+          # Base version from package.json
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          BUILD_NUM=${{ github.run_number }}
 
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      #     always-auth: true
+          # Generate unique dev version (e.g., 1.2.3-dev.42)
+          DEV_VERSION="${BASE_VERSION}-dev.${BUILD_NUM}"
+          echo "📦 Publishing @bahmni/form2-controls@$DEV_VERSION"
+
+          # Update package version and publish in one workflow
+          # npm version "$DEV_VERSION" --no-git-tag-version
+          # npm publish --access public --tag dev
+          
+          # Output information
+          echo "::notice title=Package Published::Published @bahmni/form2-controls@$DEV_VERSION"
+          echo "::notice title=Install Command::npm install @bahmni/form2-controls@dev"
+          echo "::notice title=Build Info::Build #${BUILD_NUM}"
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          always-auth: true
