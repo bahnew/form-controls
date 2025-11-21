@@ -58,8 +58,8 @@ describe('DropDown Component', () => {
         />
       );
 
-      const dropdown = screen.getByRole('combobox');
-      expect(dropdown).toHaveAttribute('aria-disabled', 'true');
+      const selectControl = document.querySelector('.needsclick__control--is-disabled');
+      expect(selectControl).toBeInTheDocument();
     });
 
     it('should show error state for validation errors', () => {

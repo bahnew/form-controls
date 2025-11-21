@@ -12,13 +12,24 @@ module.exports = {
     bundle: ['./src/index.jsx']
   },
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: "[name].js",
-    library: { type: "module" },
-    environment: { module: true },
+    path: path.join(__dirname, 'dist'),
+    filename: '[name].js',
+    libraryTarget: 'umd',
+    library: 'FormControls'
   },
-  experiments: {
-    outputModule: true,
+  externals: {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
   },
   module: {
     rules: [

@@ -4,58 +4,59 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { FreeTextAutoComplete } from 'src/components/FreeTextAutoComplete.jsx';
 
-// Mock react-select to make testing predictable
-jest.mock('react-select', () => ({
+// Mock react-select/creatable to make testing predictable
+jest.mock('react-select/creatable', () => ({
   __esModule: true,
-  default: {
-    Creatable: ({ onChange, value, options = [], id, multi, clearable, backspaceRemoves, deleteRemoves, ...props }) => {
-      const currentValue = value || '';
-      
-      const handleSelectChange = (e) => {
-        if (onChange) {
-          onChange(e.target.value || null);
-        }
-      };
+  default: ({
+    onChange, value, options = [], id, isMulti, isClearable,
+    backspaceRemovesValue, classNamePrefix, ...props
+  }) => {
+    const currentValue = value || '';
+    
+    const handleSelectChange = (e) => {
+      if (onChange) {
+        onChange(e.target.value || null);
+      }
+    };
 
-      const handleInputKeyDown = (e) => {
-        if (e.key === 'Enter' && e.target.value.trim() && onChange) {
-          onChange(e.target.value.trim());
-          e.target.value = '';
-        }
-      };
+    const handleInputKeyDown = (e) => {
+      if (e.key === 'Enter' && e.target.value.trim() && onChange) {
+        onChange(e.target.value.trim());
+        e.target.value = '';
+      }
+    };
 
-      return (
-        <div data-testid="select-container">
-          <select
-            data-testid="react-select"
-            value={currentValue}
-            onChange={handleSelectChange}
-            id={id}
-            data-multi={multi?.toString() || 'false'}
-            data-clearable={clearable?.toString() || 'false'}
-            data-backspace-removes={backspaceRemoves?.toString() || 'false'}
-            data-delete-removes={deleteRemoves?.toString() || 'false'}
-            data-current-value={currentValue}
-            {...props}
-          >
-            <option value="">Select option...</option>
-            {options.map((option, index) => (
-              <option key={index} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-            {currentValue && !options.some(opt => opt.value === currentValue) && (
-              <option value={currentValue}>{currentValue}</option>
-            )}
-          </select>
-          <input
-            data-testid="creatable-input"
-            placeholder="Type to create new option"
-            onKeyDown={handleInputKeyDown}
-          />
-        </div>
-      );
-    },
+    return (
+      <div data-testid="select-container">
+        <select
+          data-testid="react-select"
+          value={currentValue}
+          onChange={handleSelectChange}
+          id={id}
+          data-is-multi={isMulti?.toString() || 'false'}
+          data-is-clearable={isClearable?.toString() || 'false'}
+          data-backspace-removes-value={backspaceRemovesValue?.toString() || 'false'}
+          data-current-value={currentValue}
+          data-classname-prefix={classNamePrefix || ''}
+          {...props}
+        >
+          <option value="">Select option...</option>
+          {options.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+          {currentValue && !options.some(opt => opt.value === currentValue) && (
+            <option value={currentValue}>{currentValue}</option>
+          )}
+        </select>
+        <input
+          data-testid="creatable-input"
+          placeholder="Type to create new option"
+          onKeyDown={handleInputKeyDown}
+        />
+      </div>
+    );
   },
 }));
 
@@ -138,10 +139,9 @@ describe('FreeTextAutoComplete', () => {
       );
 
       const selectElement = screen.getByTestId('react-select');
-      expect(selectElement).toHaveAttribute('data-multi', 'false');
-      expect(selectElement).toHaveAttribute('data-clearable', 'false');
-      expect(selectElement).toHaveAttribute('data-backspace-removes', 'false');
-      expect(selectElement).toHaveAttribute('data-delete-removes', 'false');
+      expect(selectElement).toHaveAttribute('data-is-multi', 'false');
+      expect(selectElement).toHaveAttribute('data-is-clearable', 'false');
+      expect(selectElement).toHaveAttribute('data-backspace-removes-value', 'false');
     });
   });
 
@@ -352,10 +352,9 @@ describe('FreeTextAutoComplete', () => {
       );
 
       const selectElement = screen.getByTestId('react-select');
-      expect(selectElement).toHaveAttribute('data-multi', 'true');
-      expect(selectElement).toHaveAttribute('data-clearable', 'true');
-      expect(selectElement).toHaveAttribute('data-backspace-removes', 'true');
-      expect(selectElement).toHaveAttribute('data-delete-removes', 'true');
+      expect(selectElement).toHaveAttribute('data-is-multi', 'true');
+      expect(selectElement).toHaveAttribute('data-is-clearable', 'true');
+      expect(selectElement).toHaveAttribute('data-backspace-removes-value', 'true');
     });
   });
 

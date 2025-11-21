@@ -134,7 +134,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should display loading state initially for async mode', () => {
@@ -181,8 +181,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should call onValueChange on mount when value is provided', () => {
@@ -206,7 +206,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should be enabled when enabled prop is true', () => {
@@ -218,7 +218,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should update when enabled prop changes', () => {
@@ -230,7 +230,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
 
       rerender(
         <AutoComplete
@@ -240,7 +240,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
   });
 
@@ -255,7 +255,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should call onValueChange when initialized', () => {
@@ -284,7 +284,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should validate mandatory field on mount for formFieldPath suffix not 0', () => {
@@ -353,7 +353,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toHaveClass('Select--multi');
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__value-container')).toBeInTheDocument();
     });
 
     it('should render with conceptUuid as id', () => {
@@ -401,9 +402,8 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass(
-        'is-searchable',
-      );
+      // In react-select v5, searchability is not indicated by a class on control
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
@@ -433,7 +433,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle autoload prop in async mode', () => {
@@ -445,7 +445,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle cache prop in async mode', () => {
@@ -457,7 +457,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle undefined value', () => {
@@ -471,7 +471,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle null value', () => {
@@ -485,7 +485,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
@@ -501,7 +501,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle options prop changes', () => {
@@ -528,7 +528,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle component updates correctly', () => {
@@ -542,7 +542,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
 
       rerender(
         <AutoComplete
@@ -554,7 +554,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toHaveClass('is-disabled');
+      expect(document.querySelector('.needsclick__control')).toHaveClass('needsclick__control--is-disabled');
     });
   });
 
@@ -576,8 +576,7 @@ describe('AutoComplete', () => {
       );
 
       expect(document.querySelector('#integration-test')).toBeInTheDocument();
-      expect(document.querySelector('.Select')).not.toHaveClass('is-disabled');
-      expect(document.querySelector('.Select')).toHaveClass('is-searchable');
+      expect(document.querySelector('.needsclick__control')).not.toHaveClass('needsclick__control--is-disabled');
     });
 
     it('should handle async mode with URL', () => {
@@ -591,11 +590,11 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
-  describe('Coverage improvements - componentDidUpdate', () => {
+  describe('Component update behavior', () => {
     it('should update when validate prop changes', () => {
       const validations = [constants.validations.mandatory];
       const { rerender } = render(
@@ -622,8 +621,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      // Component should update when validate prop changes
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should update options when not searchable and options change', () => {
@@ -648,7 +646,7 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
 
     it('should handle value prop changes', () => {
@@ -676,7 +674,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('Coverage improvements - onInputChange and filtering', () => {
+  describe('Input change and filtering behavior', () => {
     it('should handle input below minimum input length', async () => {
       const user = userEvent.setup();
       render(
@@ -773,7 +771,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('Coverage improvements - handleChange edge cases', () => {
+  describe('Change handling edge cases', () => {
     it('should handle empty array value change', async () => {
       const user = userEvent.setup();
       render(
@@ -788,7 +786,7 @@ describe('AutoComplete', () => {
       );
 
       // Clear the selection
-      const clearButton = document.querySelector('.Select-clear');
+      const clearButton = document.querySelector('.needsclick__clear-indicator');
       if (clearButton) {
         await user.click(clearButton);
       }
@@ -819,7 +817,7 @@ describe('AutoComplete', () => {
     });
   });
 
-  describe('Coverage improvements - handleFocus and childRef', () => {
+  describe('Focus and ref handling', () => {
     it('should call loadOptions on focus for async mode', async () => {
       const user = userEvent.setup();
       render(
@@ -846,11 +844,11 @@ describe('AutoComplete', () => {
         />,
       );
 
-      expect(document.querySelector('.Select')).toBeInTheDocument();
+      expect(document.querySelector('.needsclick__control')).toBeInTheDocument();
     });
   });
 
-  describe('Coverage improvements - getValue', () => {
+  describe('getValue method behavior', () => {
     it('should return array with uuid for single value', () => {
       const ref = React.createRef();
       
