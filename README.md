@@ -1,6 +1,8 @@
 ## Form Controls
 
-This library provides a range of form controls that can be used to create customized forms within the Bahmni platform.
+This library (`@bahmni/form2-controls`) provides a range of form controls that can be used to create customized forms within the Bahmni platform.
+
+> **Note:** This is version 2 of the form controls library, starting at version `0.0.1`. For the previous version that supports React 16, see the [Legacy Version](#legacy-version-react-16-support) section below.
 
 ### Requirements
 
@@ -29,9 +31,56 @@ This library provides a range of form controls that can be used to create custom
 
 form-controls also integrates with SNOMED for terminology lookup as part of form configuration and generation. More details can be found in [this](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/3132686337/SNOMED+FHIR+Terminology+Server+Integration+with+Bahmni) Wiki link
 
+### TypeScript Support
+
+This library now includes comprehensive TypeScript type definitions for TypeScript consumers.
+
+**Features:**
+
+TypeScript definitions in [`index.d.ts`](./index.d.ts) inlcudes type definations for all exported components (Container, TextBox, NumericBox, AutoComplete, etc.), Type definitions for designer components, Type definitions for helpers, mappers, and services
+
+**Note for Contributors:**
+> ⚠️ If you add any new control, make sure to add the type definition for it in [`index.d.ts`](./index.d.ts) to avoid errors/warnings for TypeScript consumers.
+
+The current manual `.d.ts` file provides immediate TypeScript support without requiring any code changes!
+
+## Legacy Version (React 16 Support)
+
+If you need to use the previous version of this library that supports React 16, please use:
+
+```bash
+npm install bahmni-form-controls
+```
+
+**Legacy Package Details:**
+- **Package Name**: `bahmni-form-controls`
+- **Latest Version**: `0.93.20`
+- **React Support**: React 16.x
+- **Status**: Maintained for backward compatibility
+
+This legacy version is still in use in some parts of Bahmni and will continue to be supported for existing implementations.
+
 ## Changelog
 
-### Version 1.2.0 (React 19 Upgrade)
+### Version 0.0.1 (Initial Release - React 19)
+
+**Package Information:**
+- **New Package Name**: `@bahmni/form2-controls` (previously `bahmni-form-controls`)
+- **Version**: `0.0.1` (starting fresh version numbering)
+- **Purpose**: Provide React 19 support while maintaining the legacy `bahmni-form-controls@0.93.20` for React 16 compatibility
+
+**Installation:**
+```bash
+npm install @bahmni/form2-controls@0.0.1
+```
+
+Or with yarn:
+```bash
+yarn add @bahmni/form2-controls@0.0.1
+```
+---
+
+### React 19 Upgrade Features
 
 **Breaking Changes:**
 
