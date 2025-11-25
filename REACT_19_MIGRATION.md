@@ -2,7 +2,9 @@
 
 ## Overview
 
-Version 1.2.0 upgrades `bahmni-form-controls` to React 19.0.0 with updated dependencies and supported build configuration.
+Version 0.0.1 of `@bahmni/form2-controls` provides React 19.0.0 support with updated dependencies and build configuration.
+
+> **Note:** This is a new package name. The previous package `bahmni-form-controls@0.93.20` supports React 16 and remains available for backward compatibility. See the [Legacy Version section in README](./README.md#legacy-version-react-16-support) for details.
 
 ## What Changed
 
@@ -37,14 +39,14 @@ Version 1.2.0 upgrades `bahmni-form-controls` to React 19.0.0 with updated depen
 # Update React to 19
 npm install react@19 react-dom@19
 
-# Update bahmni-form-controls
-npm install bahmni-form-controls@1.2.0
+# Install @bahmni/form2-controls
+npm install @bahmni/form2-controls@0.0.1
 ```
 
 Or with yarn:
 ```bash
 yarn add react@19 react-dom@19
-yarn add bahmni-form-controls@1.2.0
+yarn add @bahmni/form2-controls@0.0.1
 ```
 
 ### 2. Update Your Code (If Needed)
@@ -53,8 +55,8 @@ yarn add bahmni-form-controls@1.2.0
 **No code changes needed!** The Container API is unchanged.
 
 ```jsx
-import { Container } from 'bahmni-form-controls';
-import 'bahmni-form-controls/dist/bundle.css';
+import { Container } from '@bahmni/form2-controls';
+import '@bahmni/form2-controls/dist/bundle.css';
 
 // Works exactly the same
 <Container
@@ -115,7 +117,7 @@ npm run dev
 ## Common Issues
 
 ### Issue: React version mismatch warnings
-**Solution**: The UMD build should prevent this. Ensure you're using bahmni-form-controls 1.2.0
+**Solution**: The UMD build should prevent this. Ensure you're using @bahmni/form2-controls@0.0.1
 
 ## Example Application
 
