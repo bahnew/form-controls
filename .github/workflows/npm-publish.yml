@@ -44,8 +44,8 @@ jobs:
           echo "📦 Publishing @bahmni/form2-controls@$DEV_VERSION"
 
           # Update package version and publish in one workflow
-          # npm version "$DEV_VERSION" --no-git-tag-version
-          # npm publish --access public --tag dev
+          npm version "$DEV_VERSION" --no-git-tag-version
+          npm publish --access public --tag dev
           
           # Output information
           echo "::notice title=Package Published::Published @bahmni/form2-controls@$DEV_VERSION"
