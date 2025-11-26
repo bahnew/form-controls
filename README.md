@@ -100,10 +100,10 @@ yarn add @bahmni/form2-controls@0.0.1
 
 **Migration:**
 
-See [REACT_19_MIGRATION.md](./REACT_19_MIGRATION.md) for detailed steps.
+See [REACT_19_MIGRATION.md](./docs/REACT_19_MIGRATION.md) for detailed steps.
 
 **Resources:**
-- [Migration Guide](./REACT_19_MIGRATION.md)
+- [Migration Guide](./docs/REACT_19_MIGRATION.md)
 - [Example App](./examples/react19-consumer-app/)
 
 ---

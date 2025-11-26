@@ -4,7 +4,7 @@
 
 Version 0.0.1 of `@bahmni/form2-controls` provides React 19.0.0 support with updated dependencies and build configuration.
 
-> **Note:** This is a new package name. The previous package `bahmni-form-controls@0.93.20` supports React 16 and remains available for backward compatibility. See the [Legacy Version section in README](./README.md#legacy-version-react-16-support) for details.
+> **Note:** This is a new package name. The previous package `bahmni-form-controls@0.93.20` supports React 16 and remains available for backward compatibility. See the [Legacy Version section in README](../README.md#legacy-version-react-16-support) for details.
 
 ## What Changed
 
@@ -137,11 +137,11 @@ npm run dev
 
 - [React 19 Release Notes](https://react.dev/blog/2024/12/05/react-19)
 - [react-select v5 Documentation](https://react-select.com/)
-- [Example App](./examples/react19-consumer-app/)
-- [Main README](./README.md)
+- [Example App](../examples/react19-consumer-app/)
+- [Main README](../README.md)
 
 ## Need Help?
 
-1. Check the [example app](./examples/react19-consumer-app/README.md)
+1. Check the [example app](../examples/react19-consumer-app/README.md)
 2. Review [React 19 upgrade guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
 3. Check for console warnings in your browser
