@@ -2,7 +2,7 @@
   "name": "@bahmni/form2-controls",
   "version": "0.0.1",
   "description": "Repository for form controls",
-  "license": "GPL-2.0",
+  "license": "MPL-2.0",
   "main": "./dist/bundle.js",
   "style": "./dist/bundle.css",
   "types": "./dist/index.d.ts",
